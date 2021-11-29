@@ -36,8 +36,8 @@ export class SignUpPage implements OnInit, AfterViewInit {
 
   async ngOnInit() {
     this.loadForm();
-    const access = await this.auth.getRootToken();
-    this.countries = await this.tablesService.getCountries(access);
+    // const access = await this.auth.getRootToken();
+    // this.countries = await this.tablesService.getCountries(access);
   }
 
   ngAfterViewInit() {
@@ -60,21 +60,21 @@ export class SignUpPage implements OnInit, AfterViewInit {
     //   country:'182',
     //   password:'mmg123'
     // };
-    this.auth.signUp(data).then(async (res) => {
-      console.log(res);
-      load.dismiss();
-      if (res.error ) {
-        const error = JSON.parse(res.error);
-        const alert = await this.alertCtrl.create({ mode: 'ios', header: 'Error', message: error.error, buttons: ['OK'] });
-        return await alert.present();
-      } else {
-        await this.storage.removeStorage('rootToken');
-        await this.storage.setStorage('language', value.language);
-        this.navCtrl.navigateBack('/user/signIn');
-      }
-    }).catch(async (err) => {
-      const error = err;
-    });
+    // this.auth.signUp(data).then(async (res) => {
+    //   console.log(res);
+    //   load.dismiss();
+    //   if (res.error ) {
+    //     const error = JSON.parse(res.error);
+    //     const alert = await this.alertCtrl.create({ mode: 'ios', header: 'Error', message: error.error, buttons: ['OK'] });
+    //     return await alert.present();
+    //   } else {
+    //     await this.storage.removeStorage('rootToken');
+    //     await this.storage.setStorage('language', value.language);
+    //     this.navCtrl.navigateBack('/user/signIn');
+    //   }
+    // }).catch(async (err) => {
+    //   const error = err;
+    // });
   };
 
   loadForm = () => {

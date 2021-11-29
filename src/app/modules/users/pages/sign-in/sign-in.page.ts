@@ -14,12 +14,13 @@ export class SignInPage implements OnInit, AfterViewInit {
 
   @ViewChild('slides') slides: IonSlides;
   options = { initialSlide: 0, };
+
   loginForm: FormGroup;
   forgotPasswordForm: FormGroup;
 
   constructor(
     private fb: FormBuilder,
-    private auth: AuthService,
+    private db: AuthService,
     private nav: NavController,
     private router: Router,
     private storage: StorageService,
@@ -39,15 +40,23 @@ export class SignInPage implements OnInit, AfterViewInit {
     if (this.loginForm.invalid) { return; }
     const load = await this.loadCtrl.create({message: 'Loading...'});
     await load.present();
-    console.log(this.loginForm.value);
-    this.auth.signIn(this.loginForm.value)
-    .then(async (res) => {
+    this.db.signIn(this.loginForm.value).subscribe( async (res: any) => {
+      console.log('ACCESS ', await res);
       await load.dismiss();
-    })
-    .catch(async (err) => {
+      return this.nav.navigateRoot('/pages/home');
+    }, async (err: any) => {
       await load.dismiss();
-      console.log(err);
+      await this.db.alertErr(err.error.detail);
     });
+    // console.log(this.loginForm.value);
+    // this.auth.signIn(this.loginForm.value)
+    // .then(async (res) => {
+    //   await load.dismiss();
+    // })
+    // .catch(async (err) => {
+    //   await load.dismiss();
+    //   console.log(err);
+    // });
   };
 
   onForgotPassword = () => console.log('óoSubmit');

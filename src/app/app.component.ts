@@ -11,7 +11,7 @@ import { PushService } from './core/services/push.service';
 import { LinksService } from './core/services/links.service';
 import { StorageService } from 'src/app/core/services/storage.service';
 import { AuthService } from './modules/users/services/auth.service';
-import { TraslationService } from 'src/app/core/services/traslation.service';
+import { TraslationService } from '@core/language/traslation.service';
 
 @Component({
   selector: 'app-root',
@@ -72,7 +72,7 @@ export class AppComponent implements OnInit {
     this.menu.close();
     const load = await this.loadCtrl.create({ duration: 3000, message: 'Loading...' });
     await load.present();
-    this.authService.signOut();
+    // this.authService.signOut();
     await load.dismiss();
   };
 
@@ -88,7 +88,7 @@ export class AppComponent implements OnInit {
 
   onActive = () => {
     App.addListener('appStateChange', ({ isActive }) => {
-      if(isActive) { this.authService.decoded(); }
+      // if(isActive) { this.authService.decoded(); }
     });
   };
 
