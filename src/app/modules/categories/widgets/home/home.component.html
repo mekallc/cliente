@@ -1,8 +1,8 @@
 <div id="categories" class="container">
   <div class="row g-2">
-    <div class="col-4 col-md-4 mb-1" *ngFor="let item of categories | slice: 0:toogleCategory ? categories.length : totalCategories">
+    <div class="col-4 col-md-4 mb-1" *ngFor="let item of categories$ | async | slice: 0: toogleCategory ? total : totalCategories">
       <div class="box" (click)="goToSolicitud(item)">
-        <img [src]="item.icon" class="img-fluid" [alt]="item.name | titlecase">
+        <img [src]="item.picture" class="img-fluid" [alt]="item.name | titlecase">
         <p>{{ item.name | translate }}</p>
       </div>
     </div>

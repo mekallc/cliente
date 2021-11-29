@@ -1,0 +1,36 @@
+<div class="row">
+  <div class="col-12">
+    <div class="box">
+      <ion-item lines="none" class="mb-2">
+        <ion-label>Vehicles</ion-label>
+        <ion-select interface="action-sheet" placeholder="Select..." (ionChange)="fiterBrand($event)">
+          <ion-select-option [value]="item.id" *ngFor="let item of vehicles$ | async">
+            {{ item.name }}</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <ion-item lines="none" class="mb-2">
+        <ion-label>Brand</ion-label>
+        <ion-select interface="action-sheet" placeholder="Select..." (ionChange)="filterModel($event)">
+          <ion-select-option [value]="item.id"  *ngFor="let item of brands$ | async">{{ item.name }}</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <ion-item lines="none" class="mb-2">
+        <ion-label>Model</ion-label>
+        <ion-select interface="action-sheet" placeholder="Select...">
+          <ion-select-option [value]="item.id"  *ngFor="let item of models$ | async">{{ item.name }}</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <ion-item lines="none">
+        <ion-label position="stacked">Problem</ion-label>
+        <ion-textarea [rows]="3" placeholder="Enter more information here..."></ion-textarea>
+      </ion-item>
+    </div>
+  </div>
+</div>
+<div class="row justify-content-center mt-4">
+  <div class="col-6">
+    <ion-button  expand="block" color="warning">
+      SEND
+    </ion-button>
+  </div>
+</div>

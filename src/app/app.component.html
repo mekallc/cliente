@@ -32,6 +32,11 @@
         <ion-item>
           <ion-label>{{ "SIDEMENU.PAGES" | translate }}</ion-label>
         </ion-item>
+        <ion-menu-toggle auto-hide="false" (click)="onHelp()">
+          <ion-item class="my-1" lines="none" detail="false">
+            <ion-label>{{ 'SIDEMENU.HELP_CENTER' | translate }}</ion-label>
+          </ion-item>
+        </ion-menu-toggle>
         <ion-menu-toggle auto-hide="false" *ngFor="let item of menus" (click)="onPost(item)">
           <ion-item class="my-1" lines="none" detail="false">
             <ion-label>{{ item | translate }}</ion-label>
@@ -48,6 +53,13 @@
         </ion-menu-toggle>
       </ion-list>
     </ion-content>
+    <ion-footer class="ion-no-border">
+      <ion-toolbar mode="ios">
+        <ion-title class="ion-text-right">
+          <p class="small mb-0">{{ appVersion.name }} v{{ appVersion.version }}</p>
+        </ion-title>
+      </ion-toolbar>
+    </ion-footer>
   </ion-menu>
   <ion-router-outlet id="main"></ion-router-outlet>
 </ion-app>

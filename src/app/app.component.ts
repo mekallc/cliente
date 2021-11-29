@@ -1,3 +1,4 @@
+import { HelpCenterComponent } from './core/widgets/help-center/help-center.component';
 import { PostContentsWidgetComponent } from './modules/contents/widget/post/post.component';
 import { Component, OnInit } from '@angular/core';
 import { LoadingController, MenuController, Platform, ModalController } from '@ionic/angular';
@@ -20,12 +21,14 @@ import { TraslationService } from '@core/language/traslation.service';
 })
 
 export class AppComponent implements OnInit {
+
+  appVersion: any = [];
   appPages = [
     { title: 'Home', url: '/home', },
     { title: 'Roster', url: '/roster' }
   ];
 
-  menus = [ 'SIDEMENU.HELP_CENTER', 'SIDEMENU.TERM_OF_USE', 'SIDEMENU.ABOUT' ];
+  menus = [ 'SIDEMENU.TERM_OF_USE', 'SIDEMENU.ABOUT' ];
 
   social = [
     { icon: 'star', name: 'SIDEMENU.RATING_APP' },
@@ -51,7 +54,6 @@ export class AppComponent implements OnInit {
 
   async ngOnInit() {
     this.initializeApp();
-    this.user = await this.storage.getStorage('user');
     await this.getLanguage();
   }
 
@@ -59,6 +61,8 @@ export class AppComponent implements OnInit {
     this.platform.ready().then(async () => {
       this.toSplash();
       this.pushService.initPush();
+      this.appVersion = await App.getInfo();
+      this.user = await this.storage.getStorage('user');
     });
   };
 
@@ -95,6 +99,14 @@ export class AppComponent implements OnInit {
   onPost = async (title: string) => {
     const modal = await this.modalCtrl.create({
       component: PostContentsWidgetComponent,
+      componentProps: { title }
+    });
+    await modal.present();
+  };
+
+  onHelp = async (title: string) => {
+    const modal = await this.modalCtrl.create({
+      component: HelpCenterComponent,
       componentProps: { title }
     });
     await modal.present();
