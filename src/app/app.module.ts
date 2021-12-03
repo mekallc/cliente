@@ -10,7 +10,14 @@ import { AppComponent } from './app.component';
 import { CoreModule } from '@core/core.module';
 import { CoreCordovaModule } from '@core/core-cordova.module';
 import { LanguageModule } from '@core/language/language.module';
-
+import { initializeApp,provideFirebaseApp } from '@angular/fire/app';
+import { environment } from '../environments/environment';
+import { provideAnalytics,getAnalytics,ScreenTrackingService,UserTrackingService } from '@angular/fire/analytics';
+import { provideAuth,getAuth } from '@angular/fire/auth';
+import { provideDatabase,getDatabase } from '@angular/fire/database';
+import { provideFirestore,getFirestore } from '@angular/fire/firestore';
+import { providePerformance,getPerformance } from '@angular/fire/performance';
+import {AngularFireStorageModule, BUCKET } from '@angular/fire/compat/storage';
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
@@ -23,9 +30,20 @@ import { LanguageModule } from '@core/language/language.module';
     HttpClientModule,
     CoreCordovaModule,
     IonicModule.forRoot(),
+    AngularFireStorageModule,
+    provideAuth(() => getAuth()),
+    provideDatabase(() => getDatabase()),
+    provideFirestore(() => getFirestore()),
+    provideAnalytics(() => getAnalytics()),
+    providePerformance(() => getPerformance()),
+    provideFirebaseApp(() => initializeApp(environment.firebase)),
+
+
   ],
   providers: [
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
+    ScreenTrackingService,UserTrackingService,
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    { provide: BUCKET, useValue: 'meka-app' }
   ],
   bootstrap: [AppComponent],
 })

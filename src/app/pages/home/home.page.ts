@@ -1,3 +1,4 @@
+import { DbChatService } from './../../modules/chat/services/db-chat.service';
 import { TablesService } from 'src/app/core/services/tables.service';
 import { Component } from '@angular/core';
 
@@ -22,7 +23,11 @@ export class HomePage {
     { icon: './assets/images/icons/03.svg', name: 'Llaves' }
   ];
   constructor(
-  ) {}
+    private chatService: DbChatService
+  ) {
+    this.chatService.getRoomById('queryt213').subscribe((res) => console.log(res));
+    this.chatService.createMessage('queryt213' ,{ message: 'Quer Porqueria', status: 'SENDING' });
+  }
 
   onToogleCategories = () => this.toogleCategory = !this.toogleCategory;
 }
