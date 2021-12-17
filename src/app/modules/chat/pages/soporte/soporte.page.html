@@ -1,0 +1,43 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar mode="ios">
+    <ion-buttons slot="end">
+      <ion-button (click)="onClose()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Administrador</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content #content  [scrollEvents]="true" [forceOverscroll]="true"
+  (ionScroll)="logScrolling($event)">
+  <div class="message" *ngFor="let item of items$ | async">
+    <div class="imessage">
+      <p [ngClass]="item.type === 'ADMIN' ? 'from-them' : 'from-me'">
+        {{ item.message }}
+        <span>
+          {{item.createdAt.toMillis() | date: format}}
+          <ion-icon *ngIf="item.type === 'ME' || item.type ==='USER'"
+            name="checkmark-done" [color]="item.status === 'READ' ? 'success' : 'light'">
+          </ion-icon>
+        </span>
+      </p>
+    </div>
+  </div>
+</ion-content>
+<ion-footer class="">
+  <ion-toolbar>
+    <div class="row g-2 justify-content-center">
+      <div class="col-10">
+        <ion-input [(ngModel)]="message" placeholder="Digite su mensaje..."
+          enterkeyhint="enter" mode="ios" (keypress)="sendMessageKeypress($event.keyCode)"></ion-input>
+      </div>
+      <div class="col-2">
+        <div class="text-center">
+          <ion-button fill="clear" (click)="sendMessage()">
+            <ion-icon name="send" color="primary"></ion-icon>
+          </ion-button>
+        </div>
+      </div>
+    </div>
+  </ion-toolbar>
+</ion-footer>

@@ -18,23 +18,23 @@
         <div class="col-md-6">
           <div class="avatar">
             <ion-avatar (click) = "takePicture()">
-              <img [src]="avatar">
+              <img [src]="avatar || './assets/images/user-camera.png'">
             </ion-avatar>
           </div>
           <ion-item lines="none">
             <ion-label position="stacked">{{ "SIGN.FIRSTNAME" | translate }} <ion-text color="danger">*</ion-text></ion-label>
-            <ion-input required formControlName="firstname" type="text"></ion-input>
+            <ion-input required formControlName="fist_name" type="text"></ion-input>
           </ion-item>
-          <ion-item lines="none" *ngIf="registerForm.get('firstname').invalid && registerForm.get('firstname').touched">
+          <ion-item lines="none" *ngIf="registerForm.get('fist_name').invalid && registerForm.get('fist_name').touched">
             <ion-text color="danger" class="form-error">
               <small>{{ "SIGN.ERROR.FIRSTNAME" | translate }}</small>
             </ion-text>
           </ion-item>
           <ion-item lines="none">
             <ion-label position="stacked">{{ "SIGN.LASTNAME" | translate }} <ion-text color="danger">*</ion-text></ion-label>
-            <ion-input required formControlName="lastname" type="text"></ion-input>
+            <ion-input required formControlName="last_name" type="text"></ion-input>
           </ion-item>
-          <ion-item lines="none" *ngIf="registerForm.get('lastname').invalid && registerForm.get('lastname').touched">
+          <ion-item lines="none" *ngIf="registerForm.get('last_name').invalid && registerForm.get('last_name').touched">
             <ion-text color="danger" class="form-error">
               <small>{{ "SIGN.ERROR.LASTNAME" | translate }}</small>
             </ion-text>
@@ -60,7 +60,7 @@
           <ion-item lines="none">
             <ion-label position="stacked">{{ "SIGN.COUNTRY" | translate }} <ion-text color="danger">*</ion-text></ion-label>
             <ion-select placeholder="Country" interface="action-sheet" formControlName="country">
-              <ion-select-option *ngFor="let item of countries" [value]="item.id">
+              <ion-select-option *ngFor="let item of countries$ | async" [value]="item.id">
                 (+{{ item.phone_code }}) {{ item.name  }}</ion-select-option>
             </ion-select>
           </ion-item>
@@ -70,7 +70,7 @@
           </ion-item>
           <ion-item lines="none">
             <ion-label position="stacked">{{ "SIGN.LANGUAGE" | translate }} <ion-text color="danger">*</ion-text></ion-label>
-            <ion-select placeholder="Idioma" interface="action-sheet" formControlName="language">
+            <ion-select placeholder="Idioma" interface="action-sheet">
               <ion-select-option *ngFor="let item of idioma" [value]="item.iso">
                 {{ item.name  }}</ion-select-option>
             </ion-select>
@@ -79,12 +79,12 @@
       </div>
     </form>
   </div>
+  <ion-footer class="ion-no-border">
+    <ion-toolbar mode="ios">
+      <ion-button (click)="onSubmit()" expand="block"
+        fill="clear" shape="round" mode="ios">
+        {{ "SIGN.SEND" | translate }}
+      </ion-button>
+    </ion-toolbar>
+  </ion-footer>
 </ion-content>
-<ion-footer class="ion-no-border">
-  <ion-toolbar mode="ios">
-    <ion-button (click)="onSubmit()" expand="block"
-      fill="clear" shape="round" mode="ios">
-      {{ "SIGN.SEND" | translate }}
-    </ion-button>
-  </ion-toolbar>
-</ion-footer>

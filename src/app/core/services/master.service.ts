@@ -13,11 +13,11 @@ export class MasterService {
     private http: HttpClient
   ) {}
 
-  getMaster(collection: string, options?): Observable<any> {
-    return this.http.get<any>(`${url}/${version}/${collection}`, options);
+  getMaster(collection: string): Observable<any> {
+    return this.http.get<any>(`${url}/${version}/${collection}`);
   }
 
-  postMaster(collection: string, data: any,options?) {
-    return this.http.post(`${url}/${version}/${collection}`, data, options);
+  postMaster(collection: string, data: any) {
+    return this.http.post(`${url}/${version}/${collection}`, data);
   }
 }

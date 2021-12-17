@@ -1,6 +1,6 @@
 {
 	"appId": "com.devcreativo.mekaapp",
-	"appName": "meka-cliente",
+	"appName": "Meka",
 	"webDir": "www",
 	"bundledWebRuntime": false,
 	"plugins": {

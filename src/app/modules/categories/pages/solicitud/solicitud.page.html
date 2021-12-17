@@ -13,9 +13,10 @@
         </ion-segment>
       </div>
     </div>
-    <app-mechanics *ngIf="segment === 'mechanics';else replace"></app-mechanics>
+    <app-mechanics *ngIf="segment === 'mechanics';else replace"
+      [expert]="expert"></app-mechanics>
     <ng-template #replace>
-      <app-parts></app-parts>
+      <app-parts [expert]="expert"></app-parts>
     </ng-template>
 
     <div class="row justify-content-center mb-3">

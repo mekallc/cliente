@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { SolicitudPage } from './solicitud.page';
 import { PartsComponent } from './../../widgets/parts/parts.component';
@@ -16,6 +16,7 @@ import { MechanicsComponent } from '../../widgets/mechanics/mechanics.component'
     IonicModule,
     CommonModule,
     HeaderModule,
+    ReactiveFormsModule,
     SolicitudPageRoutingModule
   ],
   declarations: [

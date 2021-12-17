@@ -1,0 +1,58 @@
+<ion-content [fullscreen]="true">
+  <ion-header class="ion-no-border">
+    <ion-toolbar mode="ios">
+      <ion-buttons slot="end">
+        <ion-button (click)="onClose()">
+          <ion-icon slot="icon-only" name="close"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+  <div id="dados" class="container">
+    <ion-list lines="none">
+      <ion-item>
+        <ion-label>
+          <h1 class="code">
+            {{ res.code }}
+          </h1>
+          <h2>Status: <b>{{ res.status === 'IN_PROCESS' ? 'Proccess' : 'Open'  }}</b></h2>
+        </ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-icon slot="start" name="calendar-outline"></ion-icon>
+        <ion-label>{{ res.date_reg | date: 'short'}}</ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-icon slot="start" name="car-outline"></ion-icon>
+        <ion-label>
+          {{ res.vehicle_model.brand }} {{ res.vehicle_model.model }}
+        </ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-icon slot="start" name="reader-outline"></ion-icon>
+        <ion-label>
+          <p class="categoria"> {{ res.type_expert }}</p>
+          <p class="description ion-text-wrap"> {{ res.description }}</p>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+  </div>
+  <div class="pictures" *ngIf="res.pictures?.length > 0">
+    <ion-slides class="my-3" mode="ios" scrollbar="ios" [options]="slideOpts">
+      <ion-slide *ngFor="let item of res.pictures">
+        <img [src]="item.picture" class="img-fluid">
+      </ion-slide>
+    </ion-slides>
+  </div>
+  <div class="map-wrapper mt-4">
+    <div #map id="map"></div>
+  </div>
+  <ion-footer class="ion-no-border">
+    <ion-toolbar>
+      <ion-button mode="ios" expand="full" (click)="onRoom(res.code)" [disabled]="res.status !== 'IN_PROCESS'"
+      color="primary"> Chat </ion-button>
+      <ion-button mode="ios" expand="full" fill="clear" (click)="onCancelService()"
+      color="danger"> Cancel Service </ion-button>
+    </ion-toolbar>
+  </ion-footer>
+</ion-content>

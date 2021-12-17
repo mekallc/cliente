@@ -41,12 +41,12 @@ export class SignInPage implements OnInit, AfterViewInit {
     const load = await this.loadCtrl.create({message: 'Loading...'});
     await load.present();
     this.db.signIn(this.loginForm.value).subscribe( async (res: any) => {
-      console.log('ACCESS ', await res);
       await load.dismiss();
       return this.nav.navigateRoot('/pages/home');
     }, async (err: any) => {
       await load.dismiss();
-      await this.db.alertErr(err.error.detail);
+      console.log(err);
+      await this.db.alertErr(err.error);
     });
     // console.log(this.loginForm.value);
     // this.auth.signIn(this.loginForm.value)
@@ -63,8 +63,8 @@ export class SignInPage implements OnInit, AfterViewInit {
 
   loadForm = () => {
     this.loginForm = this.fb.group({
-      email: ['knaimero@gmail.com', [Validators.required, Validators.email]],
-      password: ['meka123', [Validators.required, Validators.minLength(4)]],
+      email: ['cliente01@gmail.com', [Validators.required, Validators.email]],
+      password: ['123456', [Validators.required, Validators.minLength(4)]],
     });
     this.forgotPasswordForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],

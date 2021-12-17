@@ -34,8 +34,15 @@ export class AuthService {
     );
   }
 
-  signUp(data: Register) {
-    console.log('sign Up');
+  signUp(data: any) {
+    return this.ms.postMaster( '/user/add/', data).pipe(
+      map(async (res: any) => {
+        await this.refreshToken(res.token.access_token);
+        delete res.token;
+        await this.refreshUser(res);
+        return res;
+      })
+    );
   }
 
   signOut = async () => {

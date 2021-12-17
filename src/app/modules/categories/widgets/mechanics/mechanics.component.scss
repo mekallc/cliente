@@ -5,4 +5,21 @@
   .label-stacked {
     font-size: 20px !important;
   }
+  ion-slides {
+    ion-slide {
+      .images {
+        position: relative;
+        ion-icon {
+          position: absolute;
+          top: 10px;
+          right: 10px;
+          width: 45px;
+          height: 45px;
+        }
+        img {
+          border-radius: 10px;
+        }
+      }
+    }
+  }
 }

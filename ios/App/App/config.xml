@@ -19,5 +19,9 @@
     <param name="ios-package" value="CDVGlobalization"/>
   </feature>
 
+  <feature name="NativeGeocoder">
+    <param name="ios-package" value="NativeGeocoder"/>
+  </feature>
+
   
 </widget>

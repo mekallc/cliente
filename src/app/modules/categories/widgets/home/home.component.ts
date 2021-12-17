@@ -1,9 +1,9 @@
-import { NavController } from '@ionic/angular';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { NavController } from '@ionic/angular';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { DbCategoriesService } from '@modules/categories/services/db-categories.service';
-import { map } from 'rxjs/internal/operators/map';
 
 @Component({
   selector: 'app-widget-categories',
@@ -32,7 +32,7 @@ export class HomeWidgetComponent implements OnInit {
   }
 
   goToSolicitud = (item: any) => this.router.navigate(
-    ['pages', 'solicitud'], { state: item } );
+    ['pages', 'solicitud', 'home',item.id]);
 
   onToogleCategories = () => this.toogleCategory = !this.toogleCategory;
 

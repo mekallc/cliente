@@ -6,7 +6,15 @@ import { Geolocation } from '@capacitor/geolocation';
 
 export class GeolocationService {
 
-  constructor() { }
+  constructor() {
+    Geolocation.checkPermissions().then((res) => {
+      console.log(res);
+    });
+  }
+
+  requestPermissions = () => {
+    Geolocation.requestPermissions().then((res) => console.log(res));
+  };
 
   currentPosition = async () => {
     const coordinates = await Geolocation.getCurrentPosition();

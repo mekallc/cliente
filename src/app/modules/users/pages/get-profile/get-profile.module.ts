@@ -7,6 +7,8 @@ import { TranslateModule } from '@ngx-translate/core';
 
 import { GetProfilePage } from './get-profile.page';
 import { SignUpPageRoutingModule } from './get-profile-routing.module';
+import { ChangePasswordComponent } from '@modules/users/widgets/change-password/change-password.component';
+import { EditarComponent } from '@modules/users/widgets/editar/editar.component';
 
 @NgModule({
   imports: [
@@ -17,6 +19,10 @@ import { SignUpPageRoutingModule } from './get-profile-routing.module';
     ReactiveFormsModule,
     SignUpPageRoutingModule
   ],
-  declarations: [GetProfilePage]
+  declarations: [
+    GetProfilePage,
+    EditarComponent,
+    ChangePasswordComponent,
+  ]
 })
 export class GetProfilePageModule {}

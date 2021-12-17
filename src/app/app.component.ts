@@ -1,5 +1,3 @@
-import { HelpCenterComponent } from './core/widgets/help-center/help-center.component';
-import { PostContentsWidgetComponent } from './modules/contents/widget/post/post.component';
 import { Component, OnInit } from '@angular/core';
 import { LoadingController, MenuController, Platform, ModalController } from '@ionic/angular';
 import { App } from '@capacitor/app';
@@ -10,9 +8,11 @@ import { timer } from 'rxjs';
 
 import { PushService } from './core/services/push.service';
 import { LinksService } from './core/services/links.service';
-import { StorageService } from 'src/app/core/services/storage.service';
 import { AuthService } from './modules/users/services/auth.service';
 import { TraslationService } from '@core/language/traslation.service';
+import { StorageService } from 'src/app/core/services/storage.service';
+import { SoporteChatPage } from '@modules/chat/pages/soporte/soporte.page';
+import { PostContentsWidgetComponent } from './modules/contents/widget/post/post.component';
 
 @Component({
   selector: 'app-root',
@@ -46,8 +46,8 @@ export class AppComponent implements OnInit {
     private authService: AuthService,
     private linkService: LinksService,
     public traslate: TraslationService,
-    private loadCtrl: LoadingController,
     private modalCtrl: ModalController,
+    private loadCtrl: LoadingController,
   ) {
     this.onActive();
   }
@@ -59,10 +59,10 @@ export class AppComponent implements OnInit {
 
   initializeApp = () => {
     this.platform.ready().then(async () => {
-      this.toSplash();
+      // this.toSplash();
       this.pushService.initPush();
       this.appVersion = await App.getInfo();
-      this.user = await this.storage.getStorage('user');
+      this.user = await this.storage.getStorage('userClient');
     });
   };
 
@@ -76,7 +76,7 @@ export class AppComponent implements OnInit {
     this.menu.close();
     const load = await this.loadCtrl.create({ duration: 3000, message: 'Loading...' });
     await load.present();
-    // this.authService.signOut();
+    this.authService.signOut();
     await load.dismiss();
   };
 
@@ -104,11 +104,12 @@ export class AppComponent implements OnInit {
     await modal.present();
   };
 
-  onHelp = async (title: string) => {
-    const modal = await this.modalCtrl.create({
-      component: HelpCenterComponent,
-      componentProps: { title }
-    });
+  onModalChat = async () => {
+    const modal = await this.modalCtrl.create({ component: SoporteChatPage });
     await modal.present();
+  };
+
+  onHelp = (title: string) => {
+    // console.log('on Help');
   };
 }

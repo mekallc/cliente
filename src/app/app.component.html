@@ -17,7 +17,7 @@
         <ion-item detail="true" class="mt-2" (click)="onLink('/user/profile')">
           <ion-label><h2>{{ "SIDEMENU.PROFILE" | translate }}</h2></ion-label>
         </ion-item>
-        <ion-item detail="true" class="mt-2">
+        <ion-item detail="true" class="mt-2" (click)="onModalChat()">
           <ion-label><h2>{{ "SIDEMENU.MESSAGES" | translate }}</h2></ion-label>
         </ion-item>
         <ion-item lines="none"  (click)="signOut()" class="my-1">
@@ -32,7 +32,7 @@
         <ion-item>
           <ion-label>{{ "SIDEMENU.PAGES" | translate }}</ion-label>
         </ion-item>
-        <ion-menu-toggle auto-hide="false" (click)="onHelp()">
+        <ion-menu-toggle auto-hide="false">
           <ion-item class="my-1" lines="none" detail="false">
             <ion-label>{{ 'SIDEMENU.HELP_CENTER' | translate }}</ion-label>
           </ion-item>

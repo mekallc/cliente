@@ -7,6 +7,8 @@ const routes: Routes = [
       { path: 'home', loadChildren: () => import('./home/home.module').then( m => m.HomePageModule) },
       { path: 'notification', loadChildren: () => import('@modules/notification/pages/home/home.module').then( m => m.HomePageModule) },
       { path: 'solicitud', loadChildren: () => import('@modules/categories/categories.module').then( m => m.CategoriesModule) },
+      { path: 'services', loadChildren: () => import('@modules/categories/pages/home/home.module').then(m => m.HomePageModule) },
+
       { path: '', redirectTo: '/pages/home', pathMatch: 'full' }
     ]
   },
