@@ -5,6 +5,7 @@ import { ModalController, AlertController, NavController } from '@ionic/angular'
 import { RoomsChatPage } from '@modules/chat/pages/rooms/rooms.page';
 import { SoporteChatPage } from '@modules/chat/pages/soporte/soporte.page';
 import { ConnectService } from '@modules/chat/services/connect.service';
+import { PhotoViewer } from '@ionic-native/photo-viewer/ngx';
 
 declare let google: any;
 
@@ -19,6 +20,8 @@ export class WaitingComponent implements OnInit, AfterViewInit {
   @ViewChild('map', { static: false }) mapElement: ElementRef;
   map: any;
   room$: Observable<any>;
+  company$: Observable<any>;
+  openImage = false;
   slideOpts = {
     loop: true,
     freeMode: true,
@@ -31,6 +34,7 @@ export class WaitingComponent implements OnInit, AfterViewInit {
     private fs: FirebaseService,
     private conn: ConnectService,
     private navCtrl: NavController,
+    private photoViewer: PhotoViewer,
     private modalCtrl: ModalController,
     private alertCtrl: AlertController,
   ) { }
@@ -40,15 +44,9 @@ export class WaitingComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.loadMap();
-    this.createRoom(this.res);
-    console.log(this.res);
+    this.room$ = this.conn.getRoomsCompany(this.res.code);
   }
 
-  createRoom = (res: any) => {
-    if (res.user) {
-      this.conn.getRoomById(res.code).subscribe((data: any) => {});
-    }
-  };
   onCancel = async () => {
     const alert = await this.alertCtrl.create({
       header: 'INFO',
@@ -66,17 +64,9 @@ export class WaitingComponent implements OnInit, AfterViewInit {
     else { this.onCancel(); }
   };
 
-  // onChat = async (code: string) => {
-  //   const chat = await this.modalCtrl.create({
-  //     component: RoomsChatPage,
-  //     componentProps: { code }
-  //   });
-  //   await chat.present();
-  // };
-
-  onRoom = (code: string) => {
+  onChat = (code: string) => {
     this.modalCtrl.dismiss();
-    this.navCtrl.navigateForward(`chat/room/${code}`);
+    this.navCtrl.navigateForward(`chat/room/${this.res.code}/${code}`);
   };
 
   onCancelService = () => console.log('nCancelService');
@@ -96,6 +86,8 @@ export class WaitingComponent implements OnInit, AfterViewInit {
   }
 
   onClose = () => this.modalCtrl.dismiss();
+  toogle = () => this.openImage = !this.openImage;
+  openPicture = (url: string) => this.photoViewer.show(url, '', { share: true });
 
   private modalChat = async () => {
     const chat = await this.modalCtrl.create({ component: SoporteChatPage });

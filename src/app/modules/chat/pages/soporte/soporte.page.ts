@@ -1,8 +1,9 @@
 import { Component, OnInit, ElementRef, ViewChild, Input, AfterViewInit } from '@angular/core';
-import { IonContent, ModalController } from '@ionic/angular';
+import { IonContent } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { StorageService } from '@core/services/storage.service';
 import { ConnectService } from './../../services/connect.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-soporte-chat',
@@ -20,9 +21,9 @@ export class SoporteChatPage implements OnInit, AfterViewInit {
   items$: Observable<any>;
 
   constructor(
+    private router: Router,
     private conn: ConnectService,
     private storage: StorageService,
-    private modalCtrl: ModalController,
   ) { }
 
   ngOnInit() {
@@ -35,7 +36,7 @@ export class SoporteChatPage implements OnInit, AfterViewInit {
     this.conn.readMessage().subscribe((res) => {});
   }
   onCreateRoom = () => {
-    this.storage.getStorage('userClient').then((user) => {
+    this.storage.getStorage('userCompany').then((user) => {
       this.conn.getChatId(user.email).subscribe(async (res) => {
         this.items = res;
         if(res) { return; }
@@ -55,7 +56,7 @@ export class SoporteChatPage implements OnInit, AfterViewInit {
     this.message = '';
   };
 
-  onClose = () => this.modalCtrl.dismiss();
+  onClose = () => this.router.navigate(['pages', 'menu']);
 
   logScrolling(ev: any) {
     // console.log(ev);

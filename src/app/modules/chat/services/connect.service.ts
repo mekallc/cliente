@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { Firestore, addDoc, collection, doc, docData, setDoc, Timestamp,
   orderBy, query, collectionData, where, updateDoc } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { catchError, take, tap } from 'rxjs/operators';
+import { StorageService } from '@core/services/storage.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,8 +11,16 @@ import { tap } from 'rxjs/operators';
 export class ConnectService {
 
   id = 0;
+  private company: any;
   constructor(
-    private fs: Firestore) {}
+    private fs: Firestore,
+    private storage: StorageService,
+  ) {
+    this.storage.getStorage('userClient').then((res) => {
+      console.log(res);
+      this.company = res;
+    });
+  }
 
   createMessageId = (user: any) => {
     delete user.access;
@@ -69,23 +78,41 @@ export class ConnectService {
 
   // ROOM
 
-  getRoomById(uid: string) {
-    console.log(uid);
-    return docData(doc(this.fs, `rooms/${uid}`), { idField: 'id'}) as Observable<any>;
-  }
-
-  getRoomMessages(uid: string): Observable<any[]> {
+  getRoomsCompany(uid: any) {
     return collectionData(
-      query(collection(this.fs, `rooms/${uid}/message`), orderBy('createdAt')), { idField: 'id' }
+      collection(this.fs, `rooms/chat/${uid}`), { idField: 'id' }
     ) as Observable<any[]>;
   }
 
-  sendRoomMessage = (uid: string, message: any, input = 'TEXT', name = '') => {
+  createRoom = (uid: any) => {
+    console.log(this.company.id);
+    setDoc(doc(this.fs, `rooms/chat/${uid}/${this.company.id}`), this.company);
+    // updateDoc(doc(this.fs, 'rooms', `rooms/${uid}`, `${this.company.id}`), this.company);
+  };
+
+  getRoomMessages(uid: string, companyId: string): Observable<any[]> {
+    return collectionData(
+      query(
+        collection(this.fs, `rooms/chat/${uid}/${companyId}/messages`),
+        orderBy('createdAt')
+      ),
+      { idField: 'id' }
+    ) as Observable<any[]>;
+  }
+
+  sendRoomMessage = (uid: string, companyId: string, message: any, input = 'TEXT', name = '') => {
     const data = {
       message, type: 'USER', status: 'SENT', input, name,
       createdAt: Timestamp.fromMillis(new Date().getTime())
     };
-    const messageRef = collection(this.fs, `rooms/${uid}/message`);
-    return addDoc(messageRef, data);
+    return addDoc(
+      collection(this.fs, `rooms/chat/${uid}/${companyId}/messages`)
+      , data);
   };
+
+  setCompany() {
+    this.storage.getStorage('userClient').then((res) => {
+      this.company = res;
+    });
+  }
 }

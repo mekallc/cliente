@@ -11,6 +11,10 @@
     <param name="android-package" value="com.silkimen.cordovahttp.CordovaHttpPlugin"/>
   </feature>
 
+  <feature name="AppRate">
+    <param name="android-package" value="org.pushandplay.cordova.apprate.AppRate"/>
+  </feature>
+
   <feature name="File">
     <param name="android-package" value="org.apache.cordova.file.FileUtils"/>
     <param name="onload" value="true"/>
@@ -22,6 +26,10 @@
 
   <feature name="NativeGeocoder">
     <param name="android-package" value="cordova.plugin.nativegeocoder.NativeGeocoder"/>
+  </feature>
+
+  <feature name="NativeStorage">
+    <param name="android-package" value="NativeStorage"/>
   </feature>
 
   

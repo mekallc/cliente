@@ -1,13 +1,13 @@
-import { Observable, timer } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
 import { Component, OnInit, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
-import { Directory, Filesystem } from '@capacitor/filesystem';
-import { Haptics, ImpactStyle } from '@capacitor/haptics';
+import { ActivatedRoute } from '@angular/router';
 import { GestureController, NavController } from '@ionic/angular';
-import { RecordingData, VoiceRecorder } from 'capacitor-voice-recorder';
-import { ConnectService } from '@modules/chat/services/connect.service';
+import { Haptics, ImpactStyle } from '@capacitor/haptics';
 import { Camera, CameraResultType } from '@capacitor/camera';
-import { async } from '@angular/core/testing';
+import { PhotoViewer } from '@ionic-native/photo-viewer/ngx';
+import { Directory, Filesystem } from '@capacitor/filesystem';
+import { RecordingData, VoiceRecorder } from 'capacitor-voice-recorder';
+import { Observable, timer } from 'rxjs';
+import { ConnectService } from '@modules/chat/services/connect.service';
 import { FireStorageService } from '@modules/chat/services/fire-storage.service';
 
 @Component({
@@ -19,13 +19,13 @@ export class RoomsChatPage implements OnInit, AfterViewInit {
 
   @ViewChild('mic', { read: ElementRef }) mic: ElementRef;
   @ViewChild('recordBtn', { read: ElementRef }) recordBtn: ElementRef;
-
   recording = false;
   messageToogle = false;
   storedFileNames = [];
   durationDisplay = '';
   duration: number;
   uid: any;
+  company: any;
   message: string;
   toogleMessage = false;
   format = 'dd/MM HH:mm';
@@ -38,21 +38,23 @@ export class RoomsChatPage implements OnInit, AfterViewInit {
     private active: ActivatedRoute,
     private navCtrl: NavController,
     private fs: FireStorageService,
+    private photoViewer: PhotoViewer,
     private gestureCtrl: GestureController,
   ) {}
 
   ngOnInit() {
-    this.active.params.subscribe(({uid}) => this.uid = uid);
     VoiceRecorder.requestAudioRecordingPermission();
-    this.initChat();
-    this.initAudio();
+    this.active.params.subscribe(({uid, company}) => {
+      this.uid = uid;
+      this.company = company;
+    });
   }
 
   ngAfterViewInit() {
+    this.initChat();
+    this.initAudio();
     const longpress = this.gestureCtrl.create({
-      threshold: 0,
-      gestureName: 'long-press',
-      el: this.recordBtn.nativeElement,
+      threshold: 0, gestureName: 'long-press', el: this.recordBtn.nativeElement,
       onStart: ev => {
         Haptics.impact({ style: ImpactStyle.Light });
         this.startRecording();
@@ -67,13 +69,11 @@ export class RoomsChatPage implements OnInit, AfterViewInit {
   }
 
   initChat() {
-    this.items$ = this.conn.getRoomMessages(this.uid);
-    this.conn.getRoomById(this.uid).subscribe((res) => {});
-    this.conn.getRoomMessages(this.uid).subscribe((res) => {});
+    this.items$ = this.conn.getRoomMessages(this.uid, this.company);
   }
   sendMessage() {
     if (this.message.length === 0) { return; }
-    this.conn.sendRoomMessage(this.uid, this.message);
+    this.conn.sendRoomMessage(this.uid, this.company, this.message);
     this.message = '';
     this.toogleMessage = false;
   }
@@ -92,12 +92,10 @@ export class RoomsChatPage implements OnInit, AfterViewInit {
     // console.log(ev.detail);
   };
 
-  onClose = () => this.navCtrl.navigateRoot('pages/services');
+  onClose = () => this.navCtrl.navigateRoot('');
 
   // ----> VoiceRecord
-  initAudio() {
-    this.loadFiles();
-  }
+  initAudio() { this.loadFiles(); }
 
   calculateDuration = () => {
     if(!this.recording) {
@@ -151,13 +149,14 @@ export class RoomsChatPage implements OnInit, AfterViewInit {
   // -----> Camera GET
   cameraGet = async () => {
     const image = await Camera.getPhoto({
-      width: 600, height: 600,
-      quality: 60, allowEditing: false,
-      resultType: CameraResultType.DataUrl,
+      width: 600, height: 600, quality: 60, allowEditing: false, resultType: CameraResultType.DataUrl
     });
     const url = await this.fs.upload(this.uid, image.dataUrl);
     this.conn.sendRoomMessage(this.uid, url, 'IMG');
   };
 
-  openPop = () => this.openPopover = true;
+  openPop = (url: string) => {
+    this.openPopover = true;
+    this.photoViewer.show(url, '',{ share: true });
+  };
 }

@@ -5,11 +5,11 @@ import { FormsModule } from '@angular/forms';
 
 import { HomePage } from './home.page';
 import { HomePageRoutingModule } from './home-routing.module';
-import { HeaderModule } from 'src/app/core/widgets/header/header.module';
-import { IntroWidgetModule } from 'src/app/core/widgets/intro/intro.module';
-import { BannersWidgetModule } from 'src/app/core/widgets/banners/banners.module';
+import { HeaderModule } from '@core/widgets/header/header.module';
+import { IntroWidgetModule } from '@core/widgets/intro/intro.module';
+import { BannersWidgetModule } from '@core/widgets/banners/banners.module';
 import { CategoriesWidgetModule } from 'src/app/modules/categories/widgets/home/home.module';
-import { LastRepairedWidgetModule } from 'src/app/core/widgets/last-repaired/last-repaired.module';
+import { LastRepairedWidgetModule } from '@core/widgets/last-repaired/last-repaired.module';
 
 @NgModule({
   imports: [

@@ -1,0 +1,21 @@
+ion-list {
+  background: none;
+  ion-item {
+    --background: none;
+    --color: var(--ion-meka-principal);
+    ion-label {
+      --color: rgb(55, 55, 55);
+      h1, h2, h3, p {
+        color: rgb(55, 55, 55);
+      }
+      .date {
+      }
+      .vehicle {
+
+      }
+      .code {
+        font-weight: 600;
+      }
+    }
+  }
+}

@@ -1,0 +1,12 @@
+<ion-list lines="none">
+  <ion-item button *ngFor="let item of items$ | async" (click)="openService(item)" [detail]="false">
+    <ion-label>
+      <p class="date">{{ item.date_reg | amTimeAgo  }}</p>
+      <h1 class="code">{{ item.code }}</h1>
+      <h2 class="vehicle"> {{ item.vehicle_model.brand }} {{ item.vehicle_model.model }} </h2>
+    </ion-label>
+    <ion-avatar slot="end" class="expert">
+      <img [src]="item.expert_icon" />
+    </ion-avatar>
+  </ion-item>
+</ion-list>

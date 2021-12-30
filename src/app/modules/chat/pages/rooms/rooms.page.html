@@ -14,7 +14,7 @@
 <ion-content [scrollEvents]="true" (ionScroll)="logScrolling($event)">
   <div class="message" *ngFor="let item of items$ | async">
     <div class="imessage">
-      <p [ngClass]="item.type === 'COMPANY' ? 'from-them' : 'from-me'">
+      <p [ngClass]="item.type === 'LT' ? 'from-them' : 'from-me'">
         <span *ngIf="item.input ==='TEXT'">{{ item.message }}</span>
         <span class="acc" *ngIf="item.input ==='ACC'" (click)="playFile(item.name)">
           <ion-icon name="play"></ion-icon>
@@ -25,9 +25,9 @@
         <span>
 
         </span>
-          <img *ngIf="item.input ==='IMG'" [src]="item.message" class="img" (click)="openPop()">
-        <span>
-          {{item.createdAt.toMillis() | date: format}}
+          <img *ngIf="item.input ==='IMG'" [src]="item.message" class="img" (click)="openPop(item.message)">
+          <span style="font-size: 10px;">
+            {{item.createdAt.toMillis() | amTimeAgo }}
           <ion-icon *ngIf="item.type === 'ME' || item.type ==='USER'"
             name="checkmark-done" [color]="item.status === 'READ' ? 'success' : 'medium'">
           </ion-icon>

@@ -11,7 +11,7 @@ const routes: Routes = [
   },
   {
     path: 'splash',
-    loadChildren: () => import('src/app/core/widgets/splash/splash.module').then( m => m.SplashModule),
+    loadChildren: () => import('@core/widgets/splash/splash.module').then( m => m.SplashModule),
   },
   { path: 'chat', loadChildren: () => import('@modules/chat/chat.module').then(m => m.ChatModule) },
   { path: '', redirectTo: '/pages/home', pathMatch: 'full' },

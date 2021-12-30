@@ -1,0 +1,44 @@
+import { ModalController } from '@ionic/angular';
+import { Component, OnInit } from '@angular/core';
+import { Observable, timer } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { DbCategoriesService } from '@modules/categories/services/db-categories.service';
+import { WaitingComponent } from '@modules/categories/pages/waiting/waiting.component';
+
+@Component({
+  selector: 'app-history',
+  templateUrl: 'history.page.html',
+  styleUrls: ['history.page.scss'],
+})
+export class HistoryPage implements OnInit{
+
+  items$: Observable<any[]>;
+  toggle = 'IN_PROCESS';
+
+  constructor(
+    private db: DbCategoriesService,
+    private modalCtrl: ModalController
+  ) {
+  }
+
+  ngOnInit() {
+    this.items$ = this.db.getServices().pipe( map((res: any) => res.search) );
+  }
+
+  doRefresh(ev: any) {
+    timer(2000).subscribe(() => {
+      this.items$ = this.db.getServices().pipe( map((res: any) => res.search) );
+      ev.target.complete();
+    });
+  }
+
+  segmentChanged = (ev: any) => this.toggle = ev.detail.value;
+
+  onModal = async (res: any) => {
+    const modal = await this.modalCtrl.create({
+      component: WaitingComponent,
+      componentProps: { res }
+    });
+    await modal.present();
+  };
+}

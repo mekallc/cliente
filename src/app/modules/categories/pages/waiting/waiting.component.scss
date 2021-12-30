@@ -24,11 +24,22 @@ ion-content {
       }
     }
   }
+  .pictures {
+    ion-item {
+      --background: none;
+    }
+  }
   ion-slides {
     ion-slide {
       img {
         border-radius: 10px;
       }
+    }
+  }
+  .list-chat {
+    background: none;
+    ion-item {
+      --background: none;
     }
   }
   .map-wrapper {

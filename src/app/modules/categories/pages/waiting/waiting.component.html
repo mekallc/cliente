@@ -37,20 +37,32 @@
       </ion-item>
     </ion-list>
   </div>
+  <ion-list class="list-chat" *ngIf="(room$ | async) as rooms" lines="none">
+    <ion-list-header>
+      <ion-label>CHAT</ion-label>
+    </ion-list-header>
+    <ion-item button *ngFor="let room of rooms" detail (click)="onChat(room.id)">
+      <ion-label>
+        {{ room.name }}
+      </ion-label>
+    </ion-item>
+  </ion-list>
   <div class="pictures" *ngIf="res.pictures?.length > 0">
-    <ion-slides class="my-3" mode="ios" scrollbar="ios" [options]="slideOpts">
+    <ion-item lines="none" (click)="toogle()">
+      <ion-label>See Photos</ion-label>
+      <ion-icon slot="end" [name]="openImage ? 'chevron-up-outline' : 'chevron-down-outline'"></ion-icon>
+    </ion-item>
+    <ion-slides class="my-3" mode="ios" scrollbar="ios" [options]="slideOpts" [ngStyle]="{width: openImage ? '100px' : '0px'}">
       <ion-slide *ngFor="let item of res.pictures">
-        <img [src]="item.picture" class="img-fluid">
+        <img [src]="item.picture" class="img-fluid" (click)="openPicture(item.picture)">
       </ion-slide>
     </ion-slides>
   </div>
-  <div class="map-wrapper mt-4">
+  <div class="map-wrapper mt-2">
     <div #map id="map"></div>
   </div>
   <ion-footer class="ion-no-border">
     <ion-toolbar>
-      <ion-button mode="ios" expand="full" (click)="onRoom(res.code)" [disabled]="res.status !== 'IN_PROCESS'"
-      color="primary"> Chat </ion-button>
       <ion-button mode="ios" expand="full" fill="clear" (click)="onCancelService()"
       color="danger"> Cancel Service </ion-button>
     </ion-toolbar>

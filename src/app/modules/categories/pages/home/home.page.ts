@@ -13,6 +13,7 @@ import { WaitingComponent } from '@modules/categories/pages/waiting/waiting.comp
 export class HomePage implements OnInit{
 
   items$: Observable<any[]>;
+  toggle = 'IN_PROCESS';
 
   constructor(
     private db: DbCategoriesService,
@@ -30,6 +31,8 @@ export class HomePage implements OnInit{
       ev.target.complete();
     });
   }
+
+  segmentChanged = (ev: any) => this.toggle = ev.detail.value;
 
   onModal = async (res: any) => {
     const modal = await this.modalCtrl.create({

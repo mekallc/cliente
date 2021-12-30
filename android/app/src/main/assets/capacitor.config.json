@@ -23,5 +23,9 @@
 	},
 	"android": {
 		"allowMixedContent": true
+	},
+	"server": {
+		"cleartext": true,
+		"url": "http://192.168.250.163:8101"
 	}
 }

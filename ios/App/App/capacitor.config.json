@@ -1,5 +1,5 @@
 {
-	"appId": "com.devcreativo.mekaapp",
+	"appId": "com.mekadevelopments.cliente",
 	"appName": "Meka",
 	"webDir": "www",
 	"bundledWebRuntime": false,
@@ -26,6 +26,6 @@
 	},
 	"server": {
 		"cleartext": true,
-		"url": "http://192.168.250.163:8100"
+		"url": "http://192.168.250.163:8101"
 	}
 }

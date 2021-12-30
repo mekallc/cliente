@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { RoomsChatPage } from './rooms.page';
 import { RoomsChatPageRoutingModule } from './rooms-routing.module';
 import { HeaderModule } from '@core/widgets/header/header.module';
+import { MomentModule } from 'ngx-moment';
 
 
 @NgModule({
@@ -14,6 +15,7 @@ import { HeaderModule } from '@core/widgets/header/header.module';
     IonicModule,
     CommonModule,
     HeaderModule,
+    MomentModule,
     RoomsChatPageRoutingModule
   ],
   exports: [RoomsChatPage],

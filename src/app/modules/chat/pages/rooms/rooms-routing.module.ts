@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { RoomsChatPage } from './rooms.page';
 
 const routes: Routes = [
-  { path: ':uid', component: RoomsChatPage }
+  { path: ':uid/:company', component: RoomsChatPage }
 ];
 
 @NgModule({

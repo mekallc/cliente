@@ -15,7 +15,7 @@ import { CoreModule } from '@core/core.module';
 import { environment } from 'src/environments/environment';
 import { CoreCordovaModule } from '@core/core-cordova.module';
 import { LanguageModule } from '@core/language/language.module';
-
+import { SideMenuWidgetModule } from '@core/widgets/side-menu-widget/side-menu-widget.module';
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
@@ -28,6 +28,7 @@ import { LanguageModule } from '@core/language/language.module';
     TranslateModule,
     HttpClientModule,
     CoreCordovaModule,
+    SideMenuWidgetModule,
     IonicModule.forRoot(),
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideFirestore(() => getFirestore()),
