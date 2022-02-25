@@ -1,6 +1,6 @@
 import { Component, OnInit, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { GestureController, NavController } from '@ionic/angular';
+import { GestureController, IonContent, NavController } from '@ionic/angular';
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
 import { Camera, CameraResultType } from '@capacitor/camera';
 import { PhotoViewer } from '@ionic-native/photo-viewer/ngx';
@@ -17,6 +17,7 @@ import { FireStorageService } from '@modules/chat/services/fire-storage.service'
 })
 export class RoomsChatPage implements OnInit, AfterViewInit {
 
+  @ViewChild('content', { read: ElementRef }) content: ElementRef;
   @ViewChild('mic', { read: ElementRef }) mic: ElementRef;
   @ViewChild('recordBtn', { read: ElementRef }) recordBtn: ElementRef;
   recording = false;
@@ -53,6 +54,7 @@ export class RoomsChatPage implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     this.initChat();
     this.initAudio();
+    // this.scrollVisible();
     const longpress = this.gestureCtrl.create({
       threshold: 0, gestureName: 'long-press', el: this.recordBtn.nativeElement,
       onStart: ev => {
@@ -67,6 +69,11 @@ export class RoomsChatPage implements OnInit, AfterViewInit {
     }, true);
     longpress.enable();
   }
+
+  scrollVisible = () => {
+    const arr = this.content.nativeElement.children;
+    console.log(arr);
+  };
 
   initChat() {
     this.items$ = this.conn.getRoomMessages(this.uid, this.company);
@@ -89,7 +96,7 @@ export class RoomsChatPage implements OnInit, AfterViewInit {
   }
 
   logScrolling = (ev: any) => {
-    // console.log(ev.detail);
+    console.log(ev.detail);
   };
 
   onClose = () => this.navCtrl.navigateRoot('');

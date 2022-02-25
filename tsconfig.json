@@ -12,9 +12,11 @@
     "target": "es2015",
     "module": "es2020",
     "lib": ["es2018", "dom"],
+    "types": ["googlemaps"],
     "paths": {
       "@core/*": ["src/app/core/*"],
       "@pages/*": ["src/app/pages/*"],
+      "@store/*": ["src/app/store/*"],
       "@modules/*": ["src/app/modules/*"]
     }
   },

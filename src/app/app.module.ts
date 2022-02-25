@@ -16,6 +16,7 @@ import { environment } from 'src/environments/environment';
 import { CoreCordovaModule } from '@core/core-cordova.module';
 import { LanguageModule } from '@core/language/language.module';
 import { SideMenuWidgetModule } from '@core/widgets/side-menu-widget/side-menu-widget.module';
+import { AgmCoreModule } from '@agm/core';
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
@@ -33,6 +34,9 @@ import { SideMenuWidgetModule } from '@core/widgets/side-menu-widget/side-menu-w
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideFirestore(() => getFirestore()),
     provideStorage(() => getStorage()),
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyCLRF1U1vrDAqVmIdwMKTcnAEMylbvnkhY',
+    }),
   ],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },

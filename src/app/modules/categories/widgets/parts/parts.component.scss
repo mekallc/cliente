@@ -23,3 +23,17 @@
     }
   }
 }
+
+ion-list {
+  background: none;
+  ion-item {
+    --background: none;
+    ion-label {
+      color: var(--font-color);
+    }
+    ion-select, ion-input, ion-textarea {
+      --placeholder-color: var(--font-color);
+      color: var(--font-color)
+    }
+  }
+}

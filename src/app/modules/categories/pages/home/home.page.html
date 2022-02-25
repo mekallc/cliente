@@ -9,11 +9,11 @@
     </ion-refresher-content>
   </ion-refresher>
   <ion-segment mode="ios" [value]="toggle" (ionChange)="segmentChanged($event)">
-    <ion-segment-button value="IN_PROCESS">
-      <ion-label>ACCEPTED</ion-label>
-    </ion-segment-button>
     <ion-segment-button value="OPEN">
       <ion-label>OPEN</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="IN_PROCESS">
+      <ion-label>ACCEPTED</ion-label>
     </ion-segment-button>
   </ion-segment>
   <app-service-status-list [type]="toggle" *ngIf="toggle === 'IN_PROCESS'; else open"></app-service-status-list>

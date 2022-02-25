@@ -17,3 +17,23 @@ ion-content {
     }
   }
 }
+
+
+.spinner {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
+}
+
+.spinner2 {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  ion-spinner {
+    --color: #fff;
+  }
+}

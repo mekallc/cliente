@@ -8,8 +8,7 @@
     <ion-title>Administrador</ion-title>
   </ion-toolbar>
 </ion-header>
-<ion-content #content  [scrollEvents]="true" [forceOverscroll]="true"
-  (ionScroll)="logScrolling($event)">
+<ion-content #content>
   <div class="message" *ngFor="let item of items$ | async">
     <div class="imessage">
       <p [ngClass]="item.type === 'ADMIN' ? 'from-them' : 'from-me'">

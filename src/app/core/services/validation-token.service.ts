@@ -16,18 +16,18 @@ export class ValidationTokenService {
   ) { }
 
   validate = async () => {
-    const refresh = await this.storage.getStorage('refreshCompany');
-    const access = await this.storage.getStorage('tokenCompany');
+    const user = await this.storage.getStorage('userClient');
+    const access = await this.storage.getStorage('tokenClient');
     const decode: any = jwt_decode(access);
     const exp = moment().diff(moment.unix(decode.exp), 'hours');
     if (exp <= -1) { return; }
-    this.refreshToken(refresh);
+    this.refreshToken(user.refresh);
   };
 
   refreshToken = (refresh: string) => {
     this.ms.postMaster('setting/token/refresh/', { refresh }).subscribe(async (res: any) => {
-      await this.storage.removeStorage('tokenCompany');
-      await this.storage.setStorage('tokenCompany', res.access);
+      await this.storage.removeStorage('tokenClient');
+      await this.storage.setStorage('tokenClient', res.access);
     });
   };
 

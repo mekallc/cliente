@@ -1,3 +1,4 @@
+import { AgmCoreModule } from '@agm/core';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
@@ -15,6 +16,7 @@ const app: Routes = [
   imports: [
     IonicModule,
     CommonModule,
+    AgmCoreModule,
     RouterModule.forChild(app)
   ]
 })

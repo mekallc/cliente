@@ -1,3 +1,4 @@
+import { Observable } from 'rxjs';
 import { Component, OnInit } from '@angular/core';
 import { App } from '@capacitor/app';
 import { LinksService } from '@core/services/links.service';
@@ -7,6 +8,10 @@ import { AuthService } from '@modules/users/services/auth.service';
 import { SoporteChatPage } from '@modules/chat/pages/soporte/soporte.page';
 import { PostContentsWidgetComponent } from '@modules/contents/widget/post/post.component';
 import { RateApp } from 'capacitor-rate-app';
+import { AppState } from '@store/app.state';
+import { Store } from '@ngrx/store';
+import { UserModel } from '@core/model/user.interfaces';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-side-menu-widget',
@@ -26,10 +31,11 @@ export class SideMenuWidgetComponent implements OnInit {
     { icon: 'logo-facebook', name: 'SIDEMENU.FANPAGE_FB', url: 'https://www.facebook.com/Meka-108821827303515' },
   ];
 
-  user: any = [];
+  user$: Observable<UserModel>;
 
   constructor(
     private menu: MenuController,
+    private store: Store<AppState>,
     private storage: StorageService,
     private authService: AuthService,
     private linkService: LinksService,
@@ -39,12 +45,12 @@ export class SideMenuWidgetComponent implements OnInit {
 
   ngOnInit() {
     this.initialize();
+    this.user$ = this.store.select('user').pipe(map((res: any) => res.user));
   }
 
   initialize = async () => {
     this.appVersion = await App.getInfo();
     console.log(this.appVersion);
-    this.user = await this.storage.getStorage('userClient');
   };
 
   signOut = async () => {
@@ -65,8 +71,9 @@ export class SideMenuWidgetComponent implements OnInit {
   };
 
   onModalChat = async () => {
-    const modal = await this.modalCtrl.create({ component: SoporteChatPage });
-    await modal.present();
+    this.linkService.onLink('chat/soporte');
+    // const modal = await this.modalCtrl.create({ component: SoporteChatPage });
+    // await modal.present();
   };
 
   onAppRate = async () => {

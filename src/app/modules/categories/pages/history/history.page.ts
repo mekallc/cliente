@@ -1,9 +1,10 @@
 import { ModalController } from '@ionic/angular';
 import { Component, OnInit } from '@angular/core';
 import { Observable, timer } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { DbCategoriesService } from '@modules/categories/services/db-categories.service';
+import { map, tap, delay } from 'rxjs/operators';
 import { WaitingComponent } from '@modules/categories/pages/waiting/waiting.component';
+import { AppState } from '@store/app.state';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'app-history',
@@ -12,22 +13,36 @@ import { WaitingComponent } from '@modules/categories/pages/waiting/waiting.comp
 })
 export class HistoryPage implements OnInit{
 
-  items$: Observable<any[]>;
-  toggle = 'IN_PROCESS';
+  load = true;
+  total = 0;
+  items$: Observable<any>;
+  toggle = '';
 
   constructor(
-    private db: DbCategoriesService,
+    private store: Store<AppState>,
     private modalCtrl: ModalController
   ) {
   }
 
   ngOnInit() {
-    this.items$ = this.db.getServices().pipe( map((res: any) => res.search) );
+    this.items$ = this.store.select('history').pipe(
+      delay(700),
+      tap(({ loading, total }) => {
+        if (total === 0) { this.load = false; }
+        else { this.load = loading; }
+        this.total = total;
+      }),
+      map((res: any) => {
+        console.log(res);
+        return res.history;
+      }),
+      delay(300),
+    );
+    this.items$.subscribe((res) => console.log(res));
   }
 
   doRefresh(ev: any) {
     timer(2000).subscribe(() => {
-      this.items$ = this.db.getServices().pipe( map((res: any) => res.search) );
       ev.target.complete();
     });
   }

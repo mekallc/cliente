@@ -16,10 +16,7 @@ export class ConnectService {
     private fs: Firestore,
     private storage: StorageService,
   ) {
-    this.storage.getStorage('userClient').then((res) => {
-      console.log(res);
-      this.company = res;
-    });
+    this.storage.getStorage('userClient').then((res) => this.company = res);
   }
 
   createMessageId = (user: any) => {

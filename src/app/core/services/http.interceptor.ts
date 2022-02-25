@@ -3,13 +3,15 @@ import { HttpInterceptor, HttpRequest, HttpHandler, HttpHeaders, HttpEvent } fro
 import { EMPTY, from, Observable } from 'rxjs';
 import { catchError, mergeMap, switchMap } from 'rxjs/operators';
 import { StorageService } from '@core/services/storage.service';
-import { Storage } from '@capacitor/storage';
+import { Store } from '@ngrx/store';
+import { AppState } from '@store/app.state';
 
 @Injectable()
 export default class ApiInterceptor implements HttpInterceptor {
   token: any;
 
   constructor(
+    private store: Store<AppState>,
     private storage: StorageService
   ) {}
 
@@ -21,6 +23,7 @@ export default class ApiInterceptor implements HttpInterceptor {
     request.url.includes('user/add') ||
     request.url.includes('/assets/i18n/') ||
     request?.url.includes('master')) {
+      console.log('Bloqueado');
       return next.handle(request);
     }
     return from(promise).pipe(
@@ -30,6 +33,7 @@ export default class ApiInterceptor implements HttpInterceptor {
       })
     );
   }
+
   private addToken(request: HttpRequest<any>, token: any) {
     if (token) {
       const clone: HttpRequest<any> = request.clone({
@@ -39,6 +43,7 @@ export default class ApiInterceptor implements HttpInterceptor {
           Authorization: 'Bearer ' + token
         }
       });
+      console.log('Paso');
       return clone;
     }
   }

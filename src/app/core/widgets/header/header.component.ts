@@ -1,4 +1,3 @@
-import { SearchFactoriesWidgetComponent } from '../../../modules/factories/widgets/search/search.component';
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 
@@ -16,7 +15,7 @@ export class HeaderComponent implements OnInit {
   ngOnInit() {}
 
   openSearch = async () => {
-    const modal = await this.modalCtrl.create({ component: SearchFactoriesWidgetComponent });
-    await modal.present();
+    // const modal = await this.modalCtrl.create({ component: SearchFactoriesWidgetComponent });
+    // await modal.present();
   };
 }

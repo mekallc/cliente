@@ -3,7 +3,9 @@
     <div class="col-4 col-md-4 mb-1" *ngFor="let item of categories$ | async | slice: 0: toogleCategory ? total : totalCategories">
       <div class="box" (click)="goToSolicitud(item)">
         <img [src]="item.picture" class="img-fluid" [alt]="item.name | titlecase">
+       <ion-label>
         <p>{{ item.name | translate }}</p>
+       </ion-label>
       </div>
     </div>
   </div>

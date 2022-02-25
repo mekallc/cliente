@@ -11,8 +11,8 @@
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
-<ion-content [scrollEvents]="true" (ionScroll)="logScrolling($event)">
-  <div class="message" *ngFor="let item of items$ | async">
+<ion-content>
+  <div #content appScrollToBottom class="message" *ngFor="let item of items$ | async">
     <div class="imessage">
       <p [ngClass]="item.type === 'LT' ? 'from-them' : 'from-me'">
         <span *ngIf="item.input ==='TEXT'">{{ item.message }}</span>
@@ -38,7 +38,23 @@
 </ion-content>
 <ion-footer>
   <ion-toolbar>
-    <div class="container">
+    <ion-item lines="none">
+      <ion-input *ngIf="!recording" type="text" placeholder="Digite su mensaje..." [(ngModel)]="message"
+      (ionInput)="txtMessage()" mode="ios" (keypress)="sendMessageKeypress($event.keyCode)"></ion-input>
+      <ion-label *ngIf="recording">{{ durationDisplay }}</ion-label>
+      <ion-buttons slot="end">
+        <ion-button  fill="clear" (click)="cameraGet()" *ngIf="!toogleMessage">
+          <ion-icon name="camera" color="info"></ion-icon>
+        </ion-button>
+        <ion-button #recordBtn fill="clear" *ngIf="!toogleMessage">
+          <ion-icon name="mic" color="success"></ion-icon>
+        </ion-button>
+        <ion-button fill="clear" (click)="sendMessage()" *ngIf="toogleMessage">
+          <ion-icon name="send" color="primary"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-item>
+    <!-- <div class="container">
       <div class="row g-0 align-items-center">
         <div [ngClass]="toogleMessage ? 'col-10' : 'col-9'">
           <ion-input *ngIf="!recording" type="text" placeholder="Digite su mensaje..." [(ngModel)]="message"
@@ -63,57 +79,6 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
   </ion-toolbar>
 </ion-footer>
-<!-- <ion-content>
-  <div class="imessage">
-    <p class="from-them">It was loud. We just laid there and said &ldquo;is this an earthquake? I think this is an earthquake.&rdquo;</p>
-    <p class="from-me">
-      Like is this an earthquake just go back to sleep
-      <span>
-        26-11 14:20
-        <ion-icon name="checkmark-done" [color]="true ? 'success' : 'light'"></ion-icon>
-      </span>
-    </p>
-    <p class="from-them margin-b_one">It&rsquo;s more like &ldquo;this is an earthquake. Check the Internet. Yup. Earthquake. This is the size. This is the epicenter. Check social media. Make sure the East Coast knows I&rsquo;m alive. Okay, try and go back to sleep.&rdquo;😱
-      <span> 26-11 14:30 </span>
-    </p>
-    <p class="from-me no-tail emoji">👍🏻</p>
-    <p class="from-me">Glad you&rsquo;re safe</p>
-  </div>
-</ion-content>
-<ion-footer class="">
-  <ion-toolbar>
-    <ion-row class="ion-align-items-center">
-      <ion-col [size]="foot_1">
-        <ion-textarea [autoGrow]="true" *ngIf="!recording" type="text" (ionBlur)="outText($event)" (ionFocus)="inText($event)"
-          placeholder="Digite su mensaje..."></ion-textarea>
-        <span *ngIf="recording">{{ durationDisplay }}</span>
-      </ion-col>
-      <ion-col [size]="foot_2">
-        <span *ngIf="!messageToogle">
-          <ion-button #cam fill="clear">
-            <ion-icon name="camera-outline" color="dark"></ion-icon>
-          </ion-button>
-          <ion-button #mic fill="clear">
-            <ion-icon name="mic-outline" color="dark"></ion-icon>
-          </ion-button>
-        </span>
-        <ion-button #msg fill="clear" *ngIf="messageToogle">
-          <ion-icon name="send" color="primary"></ion-icon>
-        </ion-button>
-      </ion-col>
-    </ion-row>
-  </ion-toolbar>
-</ion-footer>
- -->
-
-
-<!-- <ion-button slot="end" fill="clear" color="meka" size="small">
-
-</ion-button>
-<ion-button slot="end" fill="clear" size="small" #recordBtn>
-  <ion-icon slot="icon-only" name="mic-outline"></ion-icon>
-</ion-button> -->
-

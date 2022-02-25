@@ -5,4 +5,6 @@ export interface UserModel {
   email: string;
   phone: string;
   type_user: string;
+  access: string;
+  refresh: string;
 }

@@ -20,4 +20,8 @@ export class MasterService {
   postMaster(collection: string, data: any) {
     return this.http.post(`${url}/${version}/${collection}`, data);
   }
+
+  patchMaster(collection: string, id: any, data: any) {
+    return this.http.patch(`${url}/${version}/${collection}/${id}`, data);
+  }
 }

@@ -1,5 +1,5 @@
 <app-header></app-header>
-<ion-content>
+<ion-content *ngIf="!load; else spinner">
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content
       pullingIcon="chevron-down-circle-outline"
@@ -7,17 +7,30 @@
       refreshingSpinner="circles"
       refreshingText="Refreshing...">
     </ion-refresher-content>
-  </ion-refresher>
-  <ion-segment mode="ios" [value]="toggle" (ionChange)="segmentChanged($event)">
-    <ion-segment-button value="IN_PROCESS">
-      <ion-label>ACCEPTED</ion-label>
-    </ion-segment-button>
-    <ion-segment-button value="OPEN">
-      <ion-label>OPEN</ion-label>
-    </ion-segment-button>
-  </ion-segment>
-  <app-service-status-list [type]="toggle" *ngIf="toggle === 'IN_PROCESS'; else open"></app-service-status-list>
+   </ion-refresher>
+  <div *ngIf="total> 0; else notFound"></div>
 </ion-content>
-<ng-template #open>
-  <app-service-status-list [type]="toggle"></app-service-status-list>
+<ng-template #spinner>
+  <ion-content>
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+      <ion-refresher-content
+        pullingIcon="chevron-down-circle-outline"
+        pullingText="Pull to refresh"
+        refreshingSpinner="circles"
+        refreshingText="Refreshing...">
+      </ion-refresher-content>
+     </ion-refresher>
+    <ion-progress-bar type="indeterminate"></ion-progress-bar>
+    <div class="spinner">
+      <ion-spinner name="crescent"></ion-spinner>
+    </div>
+  </ion-content>
+</ng-template>
+<ng-template #notFound>
+  <div class="notFound">
+    <ion-label>
+      <ion-icon name="happy-outline"></ion-icon>
+      <h2>Not Found</h2>
+    </ion-label>
+  </div>
 </ng-template>

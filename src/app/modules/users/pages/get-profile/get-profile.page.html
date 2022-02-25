@@ -1,4 +1,4 @@
-<ion-content>
+<ion-content >
   <ion-header class="ion-no-border">
     <ion-toolbar>
       <ion-buttons slot="end">
@@ -7,7 +7,7 @@
         </ion-button>
       </ion-buttons>
     </ion-toolbar>
-    <ion-toolbar class="toolbar-rounded">
+    <ion-toolbar class="toolbar-rounded" *ngIf="!load; else loading">
       <div class="container">
         <div class="row align-items-center">
           <div class="col-3">
@@ -17,10 +17,10 @@
           </div>
           <div class="col-9">
             <h3 class="white-text ion-text-wrap mb-0">
-              {{ user?.fist_name }} {{ user?.last_name }}
+              {{ (user$ | async).fist_name }} {{ (user$ | async).last_name }}
             </h3>
             <p class="white-text ion-text-wrap mb-0">
-              {{ user.email }}
+              {{ (user$ | async).email }}
             </p>
             <div class="star">
               <ion-icon name="star"></ion-icon>
@@ -43,10 +43,23 @@
         <ion-label>Cambiar Password</ion-label>
       </ion-segment-button>
     </ion-segment>
-    <app-editar [user]="user" *ngIf="segment ==='editar'; else change"></app-editar>
+    <app-editar [user]="(user$ | async)" *ngIf="segment ==='editar'; else change"></app-editar>
   </div>
 </ion-content>
 
 <ng-template #change>
   <app-change-password></app-change-password>
+</ng-template>
+
+<ng-template #loading>
+  <ion-progress-bar type="indeterminate"></ion-progress-bar>
+  <div class="spinner">
+    <ion-spinner name="crescent"></ion-spinner>
+  </div>
+</ng-template>
+
+<ng-template #loading2>
+  <div class="spinner2">
+    <ion-spinner name="crescent"></ion-spinner>
+  </div>
 </ng-template>

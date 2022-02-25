@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertController, NavController } from '@ionic/angular';
 import { map } from 'rxjs/operators';
-import jwt_decode from 'jwt-decode';
-import * as moment from 'moment';
+import { Store } from '@ngrx/store';
 
 import { Login, Register } from './interfaces';
 import { MasterService } from '@core/services/master.service';
 import { StorageService } from 'src/app/core/services/storage.service';
+import { loadUser } from '@store/actions/user.actions';
+import { AppState } from '@store/app.state';
 
 
 @Injectable({
@@ -19,6 +20,7 @@ export class AuthService {
     private router: Router,
     private ms: MasterService,
     private navCtrl: NavController,
+    private store: Store<AppState>,
     private storage: StorageService,
     private alertCtrl: AlertController,
   ) { }
@@ -26,9 +28,10 @@ export class AuthService {
   /** Tokens */
   signIn(data: Login) {
     return this.ms.postMaster('setting/token/', data).pipe(
-      map(async (res: any) => {
-        await this.refreshUser(res);
-        await this.refreshToken(res.access);
+      map((res: any) => {
+        this.refreshUser(res);
+        this.refreshToken(res.access);
+        this.store.dispatch(loadUser(res));
         return res;
       })
     );

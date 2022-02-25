@@ -1,8 +1,6 @@
-import { Router } from '@angular/router';
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { StorageService } from 'src/app/core/services/storage.service';
-import { IonSlides, NavController, AlertController, LoadingController } from '@ionic/angular';
+import { IonSlides, NavController, LoadingController } from '@ionic/angular';
 import { AuthService } from 'src/app/modules/users/services/auth.service';
 
 @Component({
@@ -22,9 +20,6 @@ export class SignInPage implements OnInit, AfterViewInit {
     private fb: FormBuilder,
     private db: AuthService,
     private nav: NavController,
-    private router: Router,
-    private storage: StorageService,
-    private alertCtrl: AlertController,
     private loadCtrl: LoadingController,
   ) { }
 
@@ -40,23 +35,13 @@ export class SignInPage implements OnInit, AfterViewInit {
     if (this.loginForm.invalid) { return; }
     const load = await this.loadCtrl.create({message: 'Loading...'});
     await load.present();
-    this.db.signIn(this.loginForm.value).subscribe( async (res: any) => {
+    this.db.signIn(this.loginForm.value).subscribe(async (res: any) => {
       await load.dismiss();
       return this.nav.navigateRoot('/pages/home');
     }, async (err: any) => {
       await load.dismiss();
-      console.log(err);
       await this.db.alertErr(err.error);
     });
-    // console.log(this.loginForm.value);
-    // this.auth.signIn(this.loginForm.value)
-    // .then(async (res) => {
-    //   await load.dismiss();
-    // })
-    // .catch(async (err) => {
-    //   await load.dismiss();
-    //   console.log(err);
-    // });
   };
 
   onForgotPassword = () => console.log('óoSubmit');

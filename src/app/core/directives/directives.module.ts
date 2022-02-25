@@ -1,15 +1,18 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TrimValueDirective } from './trim-value.directive';
+import { ScrollToBottomDirective } from './scroll-to-bottom.directive';
 
 
 
 @NgModule({
   declarations: [
-    TrimValueDirective
+    TrimValueDirective,
+    ScrollToBottomDirective
   ],
   exports: [
-    TrimValueDirective
+    TrimValueDirective,
+    ScrollToBottomDirective
   ],
   imports: [
     CommonModule,

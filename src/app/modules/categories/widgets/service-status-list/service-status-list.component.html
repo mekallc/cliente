@@ -1,4 +1,4 @@
-<ion-list lines="none">
+<ion-list lines="none" *ngIf="!load; else loading">
   <ion-item button *ngFor="let item of items$ | async" (click)="openService(item)" [detail]="false">
     <ion-label>
       <p class="date">{{ item.date_reg | amTimeAgo  }}</p>
@@ -10,3 +10,11 @@
     </ion-avatar>
   </ion-item>
 </ion-list>
+
+
+<ng-template #loading>
+  <ion-progress-bar type="indeterminate"></ion-progress-bar>
+  <div class="spinner">
+    <ion-spinner name="crescent"></ion-spinner>
+  </div>
+</ng-template>

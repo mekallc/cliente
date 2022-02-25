@@ -1,11 +1,14 @@
 import { Observable } from 'rxjs';
 import { Component, ElementRef, Input, OnInit, ViewChild, AfterViewInit } from '@angular/core';
-import { FirebaseService } from '@core/services/firebase.service';
-import { ModalController, AlertController, NavController } from '@ionic/angular';
-import { RoomsChatPage } from '@modules/chat/pages/rooms/rooms.page';
+import { ModalController, AlertController, NavController, LoadingController } from '@ionic/angular';
 import { SoporteChatPage } from '@modules/chat/pages/soporte/soporte.page';
 import { ConnectService } from '@modules/chat/services/connect.service';
 import { PhotoViewer } from '@ionic-native/photo-viewer/ngx';
+import { delay, map } from 'rxjs/operators';
+import { DbCategoriesService } from '@modules/categories/services/db-categories.service';
+import { Store } from '@ngrx/store';
+import { AppState } from '@store/app.state';
+import { loadService } from '@store/actions/service.actions';
 
 declare let google: any;
 
@@ -23,20 +26,19 @@ export class WaitingComponent implements OnInit, AfterViewInit {
   company$: Observable<any>;
   openImage = false;
   slideOpts = {
-    loop: true,
-    freeMode: true,
     spaceBetween: 10,
     slidesPerView: 2.3,
-    allowTouchMove: true,
   };
 
   constructor(
-    private fs: FirebaseService,
     private conn: ConnectService,
+    private store: Store<AppState>,
     private navCtrl: NavController,
+    private db: DbCategoriesService,
     private photoViewer: PhotoViewer,
     private modalCtrl: ModalController,
     private alertCtrl: AlertController,
+    private loadingCtrl: LoadingController,
   ) { }
 
   ngOnInit() {
@@ -44,7 +46,8 @@ export class WaitingComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.loadMap();
-    this.room$ = this.conn.getRoomsCompany(this.res.code);
+    console.log(this.res);
+    this.room$ = this.conn.getRoomsCompany(this.res.code).pipe(map((res: any) => res));
   }
 
   onCancel = async () => {
@@ -69,7 +72,56 @@ export class WaitingComponent implements OnInit, AfterViewInit {
     this.navCtrl.navigateForward(`chat/room/${this.res.code}/${code}`);
   };
 
-  onCancelService = () => console.log('nCancelService');
+  onCancelService = async (id: number) => {
+    console.log('nDeleteService ', id);
+    const alert = await this.alertCtrl.create({
+      header: 'Info',
+      message: 'Will you cancel this service?',
+      buttons:[
+        { text: 'Cancel', role: 'cancel', },
+        {
+          text: 'Okay',
+          id: 'confirm-button',
+          handler: async () => {
+            const loading = await this.loadingCtrl.create({ message: 'Loading...' });
+            loading.present();
+            this.db.cancelService(id).pipe(delay(700)).subscribe(
+              () => this.store.dispatch(loadService({status: 'IN_PROCESS'})),
+              (err) => console.log('Error ', err)
+            );
+            loading.dismiss();
+            this.modalCtrl.dismiss();
+          }
+        }
+      ]
+    });
+    await alert.present();
+  };
+  onDeleteService = async (id: number) => {
+    console.log('nDeleteService ', id);
+    const alert = await this.alertCtrl.create({
+      header: 'Info',
+      message: 'Will you eliminate this service?',
+      buttons:[
+        { text: 'Cancel', role: 'cancel', },
+        {
+          text: 'Okay',
+          id: 'confirm-button',
+          handler: async () => {
+            const loading = await this.loadingCtrl.create({ message: 'Loading...' });
+            loading.present();
+            this.db.deleteService(id).pipe(delay(700)).subscribe(
+              () => this.store.dispatch(loadService({status: 'OPEN'})),
+              (err) => console.log('Error ', err)
+            );
+            loading.dismiss();
+            this.modalCtrl.dismiss();
+          }
+        }
+      ]
+    });
+    await alert.present();
+  };
 
   loadMap() {
     const latLng = new google.maps.LatLng(this.res.latitude, this.res.longitude);

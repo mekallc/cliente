@@ -1,31 +1,45 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Observable, zip } from 'rxjs';
+import { loadService } from './../../../../store/actions/service.actions';
+import { Component, Input, OnInit, AfterViewInit } from '@angular/core';
+import { Observable, of, zip } from 'rxjs';
 import { DbCategoriesService } from '@modules/categories/services/db-categories.service';
-import { map } from 'rxjs/operators';
+import { delay, map, tap } from 'rxjs/operators';
 import { WaitingComponent } from '@modules/categories/pages/waiting/waiting.component';
 import { ModalController } from '@ionic/angular';
+import { AppState } from '@store/app.state';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'app-service-status-list',
   templateUrl: './service-status-list.component.html',
   styleUrls: ['./service-status-list.component.scss'],
 })
-export class ServiceStatusListComponent implements OnInit {
+export class ServiceStatusListComponent implements OnInit, AfterViewInit {
 
   @Input() type = 'OPEN';
   items$: Observable<any>;
+  load = true;
 
   constructor(
+    private store: Store<AppState>,
     private db: DbCategoriesService,
     private modalCrtl: ModalController,
   ) { }
 
   ngOnInit() {
-    this.listService();
+    this.store.dispatch(loadService({ status: this.type || 'OPEN' }));
   }
 
-  listService = () => {
-    const items = zip(this.db.getServices(), this.db.getIcone()).pipe(
+  ngAfterViewInit() {
+    this.store.select('service').pipe(
+      delay(1000),
+      tap((res: any) => this.load = res.loading),
+      map((res: any) => res.service)).subscribe((res: any) => {
+      this.listService(res);
+    });
+  }
+
+  listService = (service: any) => {
+    const items = zip( of(service), this.db.getIcone() ).pipe(
       map((x: any) => {
         const data = [];
         x[0].forEach(el => {
@@ -33,7 +47,7 @@ export class ServiceStatusListComponent implements OnInit {
           data.push(el);
         });
         return data;
-      })
+      }),
     );
     this.items$ = items.pipe(
       map((res: any) => {

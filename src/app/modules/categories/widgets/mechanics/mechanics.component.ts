@@ -94,15 +94,17 @@ export class MechanicsComponent implements OnInit, AfterViewInit{
       description: ['', [Validators.required, Validators.minLength(4)]],
       type_expert: [''], type_company: [1],
       vehicle_model: ['', Validators.required],
-      latitude: [''], longitude: [''],
-      year: [''], pictures: ['']
+      latitude: [''], longitude: [''], distance: [],
+      year: [''], pictures: [''], company_request: [0]
     });
   };
 
   setReactive = () => {
     this.formReactive.controls.type_expert.setValue(+this.expert);
-    this.formReactive.controls.latitude.setValue(this.coordinates.latitude);
-    this.formReactive.controls.longitude.setValue(this.coordinates.longitude);
+    this.formReactive.controls.latitude.setValue(-25.5154);
+    this.formReactive.controls.longitude.setValue(-49.2977);
+    // this.formReactive.controls.latitude.setValue(this.coordinates.latitude);
+    // this.formReactive.controls.longitude.setValue(this.coordinates.longitude);
     this.formReactive.controls.pictures.setValue(this.capture);
   };
 

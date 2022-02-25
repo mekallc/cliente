@@ -13,7 +13,7 @@ import { WaitingComponent } from '@modules/categories/pages/waiting/waiting.comp
 export class HomePage implements OnInit{
 
   items$: Observable<any[]>;
-  toggle = 'IN_PROCESS';
+  toggle = 'OPEN';
 
   constructor(
     private db: DbCategoriesService,
