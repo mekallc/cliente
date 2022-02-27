@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ServiceStatusListComponent } from './service-status-list.component';
 import { MomentModule } from 'ngx-moment';
+import { CompanyModule } from '@modules/categories/pages/company/company.module';
 
 
 
@@ -14,6 +15,7 @@ import { MomentModule } from 'ngx-moment';
     IonicModule,
     CommonModule,
     MomentModule,
+    CompanyModule,
   ]
 })
 export class ServiceStatusListModule { }

@@ -1,8 +1,11 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { ModalController, AlertController, LoadingController } from '@ionic/angular';
 import { timer, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { delay, map } from 'rxjs/operators';
+import { Store } from '@ngrx/store';
+import { AppState } from '@store/app.state';
 import { DbCategoriesService } from '@modules/categories/services/db-categories.service';
+import { loadService, loadInProcess } from '@store/actions';
 declare let google: any;
 
 @Component({
@@ -18,8 +21,11 @@ export class CompanyModalComponent implements OnInit {
   value = 'maps';
   companies$: Observable<any[]>;
   constructor(
+    private store: Store<AppState>,
     private db: DbCategoriesService,
-    private modalCtrl: ModalController
+    private modalCtrl: ModalController,
+    private alertCtrl: AlertController,
+    private loadingCtrl: LoadingController,
   ) { }
 
   ngOnInit() {
@@ -29,18 +35,39 @@ export class CompanyModalComponent implements OnInit {
     this.companies$.subscribe((res) => console.log(res));
   }
 
-  clickedMarker(item: any) {
-    console.log(`clicked the marker:`, item);
-  }
+  clickedMarker = async (item: any) => {
+    const data = {
+      status: 'IN_PROCESS',
+      company_request: item.id,
+      distance: item.distance.distance,
+      duration: item.distance.duration
+    };
+    const alert = await this.alertCtrl.create({
+      header: 'Info', message: 'Do you want to send the service to this provider?',
+      buttons:[
+        { text: 'Cancel', role: 'cancel', },
+        {
+          text: 'Okay',
+          id: 'confirm-button',
+          handler: async () => {
+            const loading = await this.loadingCtrl.create({ message: 'Loading...' });
+            loading.present();
+            this.db.sendService(this.res.id, data).pipe(delay(500)).subscribe((res: any) => {
+              console.log(res);
+              this.store.dispatch(loadService({ status: 'OPEN'}));
+              this.store.dispatch(loadInProcess());
+            }, err => console.log(err));
+            loading.dismiss();
+            this.modalCtrl.dismiss();
+          }
+        }
+      ]
+    });
+    await alert.present();
+  };
+  viewProfile = (item: any) => console.log(`clicked the marker:`, item);
 
-  mapClicked(ev: any) {
-    console.log(ev.coords);
-    // this.markers.push({
-    //   lat: $event.coords.lat,
-    //   lng: $event.coords.lng,
-    //   draggable: true
-    // });
-  }
+  mapClicked = (ev: any) => console.log(ev.coords);
 
   markerDragEnd(m: marker, ev: any) {
     console.log('dragEnd', m, ev);

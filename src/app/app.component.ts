@@ -13,7 +13,8 @@ import { LinksService } from './core/services/links.service';
 import { StorageService } from '@core/services/storage.service';
 import { TraslationService } from '@core/language/traslation.service';
 import { ValidationTokenService } from '@core/services/validation-token.service';
-import { loadHistory, loadUser } from '@store/actions';
+import { loadHistory, loadUser, loadInProcess, loadAccepted } from '@store/actions';
+
 
 @Component({
   selector: 'app-root',
@@ -74,5 +75,7 @@ export class AppComponent implements OnInit {
     if (!user) { return; }
     this.store.dispatch(loadUser(user));
     this.store.dispatch(loadHistory());
+    this.store.dispatch(loadInProcess());
+    this.store.dispatch(loadAccepted());
   };
 }

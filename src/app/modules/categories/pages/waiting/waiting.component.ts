@@ -1,14 +1,14 @@
-import { Observable } from 'rxjs';
 import { Component, ElementRef, Input, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { ModalController, AlertController, NavController, LoadingController } from '@ionic/angular';
 import { SoporteChatPage } from '@modules/chat/pages/soporte/soporte.page';
 import { ConnectService } from '@modules/chat/services/connect.service';
 import { PhotoViewer } from '@ionic-native/photo-viewer/ngx';
+import { Observable } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 import { DbCategoriesService } from '@modules/categories/services/db-categories.service';
 import { Store } from '@ngrx/store';
 import { AppState } from '@store/app.state';
-import { loadService } from '@store/actions/service.actions';
+import { loadInProcess, loadService } from '@store/actions';
 
 declare let google: any;
 
@@ -45,8 +45,8 @@ export class WaitingComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
+    console.log('WAITING ', this.res);
     this.loadMap();
-    console.log(this.res);
     this.room$ = this.conn.getRoomsCompany(this.res.code).pipe(map((res: any) => res));
   }
 
@@ -86,7 +86,7 @@ export class WaitingComponent implements OnInit, AfterViewInit {
             const loading = await this.loadingCtrl.create({ message: 'Loading...' });
             loading.present();
             this.db.cancelService(id).pipe(delay(700)).subscribe(
-              () => this.store.dispatch(loadService({status: 'IN_PROCESS'})),
+              () => this.store.dispatch(loadInProcess()),
               (err) => console.log('Error ', err)
             );
             loading.dismiss();

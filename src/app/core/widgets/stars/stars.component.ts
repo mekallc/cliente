@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'app-stars-widget',
@@ -8,6 +8,8 @@ import { Component, Input, OnInit } from '@angular/core';
 export class StarsComponent implements OnInit {
 
   @Input() num: number;
+  @Input() type = true;
+  @Output() value = new EventEmitter();
   data = [];
   constructor() { }
 
@@ -15,11 +17,19 @@ export class StarsComponent implements OnInit {
     this.createArray(this.num);
   }
 
-  createArray = (num: number) => {
+  createArray = (num: number = 4) => {
     const numero = num.toString().split('.');
     this.valueEntero(numero[0]);
     this.valueDecimal(numero[1]);
     this.valueFinal(numero[0]);
+  };
+
+  getClick = (item: number) => {
+    this.data = [];
+    const value = 1 + item;
+    this.valueEntero(value.toString());
+    this.valueFinal(value.toString());
+    this.value.emit(value);
   };
 
   private valueEntero = (entero: string) => {
@@ -30,15 +40,17 @@ export class StarsComponent implements OnInit {
   private valueDecimal = (decimal: string) => {
     let star;
     const value = +decimal;
-    if (value > 3 && value < 7){
-      star = 'star-half';
+    if (value > 0) {
+      if (value > 3 && value < 7){
+        star = 'star-half';
+      }
+      else if (value < 3) {
+        star = 'star-outline';
+      } else {
+        star = 'star';
+      }
+      this.data.push(star);
     }
-    else if (value < 3) {
-      star = 'star-outline';
-    } else {
-      star = 'star';
-    }
-    this.data.push(star);
   };
 
   private valueFinal = (entero: string) => {

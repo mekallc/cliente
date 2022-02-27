@@ -34,4 +34,6 @@ export class DbCategoriesService {
     const query = `?longitude=${lng}&latitude=${lat}&type_company=${company}&type_expert=${expert}`;
     return this.ms.getMaster(`user/company/list${query}`);
   };
+
+  sendService = (id: number, data: any) => this.ms.patchMaster('service/request', id, data);
 }

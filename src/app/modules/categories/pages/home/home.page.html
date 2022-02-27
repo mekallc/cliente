@@ -13,11 +13,19 @@
       <ion-label>OPEN</ion-label>
     </ion-segment-button>
     <ion-segment-button value="IN_PROCESS">
+      <ion-label>IN PROCESS</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="ACCEPTED">
       <ion-label>ACCEPTED</ion-label>
     </ion-segment-button>
   </ion-segment>
-  <app-service-status-list [type]="toggle" *ngIf="toggle === 'IN_PROCESS'; else open"></app-service-status-list>
+  <ng-template [ngIf]="toggle === 'OPEN'">
+    <app-service-status-list [type]="toggle"></app-service-status-list>
+  </ng-template>
+  <ng-template [ngIf]="toggle === 'IN_PROCESS'">
+    <app-service-status-list [type]="toggle"></app-service-status-list>
+  </ng-template>
+  <ng-template [ngIf]="toggle === 'ACCEPTED'">
+    <app-service-status-list [type]="toggle"></app-service-status-list>
+  </ng-template>
 </ion-content>
-<ng-template #open>
-  <app-service-status-list [type]="toggle"></app-service-status-list>
-</ng-template>

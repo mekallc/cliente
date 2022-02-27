@@ -1,8 +1,15 @@
 ion-content, ion-toolbar, ion-item, ion-list {
   --background: #fafafa;
+  background: #fafafa;
 }
 
 ion-content {
+  ion-segment {
+    --background: #d8d8d8;
+    ion-segment-button{
+      --indicator-color: #fafafa;
+    }
+  }
   ion-list {
     ion-item {
       ion-label {
@@ -14,35 +21,21 @@ ion-content {
       }
     }
   }
-  .map-wrapper {
-    position: relative;
-    --background: none;
-    --height: 200px;
-    --padding-start: 0px;
-    --inner-padding-end: 0px;
-    #map {
-      width: 100%;
-      height: 250px;
+}
+ion-header {
+  ion-toolbar {
+    ion-title {
+      --color: rgb(57, 57, 57);
     }
-    #map_center {
-      position: absolute;
-      z-index: 99;
-      height: 40px;
-      width: 40px;
-      top: 50%;
-      left: 50%;
-      margin-left: -21px;
-      margin-top: -41px;
+    ion-buttons {
+      ion-button {
+        ion-icon {
+          color: rgb(57, 57, 57);
+        }
+      }
     }
   }
 }
-
-
-#map  {
-  width: 100%;
-  height: 90vh;
-}
-
 agm-map  {
   height: 90vh;
 }

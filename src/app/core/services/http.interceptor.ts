@@ -23,7 +23,6 @@ export default class ApiInterceptor implements HttpInterceptor {
     request.url.includes('user/add') ||
     request.url.includes('/assets/i18n/') ||
     request?.url.includes('master')) {
-      console.log('Bloqueado');
       return next.handle(request);
     }
     return from(promise).pipe(
@@ -43,7 +42,6 @@ export default class ApiInterceptor implements HttpInterceptor {
           Authorization: 'Bearer ' + token
         }
       });
-      console.log('Paso');
       return clone;
     }
   }

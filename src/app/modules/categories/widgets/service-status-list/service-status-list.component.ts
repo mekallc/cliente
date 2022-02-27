@@ -1,12 +1,13 @@
-import { loadService } from './../../../../store/actions/service.actions';
 import { Component, Input, OnInit, AfterViewInit } from '@angular/core';
 import { Observable, of, zip } from 'rxjs';
-import { DbCategoriesService } from '@modules/categories/services/db-categories.service';
-import { delay, map, tap } from 'rxjs/operators';
-import { WaitingComponent } from '@modules/categories/pages/waiting/waiting.component';
 import { ModalController } from '@ionic/angular';
-import { AppState } from '@store/app.state';
+import { delay, map, tap } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
+import { AppState } from '@store/app.state';
+import { loadService, loadInProcess } from '@store/actions';
+import { WaitingComponent } from '@modules/categories/pages/waiting/waiting.component';
+import { DbCategoriesService } from '@modules/categories/services/db-categories.service';
+import { CompanyModalComponent } from '@modules/categories/pages/company/company-modal.component';
 
 @Component({
   selector: 'app-service-status-list',
@@ -27,15 +28,11 @@ export class ServiceStatusListComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.store.dispatch(loadService({ status: this.type || 'OPEN' }));
+    this.store.dispatch(loadInProcess());
   }
 
   ngAfterViewInit() {
-    this.store.select('service').pipe(
-      delay(1000),
-      tap((res: any) => this.load = res.loading),
-      map((res: any) => res.service)).subscribe((res: any) => {
-      this.listService(res);
-    });
+    this.loadData(this.type);
   }
 
   listService = (service: any) => {
@@ -55,13 +52,52 @@ export class ServiceStatusListComponent implements OnInit, AfterViewInit {
         return filter;
       })
     );
+    this.items$.subscribe((res) => console.log(res));
   };
 
   openService = async (res: any) => {
-    const modal = await this.modalCrtl.create({
-      component: WaitingComponent,
-      componentProps: { res }
-    });
-    modal.present();
+    if (this.type === 'OPEN') {
+      const modal = await this.modalCrtl.create({
+        component: CompanyModalComponent,
+        componentProps: { res }
+      });
+      modal.present();
+    } else {
+      const modal = await this.modalCrtl.create({
+        component: WaitingComponent,
+        componentProps: { res }
+      });
+      modal.present();
+    }
+  };
+
+  private loadData = (type: string) => {
+    console.log(type);
+    switch (type) {
+      case 'OPEN':
+        this.store.select('service').pipe(
+          delay(500),
+          tap((res: any) => this.load = res.loading),
+          map((res: any) => res.service)).subscribe((res: any) => {
+          this.listService(res);
+        });
+      break;
+      case 'IN_PROCESS':
+        this.store.select('inProcess').pipe(
+          delay(500),
+          tap((res: any) => this.load = res.loading),
+          map((res: any) => res.inProcess)).subscribe((res: any) => {
+          this.listService(res);
+        });
+      break;
+      case 'ACCEPTED':
+        this.store.select('accepted').pipe(
+          delay(500),
+          tap((res: any) => this.load = res.loading),
+          map((res: any) => res.accepted)).subscribe((res: any) => {
+          this.listService(res);
+        });
+      break;
+    }
   };
 }
