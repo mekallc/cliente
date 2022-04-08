@@ -8,7 +8,7 @@ import { HomePageRoutingModule } from './home-routing.module';
 import { HeaderModule } from '@core/widgets/header/header.module';
 import { IntroWidgetModule } from '@core/widgets/intro/intro.module';
 import { BannersWidgetModule } from '@core/widgets/banners/banners.module';
-import { CategoriesWidgetModule } from 'src/app/modules/categories/widgets/home/home.module';
+import { CategoriesWidgetModule } from '@modules/categories/widgets/mechanics/home/home.module';
 import { LastRepairedWidgetModule } from '@core/widgets/last-repaired/last-repaired.module';
 
 @NgModule({

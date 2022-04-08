@@ -27,3 +27,29 @@ ion-list {
   align-items: center;
   height: 60vh;
 }
+.notFound {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  height: 65vh;
+  ion-label {
+    --color: rgb(125, 125, 125);
+    text-align: center;
+    ion-icon {
+      --ionicon-stroke-width: 36px;
+      font-size: 50px;
+      color: rgb(125, 125, 125);
+    }
+    h2 {
+      color: rgb(125, 125, 125);
+      font-weight: 600;
+      font-size: 2rem;
+    }
+  }
+}
+
+
+.icon-chat {
+  color: var(--ion-meka-primary);
+}

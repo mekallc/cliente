@@ -1,21 +1,20 @@
 import { Component, OnInit, AfterViewInit, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AlertController, LoadingController, ModalController } from '@ionic/angular';
+import { AlertController, LoadingController, ModalController, NavController } from '@ionic/angular';
 
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 
 import { GeolocationService } from '@core/services/geolocation.service';
-import { WaitingComponent } from '@modules/categories/pages/waiting/waiting.component';
 import { DbCategoriesService } from '@modules/categories/services/db-categories.service';
 import { CameraService } from '@core/services/camera.service';
+import { CompanyModalComponent } from '@modules/categories/pages/company/company-modal.component';
 
 @Component({
   selector: 'app-mechanics',
   templateUrl: './mechanics.component.html',
   styleUrls: ['./mechanics.component.scss'],
 })
-export class MechanicsComponent implements OnInit, AfterViewInit{
+export class MechanicsComponent implements OnInit, AfterViewInit {
 
   @Input() expert: number;
 
@@ -37,6 +36,7 @@ export class MechanicsComponent implements OnInit, AfterViewInit{
 
   constructor(
     private fb: FormBuilder,
+    private nav: NavController,
     private db: DbCategoriesService,
     private geo: GeolocationService,
     private modalCtrl: ModalController,
@@ -56,17 +56,16 @@ export class MechanicsComponent implements OnInit, AfterViewInit{
   }
   onSubmit = async () => {
     this.setReactive();
-    console.log(this.formReactive.value);
     const load = await this.loadingCtrl.create({ message: 'Loading...' });
     await load.present();
     this.db.setServices(this.formReactive.value).subscribe(
       async (res) => {
         await load.dismiss();
-        const modal = await this.modalCtrl.create({ component: WaitingComponent, componentProps: { res } });
+        this.formReactive.reset();
+        const modal = await this.modalCtrl.create({ component: CompanyModalComponent, componentProps: { res } });
         await modal.present();
-        console.log('RES ', res);
+        this.nav.navigateRoot('pages/home');
     }, async (err) => {
-      console.log(err);
       await load.dismiss();
         const alert = await this.alertCtrl.create({
           header: 'ERROR', message: err.error.description, buttons: ['OK']
@@ -77,16 +76,12 @@ export class MechanicsComponent implements OnInit, AfterViewInit{
 
   fiterBrand = (ev: any) => {
     const value = ev.detail.value;
-    this.brands$ = this.db.getBrand().pipe(
-      map((res) => res.filter((row: any) => row.types_vehicle.find((el: any) => el.id === value)))
-    );
-      this.brands$.subscribe((res) => console.log(res));
+    this.brands$ = this.db.getBrand(value);
   };
 
   filterModel = (ev: any) => {
-    this.models$ = this.db.getModel().pipe(
-      map((res: any) => res.filter((row: any) => row.brand === ev.detail.value))
-    );
+    const value = ev.detail.value;
+    this.models$ = this.db.getModel(value);
   };
 
   loadReactiveForm = () => {

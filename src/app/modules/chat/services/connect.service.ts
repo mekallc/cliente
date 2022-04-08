@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Firestore, addDoc, collection, doc, docData, setDoc, Timestamp,
   orderBy, query, collectionData, where, updateDoc } from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
-import { catchError, take, tap } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { catchError, map, take, tap } from 'rxjs/operators';
 import { StorageService } from '@core/services/storage.service';
 
 @Injectable({
@@ -82,15 +82,13 @@ export class ConnectService {
   }
 
   createRoom = (uid: any) => {
-    console.log(this.company.id);
     setDoc(doc(this.fs, `rooms/chat/${uid}/${this.company.id}`), this.company);
-    // updateDoc(doc(this.fs, 'rooms', `rooms/${uid}`, `${this.company.id}`), this.company);
   };
 
   getRoomMessages(uid: string, companyId: string): Observable<any[]> {
     return collectionData(
       query(
-        collection(this.fs, `rooms/chat/${uid}/${companyId}/messages`),
+        collection(this.fs, `chats/${companyId}/services/${uid}/messages`),
         orderBy('createdAt')
       ),
       { idField: 'id' }
@@ -103,7 +101,7 @@ export class ConnectService {
       createdAt: Timestamp.fromMillis(new Date().getTime())
     };
     return addDoc(
-      collection(this.fs, `rooms/chat/${uid}/${companyId}/messages`)
+      collection(this.fs, `/chats/${companyId}/services/${uid}/messages`)
       , data);
   };
 
@@ -112,4 +110,49 @@ export class ConnectService {
       this.company = res;
     });
   }
+
+  // CHAT
+  readMessageServiceChat = (company: number, code: number) => {
+    const doc$ = collectionData(query(
+      collection(this.fs, `chats/${company}/services/${code}/messages`),
+      where('status', '==', 'SENT'), where('type', '==', 'LT')
+      ), { idField: 'id' }) as Observable<any[]>;
+      doc$.subscribe(async (res: any) => {
+        res.forEach(async (el: any) => {
+          await updateDoc(doc(this.fs, `chats/${company}/services/${code}/messages/${el.id}`), { status: 'READ' });
+      });
+    });
+    return of(true);
+  };
+
+  unReadMessageServiceChat = (item: any) => {
+    const items: any = [];
+    item.forEach((el: any)=> {
+      const data: any = this.getMessage(el);
+      if (data === undefined) {
+      } else {
+        items.push(data);
+      }
+    });
+    const filtro = items.filter((row: any) => row.unread > 0);
+    return of(items);
+  };
+
+  getMessage = (code: any) => {
+    if (code.company_request) {
+      const doc$ = collectionData(
+        query(
+          collection(this.fs, `chats/${code.company_request.id}/services/${code.code}/messages`),
+          where('status', '==', 'SENT'), where('type', '==', 'LT')
+        ), { idField: 'id' }) as Observable<any[]>;
+      doc$.pipe( map((res) => { if (res.length > 0) { return res; }; }) )
+      .subscribe((data: any) => {
+        if (data !== undefined) {
+          code.message = data;
+          code.unread = data.length;
+        }
+      });
+    }
+    return code;
+  };
 }

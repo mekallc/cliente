@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ElementRef, ViewChild, OnChanges, SimpleChanges } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { GestureController, IonContent, NavController } from '@ionic/angular';
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
@@ -15,11 +15,11 @@ import { FireStorageService } from '@modules/chat/services/fire-storage.service'
   templateUrl: 'rooms.page.html',
   styleUrls: ['rooms.page.scss'],
 })
-export class RoomsChatPage implements OnInit, AfterViewInit {
+export class RoomsChatPage implements OnInit, AfterViewInit, OnChanges {
 
   @ViewChild('content', { read: ElementRef }) content: ElementRef;
   @ViewChild('mic', { read: ElementRef }) mic: ElementRef;
-  @ViewChild('recordBtn', { read: ElementRef }) recordBtn: ElementRef;
+  // @ViewChild('recordBtn', { read: ElementRef }) recordBtn: ElementRef;
   recording = false;
   messageToogle = false;
   storedFileNames = [];
@@ -54,25 +54,13 @@ export class RoomsChatPage implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     this.initChat();
     this.initAudio();
-    // this.scrollVisible();
-    const longpress = this.gestureCtrl.create({
-      threshold: 0, gestureName: 'long-press', el: this.recordBtn.nativeElement,
-      onStart: ev => {
-        Haptics.impact({ style: ImpactStyle.Light });
-        this.startRecording();
-        this.calculateDuration();
-      },
-      onEnd: ev => {
-        Haptics.impact({ style: ImpactStyle.Light });
-        this.stopRecording();
-      },
-    }, true);
-    longpress.enable();
+    this.conn.readMessageServiceChat(this.company, this.uid).subscribe(() => {});
   }
+
+  ngOnChanges(changes: SimpleChanges): void {  }
 
   scrollVisible = () => {
     const arr = this.content.nativeElement.children;
-    console.log(arr);
   };
 
   initChat() {
@@ -95,9 +83,7 @@ export class RoomsChatPage implements OnInit, AfterViewInit {
     else { this.toogleMessage = true; }
   }
 
-  logScrolling = (ev: any) => {
-    console.log(ev.detail);
-  };
+  logScrolling = (ev: any) => { };
 
   onClose = () => this.navCtrl.navigateRoot('');
 
@@ -129,7 +115,6 @@ export class RoomsChatPage implements OnInit, AfterViewInit {
       this.recording = false;
       if (result.value && result.value.recordDataBase64) {
         const recordData = result.value.recordDataBase64;
-        console.log(recordData);
         const fileName = new Date().getTime() + '.wav';
         const url = await this.fs.uploadAudio(this.uid, fileName);
         this.conn.sendRoomMessage(this.uid, url, 'ACC', fileName);
@@ -143,7 +128,6 @@ export class RoomsChatPage implements OnInit, AfterViewInit {
     const audioFile = await Filesystem.readFile({ path: fileName, directory: Directory.Data, });
     const base64Sound = audioFile.data;
     const audioRef = new Audio(`data: audio/aac;base64,${base64Sound}`);
-    console.log('SOUND ', audioRef);
     audioRef.oncanplaythrough = () => audioRef.play();
     audioRef.load();
   };

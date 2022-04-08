@@ -12,16 +12,12 @@ export class FactoryService {
     private ms: MasterService
   ) { }
 
-  getCompaniesLocation = () => {
-    const items = this.ms.getMaster('user/company/list');
-    items.subscribe((res) => console.log(res));
-  };
+  getCompaniesLocation = () => { };
 
   private calculate = (start: any, end: any) => {
     const a = new google.maps.LatLng(start);
     const b = new google.maps.LatLng(end);
     const distance = google.maps.geometry.spherical.computeDistanceBetween(a, b);
-    console.log(distance);
     return distance;
   };
 }

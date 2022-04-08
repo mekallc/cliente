@@ -1,18 +1,40 @@
 ion-content {
   --background: #fafafa;
+  ion-list {
+    background: none;
+    ion-item {
+      --background: none;
+      --color: var(--ion-meka-principal);
+      ion-label {
+        --color: rgb(55, 55, 55);
+        h1, h2, h3, p {
+          color: rgb(55, 55, 55);
+        }
+        .date {
+        }
+        .vehicle {
+
+        }
+        .code {
+          font-weight: 600;
+        }
+      }
+    }
+  }
+
   .spinner {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 80vh;
+    height: 60vh;
   }
   .notFound {
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    height: 80vh;
+    height: 65vh;
     ion-label {
       --color: rgb(125, 125, 125);
       text-align: center;
@@ -28,6 +50,7 @@ ion-content {
       }
     }
   }
+
 }
 
 

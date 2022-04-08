@@ -43,7 +43,6 @@ export class FireStorageService {
           const storageRef = ref(this.storage, path);
           const task = uploadBytesResumable(storageRef, file);
           this.uploadPercent = percentage(task);
-          this.uploadPercent.subscribe((res) => console.log(res));
           await task;
           url = await getDownloadURL(storageRef);
         } catch(e: any) {
@@ -52,7 +51,6 @@ export class FireStorageService {
       } else {
         // handle invalid file
       }
-      console.log(url);
       return url;
     }
   };

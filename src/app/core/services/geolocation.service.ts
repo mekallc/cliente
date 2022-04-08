@@ -1,3 +1,4 @@
+import { AlertController, NavController } from '@ionic/angular';
 import { Injectable } from '@angular/core';
 import { Geolocation } from '@capacitor/geolocation';
 @Injectable({
@@ -6,19 +7,32 @@ import { Geolocation } from '@capacitor/geolocation';
 
 export class GeolocationService {
 
-  constructor() {
-    Geolocation.checkPermissions().then((res) => {
-      console.log(res);
-    });
-  }
+  constructor(
+    private navCtrl: NavController,
+    private alertCtrl: AlertController,
+  ) { }
 
   requestPermissions = () => {
-    Geolocation.requestPermissions().then((res) => console.log(res));
+    Geolocation.requestPermissions().then();
   };
 
   currentPosition = async () => {
     const coordinates = await Geolocation.getCurrentPosition();
-    console.log('Current position:', coordinates);
     return coordinates;
+  };
+
+  currentPosition2 = () => {
+    Geolocation.getCurrentPosition()
+    .catch(async (err) => {
+      const alert = await this.alertCtrl.create({
+        header: 'ERROR', mode: 'ios',
+        message: 'You need to activate the GPS',
+        buttons: [{
+          text: 'OK',
+          handler: (blah) => this.navCtrl.navigateRoot('pages/home')
+        }]
+      });
+      await alert.present();
+    });
   };
 }

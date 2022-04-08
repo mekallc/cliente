@@ -12,6 +12,8 @@ import { AppState } from '@store/app.state';
 import { Store } from '@ngrx/store';
 import { UserModel } from '@core/model/user.interfaces';
 import { map } from 'rxjs/operators';
+import { Browser, OpenOptions } from '@capacitor/browser';
+import { ValueAccessor } from '@ionic/angular/directives/control-value-accessors/value-accessor';
 
 @Component({
   selector: 'app-side-menu-widget',
@@ -25,13 +27,13 @@ export class SideMenuWidgetComponent implements OnInit {
     { title: 'Roster', url: '/roster' }
   ];
 
-  menus = [ 'SIDEMENU.TERM_OF_USE', 'SIDEMENU.ABOUT' ];
+  menus = [ 'SIDEMENU.TERM_OF_USE' ];
 
   social = [
     { icon: 'logo-facebook', name: 'SIDEMENU.FANPAGE_FB', url: 'https://www.facebook.com/Meka-108821827303515' },
   ];
 
-  user$: Observable<UserModel>;
+  user$: Observable<any>;
 
   constructor(
     private menu: MenuController,
@@ -50,7 +52,6 @@ export class SideMenuWidgetComponent implements OnInit {
 
   initialize = async () => {
     this.appVersion = await App.getInfo();
-    console.log(this.appVersion);
   };
 
   signOut = async () => {
@@ -78,6 +79,17 @@ export class SideMenuWidgetComponent implements OnInit {
 
   onAppRate = async () => {
     const info = await RateApp.requestReview();
-    console.log(info);
+  };
+
+  openBrowser = async (url: string) => {
+    const options: OpenOptions = { url, toolbarColor: '#222428' };
+    await Browser.open(options);
+  };
+
+  getName = (first: string, last: string) => {
+    const a = first.slice(0,1);
+    const b = last.slice(0,1);
+    const value = a + b;
+    return value;
   };
 }

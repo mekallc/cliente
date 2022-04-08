@@ -13,7 +13,7 @@
     <ion-item>
       <ion-label>
         <h1 class="code"> {{ res.code }} </h1>
-        <h3 class="status">{{ res.status === 'IN_PROCESS' ? 'Proccess' : 'OPEN'  }}</h3>
+        <h3 class="status">{{ res.status }}</h3>
       </ion-label>
     </ion-item>
   </ion-list>
@@ -36,7 +36,7 @@
           <ion-item>
             <ion-icon slot="start" name="car-outline"></ion-icon>
             <ion-label class="ion-text-wrap">
-              {{ res.vehicle_model.brand }} {{ res.vehicle_model.model }}
+              {{ res.vehicle_model?.brand }} {{ res.vehicle_model?.model }}
               <span *ngIf="res.year"> {{res.year}}</span>
             </ion-label>
           </ion-item>
@@ -75,16 +75,15 @@
           </ion-item>
         </ion-list>
       </ion-accordion>
-      <ion-accordion value="chat" *ngIf="(room$ | async) as rooms">
+      <ion-accordion value="chat" *ngIf="res.status === 'ACCEPTED'">
         <ion-item slot="header">
           <ion-icon slot="start" name="chatbubbles-outline"></ion-icon>
           <ion-label><b>Chat</b></ion-label>
         </ion-item>
-        <ion-list slot="content" lines="none" *ngIf="rooms.length > 0; else notFound">
-          <ion-item button *ngFor="let room of rooms; let i = index" detail (click)="onChat(room.id)">
-            <ion-badge color="primary" mode="ios" slot="start">{{ i+1 }}</ion-badge>
+        <ion-list slot="content" lines="none" *ngIf="(room$ | async); else notFound">
+          <ion-item button detail (click)="onChat(res.company_request.id)">
             <ion-label>
-              {{ room.name || room.company.name }}
+              {{ res.company_request.name }}
             </ion-label>
           </ion-item>
         </ion-list>

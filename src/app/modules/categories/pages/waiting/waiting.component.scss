@@ -1,11 +1,11 @@
 
 ion-header, ion-footer {
   ion-toolbar {
-    --background: #F0F3F8;
+    --background: #fafafa;
   }
 }
 ion-content {
-  --background: #F0F3F8;
+  --background: #fafafa;
   ion-list {
     background: none;
     ion-item {
@@ -13,10 +13,23 @@ ion-content {
     }
   }
   ion-accordion {
+    background-color: #fafafa;
+    // color: #4d4d4d;
+    ion-item {
+      --background: rgb(215, 215, 215);
+      --detail-icon-color: red;
+      ion-label, ion-icon, .ion-accordion-toggle-icon {
+        --color: #4d4d4d;
+        color: #4d4d4d !important;
+      }
+    }
     ion-list {
       background: none;
       ion-item {
         --background: none;
+        ion-icon {
+          color: #4d4d4d;
+        }
       }
     }
   }

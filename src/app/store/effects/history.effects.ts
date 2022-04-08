@@ -13,10 +13,7 @@ export class HistoryEffects {
       ofType(historyActions.loadHistory),
       mergeMap(() => this.db.getServicesClosed()
         .pipe(
-          map((history) => {
-            console.log(history);
-            return historyActions.successHistory({ history });
-          }),
+          map((history) => historyActions.successHistory({ history })),
           catchError(async ({ error }) => historyActions.errorHistory({ error }))
         )
       )

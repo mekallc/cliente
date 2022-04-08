@@ -12,7 +12,7 @@
           <ion-label>
             <p class="date">{{ item.date_reg | amTimeAgo  }}</p>
             <p class="code">{{ item.code }}</p>
-            <h2 class="brand">{{ item.vehicle_model.brand }} {{ item.vehicle_model.model }}</h2>
+            <h2 class="brand">{{ item.vehicle_model?.brand }} {{ item.vehicle_model?.model }}</h2>
             <p class="type">{{ item.type_expert }}</p>
           </ion-label>
         </div>

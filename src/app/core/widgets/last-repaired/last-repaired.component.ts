@@ -3,8 +3,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { AppState } from '@store/app.state';
 import { ServiceModel } from '@core/model/solicitud.interfaces';
-import { loadService } from '@store/actions';
-import { delay, map, tap } from 'rxjs/operators';
+import { delay, map } from 'rxjs/operators';
 import { ModalController } from '@ionic/angular';
 import { WaitingComponent } from '@modules/categories/pages/waiting/waiting.component';
 import { CompanyModalComponent } from '@modules/categories/pages/company/company-modal.component';
@@ -33,18 +32,20 @@ export class LastRepairedWidgetComponent implements OnInit, AfterViewInit {
     private modalCrtl: ModalController,
   ) { }
 
-  ngOnInit() {
-    console.log(this.status);
-    this.store.dispatch(loadService({ status: this.status }));
-  }
+  ngOnInit() { }
 
   ngAfterViewInit() {
-      this.services$ = this.store.select('service').pipe(map(({ service }) => service), delay(1000));
+    if (this.status === 'OPEN') {
+      this.services$ = this.store.select('service').pipe(map(({ service }) => service), delay(500));
+    }
+    if (this.status === 'IN_PROCESS') {
+      this.services$ = this.store.select('inProcess').pipe(map(({ inProcess }) => inProcess), delay(500));
+    }
   }
 
   openService = (res: any) => {
     if (this.status === 'OPEN') {
-      this.comanyModal(res);
+      this.companyModal(res);
     } else {
       this.waitingModal(res);
     }
@@ -57,7 +58,7 @@ export class LastRepairedWidgetComponent implements OnInit, AfterViewInit {
     });
     modal.present();
   };
-  comanyModal = async (res: any) => {
+  companyModal = async (res: any) => {
     const modal = await this.modalCrtl.create({
       component: CompanyModalComponent,
       componentProps: { res }

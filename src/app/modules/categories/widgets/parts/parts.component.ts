@@ -1,12 +1,13 @@
 import { Component, Input, OnInit, AfterViewInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { CameraService } from '@core/services/camera.service';
-import { GeolocationService } from '@core/services/geolocation.service';
 import { ModalController, AlertController, LoadingController } from '@ionic/angular';
-import { WaitingComponent } from '@modules/categories/pages/waiting/waiting.component';
-import { DbCategoriesService } from '@modules/categories/services/db-categories.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+
+import { CameraService } from '@core/services/camera.service';
+import { GeolocationService } from '@core/services/geolocation.service';
+import { DbCategoriesService } from '@modules/categories/services/db-categories.service';
+import { CompanyModalComponent } from '@modules/categories/pages/company/company-modal.component';
 
 @Component({
   selector: 'app-parts',
@@ -60,17 +61,15 @@ export class PartsComponent implements OnInit, AfterViewInit {
 
   onSubmit = async () => {
     this.setReactive();
-    console.log(this.formReact.value);
     const load = await this.loadingCtrl.create({ message: 'Loading...' });
     await load.present();
     this.db.setServices(this.formReact.value).subscribe(
       async (res) => {
-        console.log(res);
         await load.dismiss();
-        const modal = await this.modalCtrl.create({ component: WaitingComponent, componentProps: { res } });
+        this.formReact.reset();
+        const modal = await this.modalCtrl.create({ component: CompanyModalComponent, componentProps: { res } });
         await modal.present();
     }, async (err) => {
-      console.log(err);
       await load.dismiss();
         const alert = await this.alertCtrl.create({ header: 'ERROR', message: err.error.description, buttons: ['OK'] });
         await alert.present();
@@ -78,9 +77,7 @@ export class PartsComponent implements OnInit, AfterViewInit {
   };
   fiterBrand = (ev: any) => {
     const value = ev.detail.value;
-    this.brands$ = this.db.getBrand().pipe(
-      map((res) => res.filter((row: any) => row.types_vehicle.find((el: any) => el.id === value)))
-    );
+    this.brands$ = this.db.getBrand(value);
   };
 
   loadReactiveForm = () => {
@@ -103,8 +100,8 @@ export class PartsComponent implements OnInit, AfterViewInit {
 
 
   filterModel = (ev: any) => {
-    this.models$ = this.db.getModel().pipe(map((res: any) =>
-      res.filter((row: any) => row.brand === ev.detail.value)));
+    const value = ev.detail.value;
+    this.models$ = this.db.getModel(value);
   };
 
   capturePhoto = async () => {

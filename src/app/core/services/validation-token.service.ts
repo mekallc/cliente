@@ -17,11 +17,11 @@ export class ValidationTokenService {
 
   validate = async () => {
     const user = await this.storage.getStorage('userClient');
-    const access = await this.storage.getStorage('tokenClient');
-    const decode: any = jwt_decode(access);
+    const decode: any = jwt_decode(user.access);
     const exp = moment().diff(moment.unix(decode.exp), 'hours');
-    if (exp <= -1) { return; }
-    this.refreshToken(user.refresh);
+    if (exp >= -1) {
+      this.refreshToken(user.refresh);
+     }
   };
 
   refreshToken = (refresh: string) => {

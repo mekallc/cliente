@@ -1,6 +1,7 @@
 import { AlertController, LoadingController } from '@ionic/angular';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { AuthService } from '@modules/users/services/auth.service';
 
 @Component({
   selector: 'app-change-password',
@@ -9,10 +10,11 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 })
 export class ChangePasswordComponent implements OnInit {
   @Input() user: any;
-  forgotForm: FormGroup;
+  changeForm: FormGroup;
 
   constructor(
     private fb: FormBuilder,
+    private db: AuthService,
     private alertCtrl: AlertController,
     private loadingCtrl: LoadingController,
   ) { }
@@ -21,12 +23,20 @@ export class ChangePasswordComponent implements OnInit {
     this.loadForm();
   }
 
-  onSubmit = () => console.log('object');
+  onSubmit = async () => {
+    const loading = await this.loadingCtrl.create({ message: 'Processing...'});
+    loading.present();
+    this.db.changePassword(this.changeForm.value).subscribe(
+      async (res: any) => {
+        console.log(res);
+      }
+    );
+  };
 
   loadForm = () => {
-    this.forgotForm = this.fb.group({
+    this.changeForm = this.fb.group({
       pass: ['', [Validators.required, Validators.minLength(4)]],
-      repass: ['', [Validators.required, Validators.minLength(4)]],
+      newpass: ['', [Validators.required, Validators.minLength(4)]],
     });
   };
 }

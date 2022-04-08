@@ -17,7 +17,6 @@ export class FirebaseService {
 
   acceptRoom(id: string, company: any) {
     const room: any = this.getRoomById(id);
-    console.log(room);
     if(room) {
       const roomDocRef = doc(this.fs, `rooms/${id}`);
       return updateDoc(roomDocRef, { user: room.user, date_reg: room.date_reg, company });

@@ -14,8 +14,8 @@ export class DbCategoriesService {
     private ms: MasterService
   ) {}
 
-  getBrand = () => this.ms.getMaster('master/vehicle-brand/');
-  getModel = () => this.ms.getMaster('master/vehicle-model/');
+  getBrand = (type: any) => this.ms.getMaster(`master/vehicle-brand-type-vehicle/?type=${type}`);
+  getModel = (brand: any) => this.ms.getMaster(`master/vehicle-model-brand/?brand=${brand}`);
   getVehicles = () => this.ms.getMaster('master/types-vehicle/');
   getTypeCondition = () => this.ms.getMaster('master/vehicle-condition/');
   getIcone = () => this.ms.getMaster('master/expert/');

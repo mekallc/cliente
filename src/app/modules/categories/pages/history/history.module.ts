@@ -8,9 +8,10 @@ import { HistoryPageRoutingModule } from './history-routing.module';
 import { HeaderModule } from '@core/widgets/header/header.module';
 import { IntroWidgetModule } from '@core/widgets/intro/intro.module';
 import { BannersWidgetModule } from '@core/widgets/banners/banners.module';
-import { CategoriesWidgetModule } from 'src/app/modules/categories/widgets/home/home.module';
+import { CategoriesWidgetModule } from '@modules/categories/widgets/mechanics/home/home.module';
 import { LastRepairedWidgetModule } from '@core/widgets/last-repaired/last-repaired.module';
 import { ServiceStatusListModule } from '@modules/categories/widgets/service-status-list/service-status-list.module';
+import { MomentModule } from 'ngx-moment';
 
 
 @NgModule({
@@ -19,6 +20,7 @@ import { ServiceStatusListModule } from '@modules/categories/widgets/service-sta
     IonicModule,
     HeaderModule,
     CommonModule,
+    MomentModule,
     IntroWidgetModule,
     BannersWidgetModule,
     CategoriesWidgetModule,

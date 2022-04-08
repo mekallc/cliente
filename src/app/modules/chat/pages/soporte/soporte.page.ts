@@ -58,7 +58,5 @@ export class SoporteChatPage implements OnInit, AfterViewInit {
 
   onClose = () => this.router.navigate(['']);
 
-  logScrolling(ev: any) {
-    // console.log(ev);
-  };
+  logScrolling(ev: any) { };
 }

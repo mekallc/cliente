@@ -1,10 +1,11 @@
 import { ModalController } from '@ionic/angular';
 import { Component, OnInit } from '@angular/core';
-import { Observable, timer } from 'rxjs';
+import { Observable, of, timer, zip } from 'rxjs';
 import { map, tap, delay } from 'rxjs/operators';
 import { WaitingComponent } from '@modules/categories/pages/waiting/waiting.component';
 import { AppState } from '@store/app.state';
 import { Store } from '@ngrx/store';
+import { DbCategoriesService } from '@modules/categories/services/db-categories.service';
 
 @Component({
   selector: 'app-history',
@@ -20,36 +21,51 @@ export class HistoryPage implements OnInit{
 
   constructor(
     private store: Store<AppState>,
-    private modalCtrl: ModalController
+    private db: DbCategoriesService,
+    private modalCtrl: ModalController,
   ) {
   }
 
   ngOnInit() {
-    this.items$ = this.store.select('history').pipe(
-      delay(700),
-      tap(({ loading, total }) => {
-        if (total === 0) { this.load = false; }
-        else { this.load = loading; }
-        this.total = total;
-      }),
-      map((res: any) => {
-        console.log(res);
-        return res.history;
-      }),
-      delay(300),
-    );
-    this.items$.subscribe((res) => console.log(res));
+    this.loadData();
   }
 
+  loadData = () => {
+    const items$ = this.store.select('history').pipe(
+      delay(500),
+      tap(({ loading, total }) => {
+        this.load = loading;
+        this.total = total;
+      }),
+      map((res: any) => res.history),
+    );
+    items$.subscribe((res) => this.listService(res));
+  };
+
+  listService = (service: any) => {
+    this.items$ = undefined;
+    const items = zip( of(service), this.db.getIcone() ).pipe(
+      map((x: any) => {
+        const data = [];
+        x[0].forEach(el => {
+          el.expert_icon = x[1].filter((row: any) => row.name === el.type_expert)[0].picture;
+          data.push(el);
+        });
+        return data;
+      }),
+    );
+    this.items$ = items;
+  };
+
+
   doRefresh(ev: any) {
-    timer(2000).subscribe(() => {
+    timer(1000).subscribe(() => {
+      this.loadData();
       ev.target.complete();
     });
   }
 
-  segmentChanged = (ev: any) => this.toggle = ev.detail.value;
-
-  onModal = async (res: any) => {
+  openService = async (res: any) => {
     const modal = await this.modalCtrl.create({
       component: WaitingComponent,
       componentProps: { res }

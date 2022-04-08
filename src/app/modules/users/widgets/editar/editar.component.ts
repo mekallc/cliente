@@ -39,10 +39,6 @@ export class EditarComponent implements OnInit {
       password: value.password, last_name: value.lastname,
       fist_name: value.firstname, phone: `+${value.country + value.phone}`
     };
-    // this.auth.signUp(data).then((res) => {
-    //   load.dismiss();
-    //   this.auth.signIn({ email: res.email, password: value.password });
-    // }).catch((err) => console.log(err));
   };
 
 

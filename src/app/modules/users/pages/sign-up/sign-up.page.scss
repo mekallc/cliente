@@ -1,4 +1,5 @@
 ion-content {
+  --background: #fafafa;
   .head {
     ion-label {
       h1 {
@@ -22,6 +23,7 @@ ion-content {
     }
     ion-label {
       margin-bottom: .7rem !important;
+      --color: #515151;
     }
     ion-input, ion-datetime, ion-select {
       border-radius: 15px;
@@ -67,8 +69,8 @@ ion-content {
   }
 }
 ion-content, ion-footer, ion-header, ion-toolbar {
-  --background: #F0F3F8;
-  background: #F0F3F8;
+  --background: #fafafa;
+  background: #fafafa;
 }
 ion-footer {
   --background: var(--ion-meka-primary);

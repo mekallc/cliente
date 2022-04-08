@@ -1,5 +1,5 @@
 import { ModalController } from '@ionic/angular';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Observable, timer } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { DbCategoriesService } from '@modules/categories/services/db-categories.service';
@@ -17,12 +17,14 @@ export class HomePage implements OnInit{
 
   constructor(
     private db: DbCategoriesService,
-    private modalCtrl: ModalController
+    private modalCtrl: ModalController,
   ) {
   }
 
   ngOnInit() {
-    this.items$ = this.db.getServices().pipe( map((res: any) => res.search) );
+    console.log('ACCEPTED');
+    this.items$ = this.db.getServices('ACCEPTED').pipe( map((res: any) => res.search) );
+    this.items$.subscribe((res) => console.log('ACCEPTED ', res));
   }
 
   doRefresh(ev: any) {

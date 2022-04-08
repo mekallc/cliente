@@ -17,6 +17,7 @@ import { CoreCordovaModule } from '@core/core-cordova.module';
 import { LanguageModule } from '@core/language/language.module';
 import { SideMenuWidgetModule } from '@core/widgets/side-menu-widget/side-menu-widget.module';
 import { AgmCoreModule } from '@agm/core';
+import { CodeUserModule } from '@modules/users/pages/code/code.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -26,6 +27,7 @@ import { AgmCoreModule } from '@agm/core';
     CoreModule,
     BrowserModule,
     LanguageModule,
+    CodeUserModule,
     LanguageModule,
     TranslateModule,
     HttpClientModule,

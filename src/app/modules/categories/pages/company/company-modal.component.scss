@@ -1,4 +1,4 @@
-ion-content, ion-toolbar, ion-item, ion-list {
+ion-content, ion-toolbar, ion-item, ion-list, ion-accordion-group, ion-accordion {
   --background: #fafafa;
   background: #fafafa;
 }
@@ -38,4 +38,10 @@ ion-header {
 }
 agm-map  {
   height: 90vh;
+}
+
+ion-footer {
+  ion-toolbar {
+    --background: none;
+  }
 }

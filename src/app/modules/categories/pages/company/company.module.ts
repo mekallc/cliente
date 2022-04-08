@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { CompanyModalComponent } from './company-modal.component';
 import { StarsWidgetModule } from '@core/widgets/stars/stars.module';
+import { CompanyViewModalModule } from '@modules/categories/pages/company-view-modal/company-view-modal.module';
 
 
 @NgModule({
@@ -15,6 +16,7 @@ import { StarsWidgetModule } from '@core/widgets/stars/stars.module';
     CommonModule,
     AgmCoreModule,
     StarsWidgetModule,
+    CompanyViewModalModule
   ]
 })
 export class CompanyModule { }

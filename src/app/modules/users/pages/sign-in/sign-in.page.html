@@ -56,14 +56,14 @@
             <form [formGroup]="forgotPasswordForm">
               <ion-item>
                 <ion-label position="stacked">{{ "SIGN.EMAIL" | translate }} <ion-text color="danger">*</ion-text></ion-label>
-                <ion-input required type="email"></ion-input>
+                <ion-input required type="email" formControlName="email"></ion-input>
               </ion-item>
               <ion-item *ngIf="forgotPasswordForm.get('email').invalid && loginForm.get('email').touched">
                 <ion-text color="danger" class="form-error">
                   <small>{{ "SIGN.ERROR.EMAIL" | translate }}</small>
                 </ion-text>
               </ion-item>
-              <ion-button (click)="onForgotPassword()" [disabled]="forgotPasswordForm.invalid" expand="block" color="primary" shape="round" mode="ios">
+              <ion-button (click)="onSubmitForgotPassword()" [disabled]="forgotPasswordForm.invalid" expand="block" color="primary" shape="round" mode="ios">
                 {{ "SIGN.SEND" | translate }}
               </ion-button>
               <ion-button (click)="goToSlides(0)" expand="block" fill="clear" shape="round" class="mb-3" mode="ios">

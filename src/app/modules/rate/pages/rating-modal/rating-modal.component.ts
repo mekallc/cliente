@@ -14,15 +14,14 @@ export class RatingModalComponent implements OnInit, OnChanges {
     private modal: ModalController,
   ) { }
   ngOnChanges(changes: SimpleChanges): void {
-    console.log(changes);
     throw new Error('Method not implemented.');
   }
 
   ngOnInit() {}
 
-  onSubmit = () => console.log('object');
+  onSubmit = () => null;
 
-  getStar = (ev: number) => console.log(ev);
+  getStar = (ev: number) => null;
 
   onClose = () => this.modal.dismiss();
 

@@ -1,3 +1,11 @@
+ion-header {
+  ion-toolbar {
+    ion-title{
+      color:rgb(40, 40, 40);
+    }
+  }
+}
+
 ion-content {
   --background: #feffef;
   .imessage {
@@ -105,26 +113,21 @@ ion-header {
 
 ion-footer {
   ion-toolbar {
-    --background: #f4f5eb;
+    --background: #eeefde;
     ion-item {
       --background: none;
-      --padding-start: 5px;
-      --inner-padding-end: 0px;
       ion-input {
         border: .5px;
-        height: 35px;
-        border-radius: 15px;
-        --background: #dfdfdf;
-        --padding-start: 15px;
+        height: 40px;
+        border-radius: 10px;
+        --background: #d5d5d5;
+        --padding-start: 10px;
         --padding-end: 10px;
-        font-size: 12px;
+        --color: rgb(81, 79, 79);
       }
-      ion-buttons{
-        margin-inline: 3px !important;
-        ion-button{
-          --padding-start: 4px;
-          --padding-end: 4px;
-        }
+      ion-button {
+        --padding-start	: 8px;
+        --padding-end	  : 8px;
       }
     }
     .buttons-text {

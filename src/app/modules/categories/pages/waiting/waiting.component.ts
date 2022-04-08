@@ -3,7 +3,7 @@ import { ModalController, AlertController, NavController, LoadingController } fr
 import { SoporteChatPage } from '@modules/chat/pages/soporte/soporte.page';
 import { ConnectService } from '@modules/chat/services/connect.service';
 import { PhotoViewer } from '@ionic-native/photo-viewer/ngx';
-import { Observable } from 'rxjs';
+import { Observable, timer } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 import { DbCategoriesService } from '@modules/categories/services/db-categories.service';
 import { Store } from '@ngrx/store';
@@ -42,10 +42,10 @@ export class WaitingComponent implements OnInit, AfterViewInit {
   ) { }
 
   ngOnInit() {
+    timer(400).subscribe(() => console.log('WAITING ', this.res));
   }
 
   ngAfterViewInit(): void {
-    console.log('WAITING ', this.res);
     this.loadMap();
     this.room$ = this.conn.getRoomsCompany(this.res.code).pipe(map((res: any) => res));
   }
@@ -55,8 +55,8 @@ export class WaitingComponent implements OnInit, AfterViewInit {
       header: 'INFO',
       message: 'Do you want to cancel this service?',
       buttons: [
-        { text: 'Cancel', role: 'cancel', cssClass: 'secondary', handler: () => {} },
-        { text: 'Ok', handler: () => console.log('Confirm Okay') }
+        { text: 'Cancel', role: 'cancel', cssClass: 'secondary' },
+        { text: 'Ok' }
       ]
     });
     await alert.present();
@@ -67,13 +67,12 @@ export class WaitingComponent implements OnInit, AfterViewInit {
     else { this.onCancel(); }
   };
 
-  onChat = (code: string) => {
+  onChat = (code: any) => {
     this.modalCtrl.dismiss();
     this.navCtrl.navigateForward(`chat/room/${this.res.code}/${code}`);
   };
 
   onCancelService = async (id: number) => {
-    console.log('nDeleteService ', id);
     const alert = await this.alertCtrl.create({
       header: 'Info',
       message: 'Will you cancel this service?',
@@ -98,7 +97,6 @@ export class WaitingComponent implements OnInit, AfterViewInit {
     await alert.present();
   };
   onDeleteService = async (id: number) => {
-    console.log('nDeleteService ', id);
     const alert = await this.alertCtrl.create({
       header: 'Info',
       message: 'Will you eliminate this service?',

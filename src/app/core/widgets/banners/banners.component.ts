@@ -1,4 +1,9 @@
+import { map } from 'rxjs/operators';
 import { Component, OnInit } from '@angular/core';
+import { MasterService } from '@core/services/master.service';
+import { GeolocationService } from '@core/services/geolocation.service';
+import { Observable } from 'rxjs';
+
 
 @Component({
   selector: 'app-widget-banner',
@@ -7,14 +12,27 @@ import { Component, OnInit } from '@angular/core';
 })
 export class BannersWidgetComponent implements OnInit {
 
+  entry$: Observable<any[]>;
   options = {
+    loop: true,
     speed: 600,
     autoplay: true,
-    loop: true,
+    spaceBetween: 100,
+    slidesPerView: 1,
   };
 
-  constructor() { }
+  constructor(
+    private ms: MasterService,
+    private geo: GeolocationService,
+  ) { }
 
-  ngOnInit() {}
+  async ngOnInit() {
+    await this.getBanner();
+  }
+
+  getBanner = async () => {
+    const { coords } = await this.geo.currentPosition();
+    this.entry$ = this.ms.getBanner(coords.longitude, coords.latitude).pipe(map((res: any) => res.search));
+  };
 
 }

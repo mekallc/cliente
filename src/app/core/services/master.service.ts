@@ -24,4 +24,14 @@ export class MasterService {
   patchMaster(collection: string, id: any, data: any) {
     return this.http.patch(`${url}/${version}/${collection}/${id}`, data);
   }
+  patch2Master(collection: string, data: any) {
+    return this.http.patch(`${url}/${version}/${collection}`, data);
+  }
+
+  changeToken(token_user: string) {
+    return this.http.patch(`${url}/${version}/notification/token/`, { token_user });
+  }
+
+  getBanner = (lat: number, lng: number): Observable<any> =>  this.http.get<any>(
+    `${url}/${version}/banner/list/user/?longitude=${lng}&$latitude={lat}`);
 }
