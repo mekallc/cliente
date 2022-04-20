@@ -33,5 +33,5 @@ export class MasterService {
   }
 
   getBanner = (lat: number, lng: number): Observable<any> =>  this.http.get<any>(
-    `${url}/${version}/banner/list/user/?longitude=${lng}&$latitude={lat}`);
+    `${url}/${version}/banner/list/user/?longitude=${lng}&latitude=${lat}`);
 }

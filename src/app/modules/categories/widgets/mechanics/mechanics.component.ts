@@ -1,18 +1,24 @@
-import { Component, OnInit, AfterViewInit, Input } from '@angular/core';
+import { Component, OnInit, AfterViewInit, Input, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AlertController, LoadingController, ModalController, NavController } from '@ionic/angular';
 
 import { Observable } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 
+import { CameraService } from '@core/services/camera.service';
 import { GeolocationService } from '@core/services/geolocation.service';
 import { DbCategoriesService } from '@modules/categories/services/db-categories.service';
-import { CameraService } from '@core/services/camera.service';
 import { CompanyModalComponent } from '@modules/categories/pages/company/company-modal.component';
+
+import { Store } from '@ngrx/store';
+import * as actions from '@store/actions';
+import { AppState } from '@store/app.state';
 
 @Component({
   selector: 'app-mechanics',
   templateUrl: './mechanics.component.html',
   styleUrls: ['./mechanics.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MechanicsComponent implements OnInit, AfterViewInit {
 
@@ -37,6 +43,7 @@ export class MechanicsComponent implements OnInit, AfterViewInit {
   constructor(
     private fb: FormBuilder,
     private nav: NavController,
+    private store: Store<AppState>,
     private db: DbCategoriesService,
     private geo: GeolocationService,
     private modalCtrl: ModalController,
@@ -58,30 +65,31 @@ export class MechanicsComponent implements OnInit, AfterViewInit {
     this.setReactive();
     const load = await this.loadingCtrl.create({ message: 'Loading...' });
     await load.present();
-    this.db.setServices(this.formReactive.value).subscribe(
-      async (res) => {
-        await load.dismiss();
-        this.formReactive.reset();
-        const modal = await this.modalCtrl.create({ component: CompanyModalComponent, componentProps: { res } });
-        await modal.present();
-        this.nav.navigateRoot('pages/home');
+    this.store.dispatch(actions.itemAdd({ item: this.formReactive.value }));
+    this.store.select('item')
+    .pipe(filter(row => !row.loading), map(res => res.item))
+    .subscribe(async (res) => {
+      this.store.dispatch(actions.statusLoad());
+      load.dismiss();
+      this.formReactive.reset();
+      const modal = await this.modalCtrl.create({ component: CompanyModalComponent, componentProps: { res } });
+      await modal.present();
+      this.nav.navigateRoot('pages/home');
     }, async (err) => {
-      await load.dismiss();
-        const alert = await this.alertCtrl.create({
-          header: 'ERROR', message: err.error.description, buttons: ['OK']
-        });
-        await alert.present();
+      load.dismiss();
+      const alert = await this.alertCtrl.create({
+        header: 'ERROR', message: err.error.description, buttons: ['OK'] });
+      await alert.present();
     });
   };
 
   fiterBrand = (ev: any) => {
-    const value = ev.detail.value;
-    this.brands$ = this.db.getBrand(value);
+    this.brands$ = this.db.getBrand(ev.detail.value);
   };
 
   filterModel = (ev: any) => {
-    const value = ev.detail.value;
-    this.models$ = this.db.getModel(value);
+    this.models$ = this.db.getModel(ev.detail.value);
+
   };
 
   loadReactiveForm = () => {
@@ -96,10 +104,8 @@ export class MechanicsComponent implements OnInit, AfterViewInit {
 
   setReactive = () => {
     this.formReactive.controls.type_expert.setValue(+this.expert);
-    this.formReactive.controls.latitude.setValue(-25.5154);
-    this.formReactive.controls.longitude.setValue(-49.2977);
-    // this.formReactive.controls.latitude.setValue(this.coordinates.latitude);
-    // this.formReactive.controls.longitude.setValue(this.coordinates.longitude);
+    this.formReactive.controls.latitude.setValue(this.coordinates.latitude);
+    this.formReactive.controls.longitude.setValue(this.coordinates.longitude);
     this.formReactive.controls.pictures.setValue(this.capture);
   };
 

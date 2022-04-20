@@ -1,4 +1,3 @@
-import { loadService } from './store/actions/service.actions';
 import { Component, OnInit } from '@angular/core';
 import { Platform, ModalController } from '@ionic/angular';
 import { App } from '@capacitor/app';
@@ -13,11 +12,12 @@ import { PushService } from './core/services/push.service';
 import { LinksService } from './core/services/links.service';
 import { StorageService } from '@core/services/storage.service';
 import { TraslationService } from '@core/language/traslation.service';
-import { ValidationTokenService } from '@core/services/validation-token.service';
-import { loadHistory, loadUser, loadInProcess, loadAccepted } from '@store/actions';
 import { GeolocationService } from '@core/services/geolocation.service';
 import { CodeUserComponent } from '@modules/users/pages/code/code.component';
+import { ValidationTokenService } from '@core/services/validation-token.service';
 
+import * as actions from './store/actions';
+import { IntegratedService } from '@core/services/integrated.service';
 
 @Component({
   selector: 'app-root',
@@ -34,13 +34,13 @@ export class AppComponent implements OnInit {
     private platform: Platform,
     private global: Globalization,
     private store: Store<AppState>,
+    private geo: GeolocationService,
     private storage: StorageService,
     private pushService: PushService,
     private linkService: LinksService,
     public traslate: TraslationService,
-    private modalCtrl: ModalController,
     private token: ValidationTokenService,
-    private geo: GeolocationService
+    private integratedService: IntegratedService,
   ) { }
 
   ngOnInit() {
@@ -48,10 +48,14 @@ export class AppComponent implements OnInit {
     this.initializeApp();
     this.userState();
     this.getLanguage();
-    App.addListener('appStateChange', ({ isActive }) => {
-      if (!isActive) { return; }
-      this.token.validate();
-      this.geo.currentPosition2();
+    App.addListener('appStateChange', async ({ isActive }) => {
+      if (isActive) {
+        // this.userState();
+        this.token.validate();
+        this.store.dispatch(actions.expertLoad());
+        // this.geo.currentPosition2();
+        // this.integratedService.newAccepted();
+      }
     });
   }
 
@@ -59,6 +63,8 @@ export class AppComponent implements OnInit {
     this.platform.ready().then(async () => {
       this.toSplash();
       this.pushService.initPush();
+
+      this.integratedService.newAccepted();
       this.appVersion = await App.getInfo();
     });
   };
@@ -80,19 +86,19 @@ export class AppComponent implements OnInit {
   userState = async () => {
     const user = await this.storage.getStorage('userClient');
     if (!user) { return; }
-    this.store.dispatch(loadUser(user));
-    this.store.dispatch(loadInProcess());
-    this.store.dispatch(loadAccepted());
-    this.store.dispatch(loadHistory());
-    this.store.dispatch(loadService({ status: 'OPEN' }));
+    this.integratedService.getStatus();
+    this.store.dispatch(actions.itemLoad());
+    this.store.dispatch(actions.expertLoad());
+    this.store.dispatch(actions.loadHistory());
+    this.store.dispatch(actions.loadUser(user));
   };
 
   getCodePassword = async () => {
-    this.storage.removeStorage('oChange');
-    const { result } = await this.storage.getStorage('oChange');
-    if (result === 'OK') {
-      const modal =await this.modalCtrl.create({ component: CodeUserComponent });
-      modal.present();
-    }
+    // this.storage.removeStorage('oChange');
+    // const { result } = await this.storage.getStorage('oChange');
+    // if (result === 'OK') {
+    //   const modal =await this.modalCtrl.create({ component: CodeUserComponent });
+    //   modal.present();
+    // }
   };
 }

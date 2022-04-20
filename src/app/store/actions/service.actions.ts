@@ -5,6 +5,10 @@ export const loadService = createAction(
   '[OPENED] Load',  props<{ status: string }>()
 );
 
+export const deleteService = createAction(
+  '[OPENED] Delete',  props<{ id: number }>()
+);
+
 export const successService = createAction(
   '[OPENED] Success', props<{ service: ServiceModel[]}>()
 );

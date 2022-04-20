@@ -32,7 +32,9 @@ export class BannersWidgetComponent implements OnInit {
 
   getBanner = async () => {
     const { coords } = await this.geo.currentPosition();
-    this.entry$ = this.ms.getBanner(coords.longitude, coords.latitude).pipe(map((res: any) => res.search));
+    // this.entry$ = this.ms.getBanner(coords.longitude, coords.latitude).pipe(map((res: any) => res.search));
+    this.entry$ = this.ms.getBanner(10.256092197650664, -67.61916302825504).pipe(map((res: any) => res.search));
+    this.entry$.subscribe(res => console.log(res));
   };
 
 }

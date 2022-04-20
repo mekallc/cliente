@@ -36,7 +36,7 @@
           <div class="row g-0">
             <div class="col-5 col-md-3">
               <ion-item class="country" lines="none">
-                <ion-select placeholder="Country" interface="action-sheet" formControlName="country" [value]="user.country">
+                <ion-select [placeholder]="'SIGN.COUNTRY' | translate | titlecase" interface="action-sheet" formControlName="country" [value]="user.country">
                   <ion-select-option *ngFor="let item of countries$ | async" [value]="item.phone_code">
                     (+{{ item.phone_code }}) {{ item.name  }}</ion-select-option>
                 </ion-select>

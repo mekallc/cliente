@@ -19,9 +19,18 @@
 			"backgroundColor": "#080f18",
 			"androidScaleType": "CENTER_INSIDE",
 			"androidSplashResourceName": "splash"
+		},
+		"LocalNotifications": {
+			"smallIcon": "ic_stat_icon_config_sample",
+			"iconColor": "#488AFF",
+			"sound": "beep.wav"
 		}
 	},
 	"android": {
 		"allowMixedContent": true
+	},
+	"server": {
+		"cleartext": true,
+		"url": "http://192.168.250.163:8101"
 	}
 }

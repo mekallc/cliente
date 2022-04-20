@@ -1,7 +1,7 @@
 <ion-header class="ion-no-border">
   <ion-toolbar mode="ios">
     <ion-buttons slot="start">
-      <ion-back-button text=""></ion-back-button>
+      <ion-back-button></ion-back-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -41,7 +41,7 @@
           </ion-item>
           <ion-item lines="none">
             <ion-label position="stacked">{{ "SIGN.EMAIL" | translate }} <ion-text color="danger">*</ion-text></ion-label>
-            <ion-input required type="email" inputmode="email" formControlName="email"></ion-input>
+            <ion-input required type="email" inputmode="email" formControlName="email" clear-input="true"></ion-input>
           </ion-item>
           <ion-item lines="none" *ngIf="registerForm.get('email').invalid && registerForm.get('email').touched">
             <ion-text color="danger" class="form-error">

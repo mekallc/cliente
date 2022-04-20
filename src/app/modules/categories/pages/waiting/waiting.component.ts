@@ -8,7 +8,7 @@ import { delay, map } from 'rxjs/operators';
 import { DbCategoriesService } from '@modules/categories/services/db-categories.service';
 import { Store } from '@ngrx/store';
 import { AppState } from '@store/app.state';
-import { loadInProcess, loadService } from '@store/actions';
+import * as actions from '@store/actions';
 
 declare let google: any;
 
@@ -72,7 +72,7 @@ export class WaitingComponent implements OnInit, AfterViewInit {
     this.navCtrl.navigateForward(`chat/room/${this.res.code}/${code}`);
   };
 
-  onCancelService = async (id: number) => {
+  onCancelService = async (item: any) => {
     const alert = await this.alertCtrl.create({
       header: 'Info',
       message: 'Will you cancel this service?',
@@ -84,8 +84,15 @@ export class WaitingComponent implements OnInit, AfterViewInit {
           handler: async () => {
             const loading = await this.loadingCtrl.create({ message: 'Loading...' });
             loading.present();
-            this.db.cancelService(id).pipe(delay(700)).subscribe(
-              () => this.store.dispatch(loadInProcess()),
+            this.db.cancelService(item.id).pipe(delay(700)).subscribe(
+              () => {
+                if (item.status === 'IN_PROCESS') {
+                  this.store.dispatch(actions.deleteInProcess({ id: item.id }));
+                } else {
+                  this.store.dispatch(actions.deleteAccepted({ id: item.id }));
+                }
+                this.store.dispatch(actions.loadService({ status: 'OPEN' }));
+              },
               (err) => console.log('Error ', err)
             );
             loading.dismiss();
@@ -109,7 +116,7 @@ export class WaitingComponent implements OnInit, AfterViewInit {
             const loading = await this.loadingCtrl.create({ message: 'Loading...' });
             loading.present();
             this.db.deleteService(id).pipe(delay(700)).subscribe(
-              () => this.store.dispatch(loadService({status: 'OPEN'})),
+              () => this.store.dispatch(actions.deleteService({ id })),
               (err) => console.log('Error ', err)
             );
             loading.dismiss();

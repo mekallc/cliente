@@ -8,7 +8,7 @@ import { DbCategoriesService } from '@modules/categories/services/db-categories.
 
 @Injectable()
 export class InProcessEffects {
-  seervice$ = createEffect(() =>
+  service$ = createEffect(() =>
     this.actions$.pipe(
       ofType(actions.loadInProcess),
       mergeMap(() => this.db.getServices('IN_PROCESS')

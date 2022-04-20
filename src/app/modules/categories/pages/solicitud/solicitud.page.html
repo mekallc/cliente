@@ -5,10 +5,10 @@
       <div class="col-12 col-md-10">
         <ion-segment mode="md" (ionChange)="segmentChanged($event)"  [value]="segment">
           <ion-segment-button  mode="md" value="mechanics">
-            <ion-label>mechanics</ion-label>
+            <ion-label>{{ "mechanics" | translate }}</ion-label>
           </ion-segment-button>
           <ion-segment-button  mode="md" value="replacement">
-            <ion-label>replacement</ion-label>
+            <ion-label>{{ "replacement" | translate }}</ion-label>
           </ion-segment-button>
         </ion-segment>
       </div>

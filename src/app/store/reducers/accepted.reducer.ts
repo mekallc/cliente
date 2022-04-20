@@ -12,6 +12,17 @@ const acceptedReducerMap = createReducer(
   on(actions.successAccepted, (state, { accepted }) => ({ ...state, loading: false, accepted, total: accepted.length })),
 
   on(actions.errorAccepted, (state, { error }) => ({ ...state, loading: false, error })),
+
+  on(actions.addAccepted, (state, { item }) => ({
+    ...state,
+    loading: false,
+    accepted: state.accepted.concat(...item)
+  })),
+  on(actions.deleteAccepted, (state, { id }) => ({
+    ...state,
+    loading: false,
+    accepted: state.accepted.filter(i => i.id !== id)
+  })),
 );
 
 export const acceptedReducer = (state: any, action: any) => acceptedReducerMap(state, action);

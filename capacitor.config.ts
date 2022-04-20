@@ -19,14 +19,19 @@ const config: CapacitorConfig = {
       androidScaleType: "CENTER_INSIDE",
       androidSplashResourceName: "splash",
     },
+    LocalNotifications: {
+      smallIcon: "ic_stat_icon_config_sample",
+      iconColor: "#488AFF",
+      sound: "beep.wav",
+    },
   },
   android: {
     allowMixedContent: true
   },
-  // server: {
-  //   cleartext: true,
-  //   url: 'http://192.168.250.163:8101',
-  // },
+  server: {
+    cleartext: true,
+    url: 'http://192.168.250.163:8101',
+  },
 };
 
 export default config;

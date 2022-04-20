@@ -7,12 +7,16 @@ import player from 'lottie-web';
 import { LottieModule } from 'ngx-lottie';
 import { MomentModule } from 'ngx-moment';
 
-import { StoreModule } from '@ngrx/store';
-import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { EffectsModule } from '@ngrx/effects';
+import { AgmCoreModule } from '@agm/core';
+import { provideFirebaseApp } from '@angular/fire/app';
+import { provideFirestore } from '@angular/fire/firestore';
+import { provideStorage } from '@angular/fire/storage';
+import { initializeApp } from 'firebase/app';
+import { getFirestore } from 'firebase/firestore';
+import { getStorage } from 'firebase/storage';
 
-import { EffectsArray } from 'src/app/store/effects';
-import { ROOT_REDUCERS } from 'src/app/store/app.state';
+import { environment } from 'src/environments/environment';
+import { CoreStoreModule } from '@store/core-store.module';
 import ApiInterceptor from '@core/services/http.interceptor';
 
 export function playerFactory() { return player; }
@@ -22,15 +26,12 @@ export function playerFactory() { return player; }
   imports: [
     CommonModule,
     MomentModule,
+    CoreStoreModule,
     LottieModule.forRoot({ player: playerFactory }),
-    StoreModule.forRoot(ROOT_REDUCERS, {
-      runtimeChecks: {
-        strictStateImmutability: false,
-        strictActionImmutability: false,
-      },
-    }),
-    StoreDevtoolsModule.instrument({ name: 'TEST', maxAge: 25 }),
-    EffectsModule.forRoot(EffectsArray),
+    provideFirebaseApp(() => initializeApp(environment.firebase)),
+    provideFirestore(() => getFirestore()),
+    provideStorage(() => getStorage()),
+    AgmCoreModule.forRoot({ apiKey: 'AIzaSyCLRF1U1vrDAqVmIdwMKTcnAEMylbvnkhY' }),
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: ApiInterceptor, multi: true },

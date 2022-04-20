@@ -48,14 +48,13 @@ export class SignInPage implements OnInit, AfterViewInit {
     this.db.signIn(this.loginForm.value).subscribe(
     async (res: any) => {
       await this.storage.setStorage('userClient', res);
-      this.store.dispatch(actions.loadAccepted());
-      this.store.dispatch(actions.loadInProcess());
-      this.store.dispatch(actions.loadService({ status: 'OPENED' }));
+      this.store.dispatch(actions.expertLoad());
+
       await load.dismiss();
       return this.nav.navigateRoot('/pages/home');
     }, async (err: any) => {
       await load.dismiss();
-      await this.db.alertErr(err.error);
+      await this.db.alertErr(err.error.detail);
     });
   };
 

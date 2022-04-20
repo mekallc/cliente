@@ -35,5 +35,15 @@ export class DbCategoriesService {
     return this.ms.getMaster(`user/company/list${query}`);
   };
 
+  // TODO: GET Last Service
+  getService = () => this.ms.getMaster(`service/request/list/?ordering=-date_reg&number_items_page=1`).pipe();
+
+  getServiceEditStatus = (status: string, item: any) => {};
+
+  //TODO: UPDATE Service
   sendService = (id: number, data: any) => this.ms.patchMaster('service/request', id, data);
+
+  // TODO: VERIFY Status the Service
+  getChangedStatusService = (id: number) =>
+    this.ms.getMaster(`service/request/${id}`);
 }

@@ -19,15 +19,15 @@ export class ValidationTokenService {
     const user = await this.storage.getStorage('userClient');
     const decode: any = jwt_decode(user.access);
     const exp = moment().diff(moment.unix(decode.exp), 'hours');
-    if (exp >= -1) {
-      this.refreshToken(user.refresh);
-     }
+    if (exp >= -1) { this.refreshToken(user); }
   };
 
-  refreshToken = (refresh: string) => {
-    this.ms.postMaster('setting/token/refresh/', { refresh }).subscribe(async (res: any) => {
-      await this.storage.removeStorage('tokenClient');
-      await this.storage.setStorage('tokenClient', res.access);
+  refreshToken = (user: any) => {
+    this.ms.postMaster('setting/token/refresh/', { refresh: user.refresh })
+    .subscribe(async (res: any) => {
+      user.access = res.access;
+      await this.storage.removeStorage('userClient');
+      await this.storage.setStorage('userClient', user);
     });
   };
 

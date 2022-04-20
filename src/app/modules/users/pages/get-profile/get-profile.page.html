@@ -1,6 +1,8 @@
 <ion-header class="ion-no-border">
   <ion-toolbar mode="ios">
-    <ion-title style="color: #fafafa">Profile</ion-title>
+    <ion-title style="color: #fafafa">
+      {{ "SIGN.PROFILE" | translate | uppercase }}
+    </ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="onBack()">
         <ion-icon slot="icon-only" name="close-circle" style="color: '#fafafa'"></ion-icon>
@@ -40,10 +42,10 @@
   <div class="container mt-4">
     <ion-segment value="editar" (ionChange)="segmentChanged($event)" mode="ios">
       <ion-segment-button value="editar">
-        <ion-label>Editar</ion-label>
+        <ion-label>{{ "SIGN.EDIT" | translate | titlecase }}</ion-label>
       </ion-segment-button>
       <ion-segment-button value="password">
-        <ion-label>Cambiar Password</ion-label>
+        <ion-label>{{ "SIGN.FORGOT_PWD" | translate | titlecase }}</ion-label>
       </ion-segment-button>
     </ion-segment>
     <app-editar [user]="user" *ngIf="segment ==='editar'; else change"></app-editar>

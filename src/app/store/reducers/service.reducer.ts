@@ -1,5 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
-import * as serviceActions from '../actions/service.actions';
+import * as actions from '../actions';
 import { ServiceModel } from '@core/model/solicitud.interfaces';
 
 export interface ServiceState { service: ServiceModel[]; loading: boolean; error: any; total: number }
@@ -7,13 +7,19 @@ export const serviceState: ServiceState = { loading: false, service: [], error: 
 
 const serviceReducerMap = createReducer(
   serviceState,
-  on(serviceActions.loadService, (state, { status }) => ({
+  on(actions.loadService, (state, { status }) => ({
     ...state, loading: true, status })),
 
-  on(serviceActions.successService, (state, { service }) => ({
+  on(actions.successService, (state, { service }) => ({
     ...state, loading: false, service, total: service.length })),
 
-  on(serviceActions.errorService, (state, { error }) => ({
+    on(actions.deleteInProcess, (state, { id }) => ({
+      ...state,
+      loading: false,
+      inProcess: state.service.filter(i => i.id !== id)
+    })),
+
+  on(actions.errorService, (state, { error }) => ({
   ...state, loading: false, error })),
 );
 

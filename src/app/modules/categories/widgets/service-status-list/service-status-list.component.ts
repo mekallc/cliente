@@ -30,7 +30,6 @@ export class ServiceStatusListComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.store.dispatch(loadService({ status: this.type || 'OPEN' }));
-    this.store.dispatch(loadInProcess());
   }
 
   ngAfterViewInit() {

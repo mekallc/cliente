@@ -93,7 +93,7 @@
 </ion-content>
 <ion-footer class="ion-no-border">
   <ion-toolbar>
-    <ion-button mode="ios" expand="full" fill="clear" (click)="onCancelService(res.id)"
+    <ion-button mode="ios" expand="full" fill="clear" (click)="onCancelService(res)"
       *ngIf="res.status === 'IN_PROCESS' || res.status === 'ACCEPTED'"
       color="danger"> Cancel Service </ion-button>
     <ion-button mode="ios" expand="full" fill="clear" (click)="onDeleteService(res.id)" *ngIf="res.status === 'OPEN'"

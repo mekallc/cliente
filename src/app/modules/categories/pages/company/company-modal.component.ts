@@ -1,13 +1,14 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { ModalController, AlertController, LoadingController } from '@ionic/angular';
-import { timer, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
+
 import { Store } from '@ngrx/store';
-import { AppState } from '@store/app.state';
-import { DbCategoriesService } from '@modules/categories/services/db-categories.service';
 import * as actions from '@store/actions';
-import { CompanyViewModalComponent } from '@modules/categories/pages/company-view-modal/company-view-modal.component';
-import { threadId } from 'worker_threads';
+import { AppState } from '@store/app.state';
+
+import { DbCategoriesService } from '../../services/db-categories.service';
+import { CompanyViewModalComponent } from '../company-view-modal/company-view-modal.component';
 declare let google: any;
 
 @Component({
@@ -15,13 +16,16 @@ declare let google: any;
   templateUrl: './company-modal.component.html',
   styleUrls: ['./company-modal.component.scss'],
 })
+
 export class CompanyModalComponent implements OnInit {
 
   @Input() res: any;
   @ViewChild('map', { static: false }) mapElement: ElementRef;
+
   map: any;
   value = 'maps';
   companies$: Observable<any[]>;
+
   constructor(
     private store: Store<AppState>,
     private db: DbCategoriesService,
@@ -31,9 +35,13 @@ export class CompanyModalComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.getData();
+  }
+
+  getData = () => {
     this.companies$ = this.db.getCompanies(1, 2, this.res.latitude, this.res.longitude)
     .pipe(map((res: any) => res.search));
-  }
+  };
 
   clickedMarker = async (item: any) => {
     const data = {
@@ -52,8 +60,8 @@ export class CompanyModalComponent implements OnInit {
           handler: async () => {
             const loading = await this.loadingCtrl.create({ message: 'Loading...' });
             loading.present();
-            this.db.sendService(this.res.id, data).pipe(delay(500))
-              .subscribe((res: any) => this.dispatch());
+            this.store.dispatch(actions.itemUpdate({ id: this.res.id, data }));
+            this.store.dispatch(actions.statusChanged({ status: 'IN_PROCESS'}));
             loading.dismiss();
             this.modalCtrl.dismiss();
           }
