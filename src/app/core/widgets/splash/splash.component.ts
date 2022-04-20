@@ -26,7 +26,7 @@ export class SplashComponent implements OnInit {
   }
 
   ngOnInit() {
-    timer(3000).subscribe(() => this.nav.navigateRoot(''));
+    timer(2000).subscribe(() => this.nav.navigateRoot(''));
   }
 
 }

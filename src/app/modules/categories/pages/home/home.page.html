@@ -1,0 +1,31 @@
+<app-header></app-header>
+<ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content
+      pullingIcon="chevron-down-circle-outline"
+      pullingText="Pull to refresh"
+      refreshingSpinner="circles"
+      refreshingText="Refreshing...">
+    </ion-refresher-content>
+  </ion-refresher>
+  <ion-segment mode="ios" [value]="toggle" (ionChange)="segmentChanged($event)">
+    <ion-segment-button value="OPEN">
+      <ion-label>REQUESTS</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="IN_PROCESS">
+      <ion-label>IN PROCESS</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="ACCEPTED">
+      <ion-label>ACCEPTED</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+  <ng-template [ngIf]="toggle === 'OPEN'">
+    <app-service-status-list [type]="toggle"></app-service-status-list>
+  </ng-template>
+  <ng-template [ngIf]="toggle === 'IN_PROCESS'">
+    <app-service-status-list [type]="toggle"></app-service-status-list>
+  </ng-template>
+  <ng-template [ngIf]="toggle === 'ACCEPTED'">
+    <app-service-status-list [type]="toggle"></app-service-status-list>
+  </ng-template>
+</ion-content>

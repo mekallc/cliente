@@ -74,10 +74,10 @@ function copyImages(sourcePath, targetPath, images) {
   for (const icon of images) {
     let source = sourcePath + icon.source;
     let target = targetPath + icon.target;
-    fs.copyFile(source, target, err => {
-      if (err) throw err;
-      console.log(`${source} >> ${target}`);
-    });
+    fs.copyFile(source, target, function (err) {
+        if (err)
+          throw err;
+      });
   }
 }
 

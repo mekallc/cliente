@@ -11,8 +11,10 @@ const routes: Routes = [
   },
   {
     path: 'splash',
-    loadChildren: () => import('src/app/core/widgets/splash/splash.module').then( m => m.SplashModule),
+    loadChildren: () => import('@core/widgets/splash/splash.module').then( m => m.SplashModule),
   },
+  { path: 'chat', loadChildren: () => import('@modules/chat/chat.module').then(m => m.ChatModule) },
+  { path: 'search', loadChildren: () => import('@modules/factories/factories.module').then(m => m.FactoriesModule) },
   { path: '', redirectTo: '/pages/home', pathMatch: 'full' },
 ];
 

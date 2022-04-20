@@ -12,11 +12,8 @@ export class TrimValueDirective {
 
   private trimValueAccess(valueAccessor: any | ControlValueAccessor): void {
     const original = valueAccessor.registerOnChange;
-    console.log('🍌🍌🍌 Estoy aqui');
-    valueAccessor.registerOnChange = (fn: (_: unknown) => void) => original.call(valueAccessor, (value: unknown) => {
-      console.log('👏👏👏👏', value);
-      return fn((typeof value === 'string') ? value.trim() : value);
-    });
+    valueAccessor.registerOnChange = (fn: (_: unknown) => void) => original.call(valueAccessor, (value: unknown) =>
+      fn((typeof value === 'string') ? value.trim() : value));
   }
 
 }

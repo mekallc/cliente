@@ -1,0 +1,113 @@
+<ion-content [fullscreen]="true">
+  <ion-header class="ion-no-border">
+    <ion-toolbar mode="ios">
+      <ion-buttons slot="end">
+        <ion-button (click)="onClose()">
+          <ion-icon slot="icon-only" name="close"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+  <!-- Basic -->
+  <ion-list lines="none">
+    <ion-item>
+      <ion-label>
+        <h1 class="code"> {{ res.code }} </h1>
+        <h3 class="status">{{ res.status }}</h3>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+  <div class="container">
+    <ion-accordion-group value="detail" mode="ios">
+      <ion-accordion value="detail">
+        <ion-item slot="header">
+          <ion-icon slot="start" name="list"></ion-icon>
+          <ion-label><b>Details</b></ion-label>
+        </ion-item>
+        <ion-list lines="none" slot="content">
+          <ion-item>
+            <ion-icon slot="start" name="calendar-outline"></ion-icon>
+            <ion-label>{{ res.date_reg | date: 'dd-MM-yyyy'}}</ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-icon slot="start" name="time-outline"></ion-icon>
+            <ion-label>{{ res.date_reg | date: 'hh:mm'}}</ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-icon slot="start" name="car-outline"></ion-icon>
+            <ion-label class="ion-text-wrap">
+              {{ res.vehicle_model?.brand }} {{ res.vehicle_model?.model }}
+              <span *ngIf="res.year"> {{res.year}}</span>
+            </ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-icon slot="start" name="reader-outline"></ion-icon>
+            <ion-label>
+              <p class="categoria"> {{ res.type_expert }}</p>
+              <p class="description ion-text-wrap"> {{ res.description }}</p>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-accordion>
+      <ion-accordion value="location">
+        <ion-item slot="header">
+          <ion-icon slot="start" name="location-outline"></ion-icon>
+          <ion-label><b>Location</b></ion-label>
+        </ion-item>
+        <ion-list slot="content">
+          <ion-item class="map-wrapper">
+            <div #map id="map"></div>
+          </ion-item>
+        </ion-list>
+      </ion-accordion>
+      <ion-accordion value="photos">
+        <ion-item slot="header">
+          <ion-icon slot="start" name="image-outline"></ion-icon>
+          <ion-label><b>Photos</b></ion-label>
+        </ion-item>
+        <ion-list slot="content" *ngIf="res.pictures.length > 0; else notFound">
+          <ion-item class="photo">
+            <ion-slides mode="ios" scrollbar="ios" [options]="slideOpts">
+              <ion-slide *ngFor="let item of res.pictures">
+                <img [src]="item.picture" class="img-fluid" (click)="openPicture(item.picture)">
+              </ion-slide>
+            </ion-slides>
+          </ion-item>
+        </ion-list>
+      </ion-accordion>
+      <ion-accordion value="chat" *ngIf="res.status === 'ACCEPTED'">
+        <ion-item slot="header">
+          <ion-icon slot="start" name="chatbubbles-outline"></ion-icon>
+          <ion-label><b>Chat</b></ion-label>
+        </ion-item>
+        <ion-list slot="content" lines="none" *ngIf="(room$ | async); else notFound">
+          <ion-item button detail (click)="onChat(res.company_request.id)">
+            <ion-label>
+              {{ res.company_request.name }}
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-accordion>
+    </ion-accordion-group>
+  </div>
+</ion-content>
+<ion-footer class="ion-no-border">
+  <ion-toolbar>
+    <ion-button mode="ios" expand="full" fill="clear" (click)="onCancelService(res)"
+      *ngIf="res.status === 'IN_PROCESS' || res.status === 'ACCEPTED'"
+      color="danger"> Cancel Service </ion-button>
+    <ion-button mode="ios" expand="full" fill="clear" (click)="onDeleteService(res.id)" *ngIf="res.status === 'OPEN'"
+    color="danger"> Delete Service </ion-button>
+  </ion-toolbar>
+</ion-footer>
+
+
+<ng-template #notFound>
+  <ion-list slot="content">
+    <ion-item>
+      <ion-label>
+        <p class="text-center"> Not Found! </p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ng-template>

@@ -1,11 +1,15 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
 import { IonicModule } from '@ionic/angular';
-import { FormsModule } from '@angular/forms';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { SolicitudPage } from './solicitud.page';
-import { HeaderModule } from 'src/app/core/widgets/header/header.module';
+import { PartsComponent } from './../../widgets/parts/parts.component';
 import { SolicitudPageRoutingModule } from './solicitud-routing.module';
+import { HeaderModule } from '@core/widgets/header/header.module';
+import { MechanicsComponent } from '../../widgets/mechanics/mechanics.component';
 
 
 @NgModule({
@@ -14,9 +18,15 @@ import { SolicitudPageRoutingModule } from './solicitud-routing.module';
     IonicModule,
     CommonModule,
     HeaderModule,
+    TranslateModule,
+    ReactiveFormsModule,
     SolicitudPageRoutingModule
   ],
-  declarations: [SolicitudPage],
+  declarations: [
+    SolicitudPage,
+    PartsComponent,
+    MechanicsComponent,
+  ],
   exports: [SolicitudPage]
 })
 export class SolicitudCategoriesModule {}

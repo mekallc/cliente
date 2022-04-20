@@ -1,4 +1,18 @@
 ion-content {
+  --background: #fafafa;
+  ion-list {
+    background: none;
+    ion-item {
+      --background: none;
+      ion-label {
+        --color: var(--ion-meka-principal);
+        p, h1, h2, h3, h4 , h5, h6 { color: #222428;}
+      }
+      ion-icon {
+        --color: var(--ion-meka-principal);
+      }
+    }
+  }
   .box {
     margin: 1rem 0;
     img {

@@ -15,7 +15,7 @@ export class LinksService {
 
   onLink = (url: string) => {
     this.menu.close();
-    this.nav.navigateForward(url);
+    this.nav.navigateRoot(url);
   };
 
   onLinkFade = (url: string) => {

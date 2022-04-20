@@ -1,7 +1,6 @@
-import { NavController } from '@ionic/angular';
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Route, UrlSegment, UrlTree } from '@angular/router';
-import { Observable } from 'rxjs';
+import { ActivatedRouteSnapshot, CanActivate } from '@angular/router';
+import { NavController } from '@ionic/angular';
 import { StorageService } from 'src/app/core/services/storage.service';
 
 @Injectable({
@@ -15,7 +14,7 @@ export class AuthGuard implements CanActivate {
   ) {}
 
   async canActivate(route: ActivatedRouteSnapshot): Promise<boolean> {
-    const result = await this.storage.getStorage('token');
+    const result = await this.storage.getStorage('userClient');
     if (!result) {
       this.nav.navigateRoot('/user/signIn');
       return false;

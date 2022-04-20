@@ -21,7 +21,6 @@ export class TablesService {
     try {
       const result = await this.http.get(`${api.url}/${api.version}/master/countries/`, {},api.headers);
       if (!result.data || !result.data.length) {
-        console.log(`Did not find any customers.`);
         return [];
       }
       return JSON.parse(result.data);
@@ -37,7 +36,6 @@ export class TablesService {
     try {
       const result = await this.http.get(`${api.url}/${api.version}/master/${name}/`, {},api.headers);
       if (!result.data || !result.data.length) {
-        console.log(`Did not find any customers.`);
         return [];
       }
       return JSON.parse(result.data);
@@ -53,7 +51,6 @@ export class TablesService {
     try {
       const result = await this.http.get(`${api.url}/${api.version}/master/${name}/`, {},api.headers);
       if (!result.data || !result.data.length) {
-        console.log(`Did not find any customers.`);
         return [];
       }
       return JSON.parse(result.data);

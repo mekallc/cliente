@@ -1,0 +1,27 @@
+<ion-content [fullscreen]="true">
+  <div id="content" class="container mt-5">
+    <ion-label>
+      <h1>Reset Password</h1>
+      <h2>We need to validate your account, write the code that came to your email</h2>
+    </ion-label>
+    <form [formGroup]="formControl" class="mt-4">
+      <ion-list lines="none">
+        <ion-item>
+          <ion-label position="stacked">Code</ion-label>
+          <ion-input formControlName="code" type="number" [maxlength]="4" [max]="4"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="stacked">E-Mail</ion-label>
+          <ion-input formControlName="email" type="email"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="stacked">New Password</ion-label>
+          <ion-input formControlName="password" type="text"></ion-input>
+        </ion-item>
+        <ion-button class="mt-4" [disabled]="formControl.invalid" (click)="onSubmit()" expand="block" color="warning" shape="round">
+          Validate
+        </ion-button>
+      </ion-list>
+    </form>
+  </div>
+</ion-content>

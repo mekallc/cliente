@@ -1,52 +1,54 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
-import { ActionPerformed, PushNotificationSchema, PushNotifications, Token } from '@capacitor/push-notifications';
-import { Platform } from '@ionic/angular';
+import { PushNotifications } from '@capacitor/push-notifications';
+import { MasterService } from '@core/services/master.service';
+import { StorageService } from '@core/services/storage.service';
 
 @Injectable({
   providedIn: 'root'
 })
+
 export class PushService {
   constructor(
-    private platform: Platform,
-    private router: Router) { }
+    private ms: MasterService,
+    private storage: StorageService
+    ) { }
 
-  initPush() {
-    if (this.platform.is('mobile')) { this.registerPush(); }
-  }
 
-  private registerPush() {
-    PushNotifications.requestPermissions().then((result) => {
-      if (result.receive === 'granted') {
-        // Register with Apple / Google to receive push via APNS/FCM
-        PushNotifications.register();
-      } else {
-        // Show some error
-      }
+  initPush = (): void => {
+    this.registerNotifications();
+    this.addListeners();
+    this.getDeliveredNotifications();
+  };
+
+  registerNotifications = async () => {
+    let permStatus = await PushNotifications.checkPermissions();
+    if (permStatus.receive === 'prompt') {
+      permStatus = await PushNotifications.requestPermissions();
+    }
+    if (permStatus.receive !== 'granted') {
+      throw new Error('User denied permissions!');
+    }
+    await PushNotifications.register();
+  };
+
+  addListeners = async () => {
+    await PushNotifications.addListener('registration', async (token: any) => {
+      await this.storage.setStorage('push', token.value);
+      await this.updateToken(token.value);
     });
-
-    PushNotifications.addListener('registration', (token: Token) => {
-      // console.log('Token => ', token.value);
+    await PushNotifications.addListener('registrationError', err => {
+      console.error('Registration error: ', err.error);
     });
+    await PushNotifications.addListener('pushNotificationReceived', notification => { });
+    await PushNotifications.addListener('pushNotificationActionPerformed', notification => { });
+  };
 
-    PushNotifications.addListener('registrationError', (error: any) => {
-      console.log('Error: ' + JSON.stringify(error));
-    });
+  getDeliveredNotifications = async () => {
+    const notificationList = await PushNotifications.getDeliveredNotifications();
+  };
 
-    PushNotifications.addListener(
-      'pushNotificationReceived', async (notification: PushNotificationSchema) => {
-        console.log('Push received: ' + JSON.stringify(notification));
-      }
-    );
-
-    PushNotifications.addListener(
-      'pushNotificationActionPerformed', async (notification: ActionPerformed) => {
-        const data = notification.notification.data;
-        if (data.detailsId) {
-          this.router.navigateByUrl(`/home/${data.detailsId}`);
-        }
-      }
-    );
-  }
-
+  updateToken = async (token: any)=>{
+    console.log(token);
+    this.ms.changeToken(token).subscribe((res) => {});
+  };
 }

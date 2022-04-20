@@ -1,17 +1,23 @@
-import { PostContentsWidgetComponent } from './modules/contents/widget/post/post.component';
 import { Component, OnInit } from '@angular/core';
-import { LoadingController, MenuController, Platform, ModalController } from '@ionic/angular';
+import { Platform, ModalController } from '@ionic/angular';
 import { App } from '@capacitor/app';
 import { StatusBar } from '@capacitor/status-bar';
 import { SplashScreen } from '@capacitor/splash-screen';
 import { Globalization } from '@ionic-native/globalization/ngx';
 import { timer } from 'rxjs';
+import { Store } from '@ngrx/store';
 
+import { AppState } from '@store/app.state';
 import { PushService } from './core/services/push.service';
 import { LinksService } from './core/services/links.service';
-import { StorageService } from 'src/app/core/services/storage.service';
-import { AuthService } from './modules/users/services/auth.service';
-import { TraslationService } from 'src/app/core/services/traslation.service';
+import { StorageService } from '@core/services/storage.service';
+import { TraslationService } from '@core/language/traslation.service';
+import { GeolocationService } from '@core/services/geolocation.service';
+import { CodeUserComponent } from '@modules/users/pages/code/code.component';
+import { ValidationTokenService } from '@core/services/validation-token.service';
+
+import * as actions from './store/actions';
+import { IntegratedService } from '@core/services/integrated.service';
 
 @Component({
   selector: 'app-root',
@@ -20,45 +26,46 @@ import { TraslationService } from 'src/app/core/services/traslation.service';
 })
 
 export class AppComponent implements OnInit {
-  appPages = [
-    { title: 'Home', url: '/home', },
-    { title: 'Roster', url: '/roster' }
-  ];
-
-  menus = [ 'SIDEMENU.HELP_CENTER', 'SIDEMENU.TERM_OF_USE', 'SIDEMENU.ABOUT' ];
-
-  social = [
-    { icon: 'star', name: 'SIDEMENU.RATING_APP' },
-    { icon: 'logo-facebook', name: 'SIDEMENU.FANPAGE_FB' },
-  ];
 
   user: any = [];
+  appVersion: any = [];
 
   constructor(
     private platform: Platform,
-    private menu: MenuController,
     private global: Globalization,
+    private store: Store<AppState>,
+    private geo: GeolocationService,
     private storage: StorageService,
     private pushService: PushService,
-    private authService: AuthService,
     private linkService: LinksService,
     public traslate: TraslationService,
-    private loadCtrl: LoadingController,
-    private modalCtrl: ModalController,
-  ) {
-    this.onActive();
-  }
+    private token: ValidationTokenService,
+    private integratedService: IntegratedService,
+  ) { }
 
-  async ngOnInit() {
+  ngOnInit() {
+    this.getCodePassword();
     this.initializeApp();
-    this.user = await this.storage.getStorage('user');
-    await this.getLanguage();
+    this.userState();
+    this.getLanguage();
+    App.addListener('appStateChange', async ({ isActive }) => {
+      if (isActive) {
+        // this.userState();
+        this.token.validate();
+        this.store.dispatch(actions.expertLoad());
+        // this.geo.currentPosition2();
+        // this.integratedService.newAccepted();
+      }
+    });
   }
 
   initializeApp = () => {
     this.platform.ready().then(async () => {
       this.toSplash();
       this.pushService.initPush();
+
+      this.integratedService.newAccepted();
+      this.appVersion = await App.getInfo();
     });
   };
 
@@ -66,14 +73,6 @@ export class AppComponent implements OnInit {
     const { value } = await this.global.getPreferredLanguage();
     if (value) { this.traslate.use(value.split('-')[0]); }
     else { this.traslate.use('en');}
-  };
-
-  signOut = async () => {
-    this.menu.close();
-    const load = await this.loadCtrl.create({ duration: 3000, message: 'Loading...' });
-    await load.present();
-    this.authService.signOut();
-    await load.dismiss();
   };
 
   toSplash = () => {
@@ -84,19 +83,22 @@ export class AppComponent implements OnInit {
     });
   };
 
-  onLink = (url: string) => this.linkService.onLink(url);
-
-  onActive = () => {
-    App.addListener('appStateChange', ({ isActive }) => {
-      if(isActive) { this.authService.decoded(); }
-    });
+  userState = async () => {
+    const user = await this.storage.getStorage('userClient');
+    if (!user) { return; }
+    this.integratedService.getStatus();
+    this.store.dispatch(actions.itemLoad());
+    this.store.dispatch(actions.expertLoad());
+    this.store.dispatch(actions.loadHistory());
+    this.store.dispatch(actions.loadUser(user));
   };
 
-  onPost = async (title: string) => {
-    const modal = await this.modalCtrl.create({
-      component: PostContentsWidgetComponent,
-      componentProps: { title }
-    });
-    await modal.present();
+  getCodePassword = async () => {
+    // this.storage.removeStorage('oChange');
+    // const { result } = await this.storage.getStorage('oChange');
+    // if (result === 'OK') {
+    //   const modal =await this.modalCtrl.create({ component: CodeUserComponent });
+    //   modal.present();
+    // }
   };
 }

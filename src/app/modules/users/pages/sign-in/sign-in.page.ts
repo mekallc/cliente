@@ -1,9 +1,12 @@
-import { Router } from '@angular/router';
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { StorageService } from 'src/app/core/services/storage.service';
-import { IonSlides, NavController, AlertController, LoadingController } from '@ionic/angular';
-import { AuthService } from 'src/app/modules/users/services/auth.service';
+import { IonSlides, NavController, LoadingController, AlertController } from '@ionic/angular';
+import { Store } from '@ngrx/store';
+import { AppState } from '@store/app.state';
+import * as actions from '@store/actions';
+import { AuthService } from '@modules/users/services/auth.service';
+import { PushService } from '@core/services/push.service';
+import { StorageService } from '@core/services/storage.service';
 
 @Component({
   selector: 'app-sign-in',
@@ -14,21 +17,24 @@ export class SignInPage implements OnInit, AfterViewInit {
 
   @ViewChild('slides') slides: IonSlides;
   options = { initialSlide: 0, };
+
   loginForm: FormGroup;
   forgotPasswordForm: FormGroup;
 
   constructor(
     private fb: FormBuilder,
-    private auth: AuthService,
+    private db: AuthService,
     private nav: NavController,
-    private router: Router,
+    private store: Store<AppState>,
     private storage: StorageService,
+    private pushService: PushService,
     private alertCtrl: AlertController,
     private loadCtrl: LoadingController,
   ) { }
 
   ngOnInit() {
     this.loadForm();
+    this.pushService.initPush();
   }
 
   ngAfterViewInit() {
@@ -39,23 +45,42 @@ export class SignInPage implements OnInit, AfterViewInit {
     if (this.loginForm.invalid) { return; }
     const load = await this.loadCtrl.create({message: 'Loading...'});
     await load.present();
-    console.log(this.loginForm.value);
-    this.auth.signIn(this.loginForm.value)
-    .then(async (res) => {
+    this.db.signIn(this.loginForm.value).subscribe(
+    async (res: any) => {
+      await this.storage.setStorage('userClient', res);
+      this.store.dispatch(actions.expertLoad());
+
       await load.dismiss();
-    })
-    .catch(async (err) => {
+      return this.nav.navigateRoot('/pages/home');
+    }, async (err: any) => {
       await load.dismiss();
-      console.log(err);
+      await this.db.alertErr(err.error.detail);
     });
   };
 
-  onForgotPassword = () => console.log('óoSubmit');
+  onSubmitForgotPassword = async () => {
+    const form = this.forgotPasswordForm;
+    if (form.invalid) { return; }
+    const load = await this.loadCtrl.create({message: 'Loading...'});
+    await load.present();
+    this.db.forgotSenha(form.value).subscribe(
+      async (res) => {
+        await load.dismiss();
+        await this.storage.setStorage('oChange', res);
+        const alert = await this.alertCtrl.create({
+          header: 'INFO',
+          message: 'A code was sent to your email',
+          buttons: ['Ok']
+        });
+        await alert.present();
+      }
+    );
+  };
 
   loadForm = () => {
     this.loginForm = this.fb.group({
-      email: ['knaimero@gmail.com', [Validators.required, Validators.email]],
-      password: ['meka123', [Validators.required, Validators.minLength(4)]],
+      email: ['cliente01@gmail.com', [Validators.required, Validators.email]],
+      password: ['123456', [Validators.required, Validators.minLength(4)]],
     });
     this.forgotPasswordForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],

@@ -2,8 +2,8 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.devcreativo.mekaapp',
-  appName: 'meka-cliente',
+  appId: 'com.mekadevelopments.cliente',
+  appName: 'Meka',
   webDir: 'www',
   bundledWebRuntime: false,
   plugins: {
@@ -19,14 +19,18 @@ const config: CapacitorConfig = {
       androidScaleType: "CENTER_INSIDE",
       androidSplashResourceName: "splash",
     },
+    LocalNotifications: {
+      smallIcon: "ic_stat_icon_config_sample",
+      iconColor: "#488AFF",
+      sound: "beep.wav",
+    },
   },
   android: {
     allowMixedContent: true
   },
   server: {
     cleartext: true,
-    url: 'http://192.168.250.163:8100',
-    // url: 'https://guayoyo-inc.web.app/'
+    url: 'http://192.168.250.163:8101',
   },
 };
 

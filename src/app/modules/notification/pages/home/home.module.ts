@@ -4,7 +4,7 @@ import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
 
 import { HomePage } from './home.page';
-import { HeaderModule } from 'src/app/core/widgets/header/header.module';
+import { HeaderModule } from '@core/widgets/header/header.module';
 import { HomePageRoutingModule } from './home-routing.module';
 
 

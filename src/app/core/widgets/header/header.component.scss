@@ -1,8 +1,12 @@
 ion-header {
-  --background: #080F18;
+  // --background: #080F18;
   ion-toolbar {
-    --background: #080F18;
+    // --background: #080F18;
+    --background: #fafafa;
     --min-height: 50px;
+    ion-title {
+      --color: #080F18;
+    }
     ion-searchbar {
       --background: #F9F9FB;
       --border-radius: 10px 10px 10px 10px;
@@ -30,9 +34,10 @@ ion-header {
       }
     }
     ion-menu-button {
-      --color	: #3a3a3a;
+      --color	: #fafafa;
       padding: .2rem;
-      --background: #D1E0F8;
+      // --background: #D1E0F8;
+      --background: #080F18;
       --border-radius: 0px 25px 25px 25px;
       height: 45px !important;
     }

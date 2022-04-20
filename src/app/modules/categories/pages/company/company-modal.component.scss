@@ -1,0 +1,47 @@
+ion-content, ion-toolbar, ion-item, ion-list, ion-accordion-group, ion-accordion {
+  --background: #fafafa;
+  background: #fafafa;
+}
+
+ion-content {
+  ion-segment {
+    --background: #d8d8d8;
+    ion-segment-button{
+      --indicator-color: #fafafa;
+    }
+  }
+  ion-list {
+    ion-item {
+      ion-label {
+        p{
+          &:last-child {
+            font-size: .8rem;
+          }
+        }
+      }
+    }
+  }
+}
+ion-header {
+  ion-toolbar {
+    ion-title {
+      --color: rgb(57, 57, 57);
+    }
+    ion-buttons {
+      ion-button {
+        ion-icon {
+          color: rgb(57, 57, 57);
+        }
+      }
+    }
+  }
+}
+agm-map  {
+  height: 90vh;
+}
+
+ion-footer {
+  ion-toolbar {
+    --background: none;
+  }
+}

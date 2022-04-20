@@ -12,8 +12,8 @@ import { TranslateModule } from '@ngx-translate/core';
   imports: [
     pagesRoute,
     CommonModule,
-    FormsModule,
     IonicModule,
+    FormsModule,
     TranslateModule,
   ],
   declarations: [PagesPage]

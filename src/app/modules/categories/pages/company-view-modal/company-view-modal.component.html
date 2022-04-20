@@ -1,0 +1,101 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="end">
+      <ion-button (click)="onClose()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-accordion-group value="detail" mode="ios">
+    <ion-accordion value="detail">
+      <ion-item class="title" slot="header">
+        <ion-icon slot="start" name="list"></ion-icon>
+        <ion-label><b>Information</b></ion-label>
+      </ion-item>
+      <ion-list lines="none" slot="content">
+        <ion-item>
+          <ion-icon slot="start" name="calendar-outline"></ion-icon>
+          <ion-label>{{ company.name }}</ion-label>
+        </ion-item>
+        <!-- <ion-item>
+          <ion-icon slot="start" name="reader-outline"></ion-icon>
+          <ion-label>
+          </ion-label>
+        </ion-item> -->
+        <ion-item>
+          <ion-icon slot="start" name="business-outline"></ion-icon>
+          <ion-label class="ion-text-wrap">{{ company.address }}</ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-icon slot="start" name="star"></ion-icon>
+          <ion-label class="ion-text-wrap">
+            4.3
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-accordion>
+    <ion-accordion value="services">
+      <ion-item class="title" slot="header">
+        <ion-icon slot="start" name="list"></ion-icon>
+        <ion-label><b>Services</b></ion-label>
+      </ion-item>
+      <ion-list lines="none" slot="content">
+        <ion-item>
+          <ion-label color="primary" class="ion-text-wrap">
+            <ion-badge *ngFor="let code of company.type_expert" class="mx-1">{{ code.name }}</ion-badge>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-accordion>
+    <ion-accordion value="location">
+      <ion-item class="title" slot="header">
+        <ion-icon slot="start" name="location-outline"></ion-icon>
+        <ion-label><b>Location</b></ion-label>
+      </ion-item>
+      <ion-list slot="content">
+        <agm-map [latitude]="+company.distance.latitude" [longitude]="+company.distance.longitude" [zoom]="18">
+          <agm-marker [latitude]="company.distance.latitude" [longitude]="company.distance.longitude">
+          </agm-marker>
+        </agm-map>
+        <!-- <ion-item class="map-wrapper">
+          <div #map id="map"></div>
+        </ion-item> -->
+      </ion-list>
+    </ion-accordion>
+    <ion-accordion value="comments">
+      <ion-item class="title" slot="header">
+        <ion-icon slot="start" name="location-outline"></ion-icon>
+        <ion-label><b>Comments</b></ion-label>
+      </ion-item>
+      <ion-list slot="content" lines="none">
+        <ion-item class="map-wrapper">
+          <ion-label>Label</ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-accordion>
+  </ion-accordion-group>
+  <ion-button (click)="onSend(company, id)" expand="full" color="primary">
+    Send Service
+  </ion-button>
+</ion-content>
+<!--
+
+{id: 54, date_reg: '2021-12-20T10:28:15.988999-04:00', name: 'Taller MMG', identity: null, email: 'devcreativo@mmg.com', …}
+address: "Rua Leon Nícolas 89, Capão Raso. Curitiba - Paraná"
+date_reg: "2021-12-20T10:28:15.988999-04:00"
+distance:
+distance: "0.1 km"
+duration: "1 min"
+latitude: "-25.5154000000000000"
+longitude: "-49.2977000000000000"
+[[Prototype]]: Object
+email: "devcreativo@mmg.com"
+id: 54
+identity: null
+name: "Taller MMG"
+phone: "41998819501"
+type_company: "MECHANICAL"
+
+-->

@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { SolicitudPage } from './solicitud.page';
 
 const routes: Routes = [
-  { path: '', component: SolicitudPage, }
+  { path: ':id', component: SolicitudPage, }
 ];
 
 @NgModule({

@@ -29,6 +29,121 @@
             {
               "client_id": "882572463657-0oipic4nqjj3n3adbn9vn7j8fvgmq1d3.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "882572463657-8mgrhfh9s0mgdcd8jb0ac8kv1adrpcck.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.devcreativo.mekaapp"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:882572463657:android:3dc4dbf2b37ddaeee69638",
+        "android_client_info": {
+          "package_name": "com.mekadevelopments.cliente"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "882572463657-0oipic4nqjj3n3adbn9vn7j8fvgmq1d3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA7njc9IjM84ihgcMypPOlEMK-4EKIaJ4Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "882572463657-0oipic4nqjj3n3adbn9vn7j8fvgmq1d3.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "882572463657-8mgrhfh9s0mgdcd8jb0ac8kv1adrpcck.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.devcreativo.mekaapp"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:882572463657:android:128052d764d8100be69638",
+        "android_client_info": {
+          "package_name": "com.mekadevelopments.lt"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "882572463657-0oipic4nqjj3n3adbn9vn7j8fvgmq1d3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA7njc9IjM84ihgcMypPOlEMK-4EKIaJ4Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "882572463657-0oipic4nqjj3n3adbn9vn7j8fvgmq1d3.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "882572463657-8mgrhfh9s0mgdcd8jb0ac8kv1adrpcck.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.devcreativo.mekaapp"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:882572463657:android:f2824675c974f8bfe69638",
+        "android_client_info": {
+          "package_name": "com.mekadevelopments.pushtest"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "882572463657-0oipic4nqjj3n3adbn9vn7j8fvgmq1d3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA7njc9IjM84ihgcMypPOlEMK-4EKIaJ4Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "882572463657-0oipic4nqjj3n3adbn9vn7j8fvgmq1d3.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "882572463657-8mgrhfh9s0mgdcd8jb0ac8kv1adrpcck.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.devcreativo.mekaapp"
+              }
             }
           ]
         }

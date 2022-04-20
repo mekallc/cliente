@@ -4,7 +4,7 @@ import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
 
 import { SearchListPage } from './search-list.page';
-import { HeaderModule } from 'src/app/core/widgets/header/header.module';
+import { HeaderModule } from '@core/widgets/header/header.module';
 import { Routes, RouterModule } from '@angular/router';
 
 

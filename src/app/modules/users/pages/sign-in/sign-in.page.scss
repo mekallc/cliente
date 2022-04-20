@@ -9,6 +9,7 @@ ion-content {
       --border-style: none;
       ion-label {
         margin-bottom: .7rem !important;
+        --color: #3f3f3f;
       }
       ion-input, ion-datetime, ion-select {
         border-radius: 15px;
@@ -34,6 +35,6 @@ ion-content {
   }
 }
 ion-content, ion-footer, ion-toolbar {
-  --background: #F0F3F8;
-  background: #F0F3F8;
+  --background: #fafafa;
+  background: #fafafa;
 }
