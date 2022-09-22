@@ -17,9 +17,11 @@ export class ValidationTokenService {
 
   validate = async () => {
     const user = await this.storage.getStorage('userClient');
-    const decode: any = jwt_decode(user.access);
-    const exp = moment().diff(moment.unix(decode.exp), 'hours');
-    if (exp >= -1) { this.refreshToken(user); }
+    if (user) {
+      const decode: any = jwt_decode(user.access);
+      const exp = moment().diff(moment.unix(decode.exp), 'hours');
+      if (exp >= -1) { this.refreshToken(user); }
+    }
   };
 
   refreshToken = (user: any) => {

@@ -1,8 +1,9 @@
-import { map } from 'rxjs/operators';
 import { Component, OnInit } from '@angular/core';
 import { MasterService } from '@core/services/master.service';
-import { GeolocationService } from '@core/services/geolocation.service';
+import { Geolocation, Position } from '@capacitor/geolocation';
 import { Observable } from 'rxjs';
+import { UtilsService } from '@core/services/utils.service';
+import { CompanyViewModalComponent } from '@modules/categories/pages/company-view-modal/company-view-modal.component';
 
 
 @Component({
@@ -12,7 +13,7 @@ import { Observable } from 'rxjs';
 })
 export class BannersWidgetComponent implements OnInit {
 
-  entry$: Observable<any[]>;
+  entry$: Observable<any>;
   options = {
     loop: true,
     speed: 600,
@@ -23,18 +24,38 @@ export class BannersWidgetComponent implements OnInit {
 
   constructor(
     private ms: MasterService,
-    private geo: GeolocationService,
+    private uService: UtilsService,
   ) { }
 
   async ngOnInit() {
     await this.getBanner();
   }
 
-  getBanner = async () => {
-    const { coords } = await this.geo.currentPosition();
-    // this.entry$ = this.ms.getBanner(coords.longitude, coords.latitude).pipe(map((res: any) => res.search));
-    this.entry$ = this.ms.getBanner(10.256092197650664, -67.61916302825504).pipe(map((res: any) => res.search));
-    this.entry$.subscribe(res => console.log(res));
+  async getBanner(): Promise<void> {
+    const position: Position = await Geolocation.getCurrentPosition();
+    if (position) {
+      const data = {
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude,
+      };
+      this.entry$ = this.ms.postMaster('banners/client', data);
+      this.entry$.subscribe(res => console.log(res));
+    }
   };
 
+  goToCompany(id: string) {
+    this.ms.getMaster(`companies/${id}`)
+    .subscribe(async (provider: any) => {
+      if(provider) {
+        console.log(provider);
+        await this.uService.modal({
+          mode: 'ios',
+          initialBreakpoint: 0.95,
+          breakpoints: [0, 1, 1],
+          component: CompanyViewModalComponent,
+          componentProps: { provider }
+        });
+      }
+    });
+  }
 }

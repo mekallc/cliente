@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { ConnectService } from '@modules/chat/services/connect.service';
+import { NavController } from '@ionic/angular';
 import { Store } from '@ngrx/store';
-import { AppState } from '@store/app.state';
 import { Observable } from 'rxjs';
-import { filter, map, take } from 'rxjs/operators';
+import { filter, map, tap } from 'rxjs/operators';
+import { AppState } from '@store/app.state';
+import { ConnectService } from '@modules/chat/services/connect.service';
 
 @Component({
   selector: 'app-home',
@@ -14,27 +14,37 @@ import { filter, map, take } from 'rxjs/operators';
 export class HomePage implements OnInit {
 
   chats$: Observable<any>;
+  service$: Observable<any>;
+  total$: Observable<number|any>;
 
   constructor(
-    private router: Router,
+    private nav: NavController,
+    private conn: ConnectService,
     private store: Store<AppState>,
-    private chatService: ConnectService
   ) {}
 
   ngOnInit(): void {
-    this.getData();
+    // this.getServiceActive();
   }
 
-  getData = () => {
-    const items$ = this.store.select('accepted').pipe(filter((row: any) => !row.loading), map((res: any) => res.accepted));
-    items$.pipe().subscribe((res: any) => {
-      console.log(res);
-      if (res.company_request !== null) {
-        this.chats$ = this.chatService.unReadMessageServiceChat(res);
-      }
-    });
+
+  // getServiceActive = () => {
+  //   this.service$ = this.store.select('item')
+  //   .pipe(
+  //     filter(row => !row.loading),
+  //     map((res: any) => res.item),
+  //     tap((res) => this.getChatNotification(res))
+  //   );
+  // };
+
+  getChatNotification = (item: any) => {
+    this.total$ = this.conn.unReadMessage(item).pipe(map((res: any) => res.length));
+    this.total$.subscribe(res => console.log('CHAT ', res));
   };
 
-  goToChat = (item: any) =>
-    this.router.navigate(['/chat', 'room', item.code, item.company_request.id]);
+  onGoToChat(service: any) {
+    if(service.status === 'ACCEPTED') {
+      this.nav.navigateRoot(`/chat/room/${service.code}/${service.company}`);
+    }
+  }
 }

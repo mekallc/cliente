@@ -4,22 +4,18 @@ import * as reducers from '@store/reducers';
 export interface AppState {
   user: reducers.UserState;
   item: reducers.ItemState;
+  rating: reducers.RatingState;
   expert: reducers.ExpertState;
-  status: reducers.StatusState;
-  service: reducers.ServiceState;
-  history: reducers.HistoryState;
-  accepted: reducers.AcceptedState;
-  inProcess: reducers.InProcessState;
+  finished: reducers.FinishedState;
+  cancelled: reducers.CancelledState;
 }
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export const ROOT_REDUCERS: ActionReducerMap<AppState> = {
   user: reducers.userReducer,
   item: reducers.itemReducer,
-  status: reducers.statusReducer,
+  rating: reducers.ratingReducer,
   expert: reducers.expertReducer,
-  service: reducers.serviceReducer,
-  history: reducers.historyReducer,
-  accepted: reducers.acceptedReducer,
-  inProcess: reducers.inProcessReducer,
+  finished: reducers.finishedReducer,
+  cancelled: reducers.cancelledReducer,
 };

@@ -29,9 +29,12 @@ export default class ApiInterceptor implements HttpInterceptor {
     }
     this.validationTokenService.validate();
     return from(promise).pipe(
-      mergeMap((user) => {
-        const newClone = this.addToken(request, user.access);
-        return next.handle(newClone);
+      mergeMap((user: any) => {
+        if (user) {
+          const newClone = this.addToken(request, user.access);
+          return next.handle(newClone);
+        }
+        return next.handle(request);
       })
     );
   }

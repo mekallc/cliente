@@ -1,13 +1,13 @@
-import { statusChanged } from './../../store/actions/status.actions';
-import { itemStatus } from './../../store/actions/item.actions';
+/* eslint-disable no-underscore-dangle */
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { interval, Observable } from 'rxjs';
-import { filter, map, switchMap, take } from 'rxjs/operators';
-import { LocalNotifications } from '@capacitor/local-notifications';
-import * as action from '@store/actions';
+import { filter, map, take } from 'rxjs/operators';
+import * as actions from '@store/actions';
 import { AppState } from '@store/app.state';
-import { DbCategoriesService } from '@modules/categories/services/db-categories.service';
+import { ChatService } from '@core/services/chat.service';
+import { UtilsService } from '@core/services/utils.service';
+import { StorageService } from '@core/services/storage.service';
+import { RatingModalComponent } from '@modules/rate/pages/rating-modal/rating-modal.component';
 
 @Injectable({
   providedIn: 'root'
@@ -15,74 +15,55 @@ import { DbCategoriesService } from '@modules/categories/services/db-categories.
 
 export class IntegratedService {
   private constructor(
+    private uService: UtilsService,
     private store: Store<AppState>,
-    private db: DbCategoriesService,
-  ) {
+    private storage: StorageService,
+    private chatService: ChatService,
+  ) { }
+
+
+  async initStates(): Promise<void> {
+    const user = await this.storage.getStorage('oUser');
+    if (user) {
+      this.store.dispatch(actions.loadUser(user));
+      this.store.dispatch(actions.itemLoad({ user: user._id }));
+    }
+  };
+
+  pageStates() {
+    this.store.dispatch(actions.expertLoad());
+    this.store.dispatch(actions.finishedLoad());
+    this.store.dispatch(actions.cancelledLoad());
   }
 
-  newAccepted = () => {
-    interval(1 * 5 * 1000).subscribe(() => {
-      this.getFunctions();
-    });
-  };
-
-  getStatus = () => {
-    this.store.select('item').pipe(
-      filter(row => !row.loading), map(res => res.item)
+  // INGRESA EL ROOM SI EL SERVICIO ESTA ABIERTO
+  onServiceStatus() {
+    this.store.select('item')
+    .pipe(
+      filter(row => !row.loading),
+      map((res: any) => res.item)
     )
-    .subscribe(res => {
-      if(res) {
-        this.store.dispatch(action.statusChanged({ status: res.status }));
+    .subscribe((res: any) => {
+      if (res) {
+        this.chatService.joinService(res._id);
+        this.navigateWithStatus(res);
       }
     });
-  };
+  }
 
-  private getFunctions = () => {
-    this.store.select('status').subscribe(
-      ({status}) => {
-        if(status === 'IN_PROCESS') {
-          console.log('IN PROCESS');
-        }
-      }
-    );
-    // const item$: Observable<any> = this.store.select('item')
-    // .pipe(
-    //   filter(row => !row.loading),
-    //   map((data: any) => data.item),
-    //   switchMap(data => {
-    //     console.log(data.status);
-    //     if (data.status !== 'CANCELLED') {
-    //       return this.db.getChangedStatusService(data.id)
-    //       .pipe(
-    //         take(1),
-    //         map((res: any) => {
-    //           if (data.status !== res.status) {
-    //             this.store.dispatch(action.itemStatus({ item: res}));
-    //             console.log(res);
-    //           } else {
-    //             console.log(`IGUAL: ${res.status} === ${data.status} `);
-    //           }
-    //           return res;
-    //         })
-    //       );
-    //     }
-    //   })
-    // );
-    // item$.subscribe(data => console.log('DATA ', data));
-    // let count = 0;
-    // this.getStore().pipe(take(1)).subscribe(res => {
-    //   console.log('COUNT ', count++);
-    //   if(res && res.status !== 'OPEN') {
-    //     this.db.getChangedStatusService(res.id).pipe(take(1))
-    //     .subscribe(data => {
-    //       if(res.status !== data.status) {
-    //         console.log(`[${count++}] CHANGED: ${res.status} === ${data.status}`);
-    //         console.log(data);
-    //         // this.store.dispatch(action.itemDelete({ id: id.status }));
-    //         this.store.dispatch(action.itemStatus({ item: data }));
-    //       }
-    //     });
-    //   }
-    // });
-  };
+  private async navigateWithStatus(service: any) {
+    const status = service.status;
+    if (status === 'open') {
+      this.uService.navigate('service-open');
+    }
+    else if(status === 'finished') {
+      await this.uService.modal({
+        mode: 'ios',
+        initialBreakpoint: 0.85,
+        breakpoints: [0, 0.85, 1],
+        component: RatingModalComponent,
+        componentProps: { service }
+      });
+    }
+  }
 }

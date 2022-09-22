@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { App } from '@capacitor/app';
 import { LinksService } from '@core/services/links.service';
 import { LoadingController, MenuController, ModalController } from '@ionic/angular';
@@ -11,7 +11,7 @@ import { RateApp } from 'capacitor-rate-app';
 import { AppState } from '@store/app.state';
 import { Store } from '@ngrx/store';
 import { UserModel } from '@core/model/user.interfaces';
-import { map } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 import { Browser, OpenOptions } from '@capacitor/browser';
 import { ValueAccessor } from '@ionic/angular/directives/control-value-accessors/value-accessor';
 
@@ -21,7 +21,11 @@ import { ValueAccessor } from '@ionic/angular/directives/control-value-accessors
   styleUrls: ['./side-menu-widget.component.scss'],
 })
 export class SideMenuWidgetComponent implements OnInit {
-  appVersion: any = [];
+
+  @Input() appVersion: any;
+  user$: Observable<any>;
+  score$: Observable<number|any>;
+
   appPages = [
     { title: 'Home', url: '/home', },
     { title: 'Roster', url: '/roster' }
@@ -33,7 +37,6 @@ export class SideMenuWidgetComponent implements OnInit {
     { icon: 'logo-facebook', name: 'SIDEMENU.FANPAGE_FB', url: 'https://www.facebook.com/Meka-108821827303515' },
   ];
 
-  user$: Observable<any>;
 
   constructor(
     private menu: MenuController,
@@ -46,13 +49,14 @@ export class SideMenuWidgetComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.initialize();
     this.user$ = this.store.select('user').pipe(map((res: any) => res.user));
+    this.score$ = this.store.select('rating')
+    .pipe(
+      filter(row => !row.loading),
+      map((res: any) => res.total !== null ? res.total: 0),
+      map((res: number) => res.toFixed(1))
+    );
   }
-
-  initialize = async () => {
-    this.appVersion = await App.getInfo();
-  };
 
   signOut = async () => {
     this.menu.close();

@@ -10,7 +10,7 @@ import { StorageService } from '@core/services/storage.service';
 })
 export class ConnectService {
 
-  id = 0;
+  id = '';
   private company: any;
   constructor(
     private fs: Firestore,
@@ -125,18 +125,33 @@ export class ConnectService {
     return of(true);
   };
 
-  unReadMessageServiceChat = (item: any) => {
-    const items: any = [];
-    item.forEach((el: any)=> {
-      const data: any = this.getMessage(el);
-      if (data === undefined) {
-      } else {
-        items.push(data);
-      }
-    });
-    const filtro = items.filter((row: any) => row.unread > 0);
-    return of(items);
+  // unReadMessageServiceChat = (item: any) => {
+  //   const items: any = [];
+  //   item.forEach((el: any)=> {
+  //     const data: any = this.getMessage(el);
+  //     if (data === undefined) {
+  //     } else {
+  //       items.push(data);
+  //     }
+  //   });
+  //   const filtro = items.filter((row: any) => row.unread > 0);
+  //   return of(items);
+  // };
+
+  unReadMessageChat = (res: any) => {
+    const data = this.getMessage(res);
+    return data;
   };
+
+  unReadMessage = (code: any) => {
+    const doc$ = collectionData(
+      query(
+        collection(this.fs, `chats/${code.company_request.id}/services/${code.code}/messages`),
+        where('status', '==', 'SENT'), where('type', '==', 'LT')
+      ), { idField: 'id' }) as Observable<any[]>;
+    return doc$;
+  };
+
 
   getMessage = (code: any) => {
     if (code.company_request) {

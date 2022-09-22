@@ -3,7 +3,6 @@ import { ActivatedRoute } from '@angular/router';
 import { GestureController, IonContent, NavController } from '@ionic/angular';
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
 import { Camera, CameraResultType } from '@capacitor/camera';
-import { PhotoViewer } from '@ionic-native/photo-viewer/ngx';
 import { Directory, Filesystem } from '@capacitor/filesystem';
 import { RecordingData, VoiceRecorder } from 'capacitor-voice-recorder';
 import { Observable, timer } from 'rxjs';
@@ -39,7 +38,6 @@ export class RoomsChatPage implements OnInit, AfterViewInit, OnChanges {
     private active: ActivatedRoute,
     private navCtrl: NavController,
     private fs: FireStorageService,
-    private photoViewer: PhotoViewer,
     private gestureCtrl: GestureController,
   ) {}
 
@@ -147,7 +145,5 @@ export class RoomsChatPage implements OnInit, AfterViewInit, OnChanges {
   };
 
   openPop = (url: string) => {
-    this.openPopover = true;
-    this.photoViewer.show(url, '',{ share: true });
   };
 }

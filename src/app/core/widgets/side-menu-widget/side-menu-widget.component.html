@@ -3,14 +3,14 @@
     <ion-toolbar>
       <ion-item lines="none" class="my-3">
         <ion-avatar slot="start" *ngIf="user.picture; else notAvatar">
-          <img [src]="user.picture" />
+          <img [src]="user.picture" [alt]="user.first_name" />
         </ion-avatar>
         <ion-label>
-          <h2>{{ user.fist_name }} {{ user.last_name }}</h2>
+          <h2>{{ user.first_name }} {{ user.last_name }}</h2>
           <h4>{{ user.email }}</h4>
           <p>
-            <span>4.7</span>
-            <ion-icon name="star" class="ms-1"></ion-icon>
+            <span>{{ score$ | async }}</span>
+            <ion-icon color="warning" [name]="(score$ | async) === 0 ? 'star-outline': 'star'" class="ms-1"></ion-icon>
           </p>
         </ion-label>
       </ion-item>
@@ -32,7 +32,7 @@
       <ion-item>
         <ion-label>{{ "SIDEMENU.PAGES" | translate }}</ion-label>
       </ion-item>
-      <ion-menu-toggle auto-hide="false">
+      <!-- <ion-menu-toggle auto-hide="false">
         <ion-item class="my-1" lines="none" detail="false">
           <ion-label>{{ 'SIDEMENU.HELP_CENTER' | translate }}</ion-label>
         </ion-item>
@@ -41,7 +41,7 @@
         <ion-item class="my-1" lines="none" detail="false">
           <ion-label>{{ item | translate }}</ion-label>
         </ion-item>
-      </ion-menu-toggle>
+      </ion-menu-toggle> -->
       <ion-menu-toggle auto-hide="false">
         <ion-item class="my-1" lines="none" detail="false" (click)="openBrowser('https://appmeka.com/')">
           <ion-label>{{ 'SIDEMENU.ABOUT' | translate }}</ion-label>
@@ -69,7 +69,7 @@
 <ng-template #notAvatar>
   <ion-avatar slot="start" *ngIf="(user$ | async) as user">
     <div class="meka">
-      <p>{{ getName(user.fist_name, user.last_name) }}</p>
+      <p>{{ getName(user.first_name, user.last_name) }}</p>
     </div>
   </ion-avatar>
 </ng-template>

@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
+import { IonicModule } from '@ionic/angular';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { HomePage } from './home.page';
 import { HomePageRoutingModule } from './home-routing.module';
@@ -19,6 +20,7 @@ import { ServiceStatusListModule } from '@modules/categories/widgets/service-sta
     IonicModule,
     HeaderModule,
     CommonModule,
+    TranslateModule,
     IntroWidgetModule,
     BannersWidgetModule,
     HomePageRoutingModule,

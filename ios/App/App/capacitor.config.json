@@ -12,13 +12,13 @@
 			]
 		},
 		"SplashScreen": {
-			"launchAutoHide": false,
-			"splashImmersive": false,
-			"splashFullScreen": false,
-			"launchShowDuration": 500,
-			"backgroundColor": "#080f18",
-			"androidScaleType": "CENTER_INSIDE",
-			"androidSplashResourceName": "splash"
+			"launchShowDuration": 0,
+			"launchAutoHide": false
+		},
+		"LocalNotifications": {
+			"smallIcon": "ic_stat_ionic_logo",
+			"iconColor": "#4d4d4d",
+			"sound": "beep.wav"
 		}
 	},
 	"android": {

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertController, NavController } from '@ionic/angular';
-import { map } from 'rxjs/operators';
+import { map, take } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 
 import { Login, Register } from './interfaces';
@@ -17,7 +17,6 @@ import { AppState } from '@store/app.state';
 export class AuthService {
 
   constructor(
-    private router: Router,
     private ms: MasterService,
     private navCtrl: NavController,
     private store: Store<AppState>,
@@ -25,34 +24,38 @@ export class AuthService {
     private alertCtrl: AlertController,
   ) { }
 
-  /** Tokens */
+  //TODO: Autoriza el accesso
   signIn(data: Login) {
-    return this.ms.postMaster('setting/token/', data).pipe(
-      map((res: any) => {
-        this.refreshUser(res);
-        this.refreshToken(res.access);
+    return this.ms.postMaster('users/login-cliente', data).pipe(
+      take(1),
+      map(async (res: any) => {
+        await this.storage.setStorage('oAccess', res.access);
+        await this.storage.setStorage('oUser', res.user);
         this.store.dispatch(loadUser(res));
         return res;
       })
     );
   }
 
+  // TODO: Crea un usuario
   signUp(data: any) {
-    return this.ms.postMaster( 'user/add/', data).pipe(
+    return this.ms.postMaster( 'users', data).pipe(
       map(async (res: any) => {
-        await this.refreshToken(res.token.access_token);
-        delete res.token;
-        await this.refreshUser(res);
-        return res;
+        console.log(res);
+        await this.storage.setStorage('oProfile', res);
+        return this.navCtrl.navigateRoot('/user/signIn');
       })
     );
   }
 
+  // TODO: Desloga la app
   signOut = async () => {
-    await this.storage.removeStorage('userClient');
-    await this.storage.removeStorage('tokenClient');
+    await this.storage.clearStorages();
     return this.navCtrl.navigateRoot('/user/signIn');
   };
+
+  // TODO: Get Countries
+  getCountries = () => this.ms.getMaster('/tables/countries');
 
   updateToken = (token: string) => this.ms.changeToken(token);
 
@@ -70,6 +73,8 @@ export class AuthService {
       { header: 'Error', message, buttons: ['OK'], mode:'ios'});
     await alert.present();
   };
+
+  getRating = () => this.ms.getMaster('ratings/');
 
   private refreshUser = async (user: any) => {
     await this.storage.removeStorage('userClient');

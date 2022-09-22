@@ -17,6 +17,10 @@ export class MasterService {
     return this.http.get<any>(`${url}/${version}/${collection}`);
   }
 
+  getMasterObserve(collection: string): Observable<any> {
+    return this.http.get<any>(`${url}/${version}/${collection}`, { observe: 'response' });
+  }
+
   postMaster(collection: string, data: any) {
     return this.http.post(`${url}/${version}/${collection}`, data);
   }
@@ -24,6 +28,7 @@ export class MasterService {
   patchMaster(collection: string, id: any, data: any) {
     return this.http.patch(`${url}/${version}/${collection}/${id}`, data);
   }
+
   patch2Master(collection: string, data: any) {
     return this.http.patch(`${url}/${version}/${collection}`, data);
   }

@@ -3,6 +3,15 @@ ion-content, ion-toolbar, ion-item, ion-list {
   background: #fafafa;
 }
 
+ion-badge {
+  --background: var(--ion-meka-primary);
+  --color: #e0ac08;
+}
+
+ion-title {
+  --color: var(--ion-meka-primary);
+  color: var(--ion-meka-primary);
+}
 
 ion-accordion {
   .title {
@@ -19,29 +28,6 @@ ion-accordion {
   }
 }
 
-.map-wrapper {
-  position: relative;
-  --background: none;
-  --height: 200px;
-  --padding-start: 0px;
-  --inner-padding-end: 0px;
-  #map {
-    width: 100%;
-    height: 250px;
-  }
-  #map_center {
-    position: absolute;
-    z-index: 99;
-    height: 40px;
-    width: 40px;
-    top: 50%;
-    left: 50%;
-    margin-left: -21px;
-    margin-top: -41px;
-  }
-}
-
-
 agm-map  {
-  height: 400px;
+  min-height: 400px;
 }

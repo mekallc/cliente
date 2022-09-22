@@ -13,10 +13,10 @@ ion-content, ion-list, ion-toolbar {
         }
       }
       ion-textarea {
-        --background: #e4e4e4;
-        --border-radius: 10px;
-        --padding-start: 10px;
+        border-radius: 10px;
         --padding-end: 10px;
+        --background: #e4e4e4;
+        --padding-start: 10px;
         --color: rgb(55, 55, 55);
       }
     }

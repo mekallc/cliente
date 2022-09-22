@@ -1,20 +1,24 @@
 <ion-content [fullscreen]="true">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-6 col-md-5 mb-4">
+        <div class="text-center mt-5">
+          <img src="./assets/images/logo-meka-white.png" class="img-fluid" alt="">
+        </div>
+      </div>
+    </div>
+  </div>
   <ion-slides #slides mode="ios" [options]="options">
     <ion-slide>
       <div class="container">
         <div class="row justify-content-center">
-          <div class="col-6 col-md-5 mb-4">
-            <div class="text-center">
-              <img src="./assets/images/logo-meka-white.png" class="img-fluid" alt="">
-            </div>
-          </div>
           <div class="col-12 col-md-7">
             <form [formGroup]="loginForm">
               <ion-item>
                 <ion-label position="stacked">{{ "SIGN.EMAIL" | translate }} <ion-text color="danger">*</ion-text></ion-label>
-                <ion-input required type="email" formControlName="email"></ion-input>
+                <ion-input required type="email" formControlName="username"></ion-input>
               </ion-item>
-              <ion-item *ngIf="loginForm.get('email').invalid && loginForm.get('email').touched">
+              <ion-item *ngIf="loginForm.get('username').invalid && loginForm.get('username').touched">
                 <ion-text color="danger" class="form-error">
                   <small>{{ "SIGN.ERROR.EMAIL" | translate }}</small>
                 </ion-text>
@@ -34,11 +38,6 @@
               <ion-button (click)="goToSlides(1)" expand="block" fill="clear" shape="round" class="mb-3" mode="ios">
                 {{ "SIGN.FORGET_YOUR_PASSWORD" | translate }}
               </ion-button>
-              <!-- <ion-item *ngIf="email.invalid && email.touched" lines="none">
-                <ion-text color="danger" class="form-error">
-                  Please enter a valid email address.
-                </ion-text>
-              </ion-item> -->
             </form>
           </div>
         </div>
@@ -47,18 +46,13 @@
     <ion-slide>
       <div class="container">
         <div class="row justify-content-center">
-          <div class="col-6 col-md-5 mb-4">
-            <div class="text-center">
-              <img src="./assets/images/logo-meka-white.png" class="img-fluid" alt="">
-            </div>
-          </div>
           <div class="col-12 col-md-7">
             <form [formGroup]="forgotPasswordForm">
               <ion-item>
                 <ion-label position="stacked">{{ "SIGN.EMAIL" | translate }} <ion-text color="danger">*</ion-text></ion-label>
                 <ion-input required type="email" formControlName="email"></ion-input>
               </ion-item>
-              <ion-item *ngIf="forgotPasswordForm.get('email').invalid && loginForm.get('email').touched">
+              <ion-item *ngIf="forgotPasswordForm.get('email').invalid && forgotPasswordForm.get('email').touched">
                 <ion-text color="danger" class="form-error">
                   <small>{{ "SIGN.ERROR.EMAIL" | translate }}</small>
                 </ion-text>

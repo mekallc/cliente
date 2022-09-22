@@ -34,14 +34,7 @@ export class LastRepairedWidgetComponent implements OnInit, AfterViewInit {
 
   ngOnInit() { }
 
-  ngAfterViewInit() {
-    if (this.status === 'OPEN') {
-      this.services$ = this.store.select('service').pipe(map(({ service }) => service), delay(500));
-    }
-    if (this.status === 'IN_PROCESS') {
-      this.services$ = this.store.select('inProcess').pipe(map(({ inProcess }) => inProcess), delay(500));
-    }
-  }
+  ngAfterViewInit() { }
 
   openService = (res: any) => {
     if (this.status === 'OPEN') {

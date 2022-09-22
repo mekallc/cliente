@@ -13,7 +13,7 @@ export class ExpertEffects {
       mergeMap(() => this.db.getTypeExpert()
         .pipe(
           map((items) => actions.expertLoaded({ items })),
-          catchError(async ({ error }) => actions.errorAccepted({ error }))
+          catchError(async ({ error }) => actions.expertError({ error }))
         )
       )
     )

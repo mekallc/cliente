@@ -8,14 +8,14 @@
       <ion-icon name="list"></ion-icon>
       <ion-label>{{ "TABS.SERVICES" | translate }}</ion-label>
     </ion-tab-button>
-    <ion-tab-button tab="history">
-      <ion-icon name="library"></ion-icon>
-      <ion-label>{{ "TABS.HISTORY" | translate }}</ion-label>
-    </ion-tab-button>
     <ion-tab-button tab="notification">
-      <ion-badge color="danger"></ion-badge>
+      <ion-badge color="danger" *ngIf="notification">
+        <span [ngClass]="(total$ | async) !== 0 ? 'text-white' : 'text-danger'" >
+          {{ total$ | async }}</span>
+      </ion-badge>
       <ion-icon name="notifications"></ion-icon>
       <ion-label>{{ "TABS.NOTIFICATIONS" | translate }}</ion-label>
     </ion-tab-button>
   </ion-tab-bar>
 </ion-tabs>
+x

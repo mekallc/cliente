@@ -1,37 +1,13 @@
-<ion-list lines="none" *ngIf="!load; else loading">
-  <div class="notFound" *ngIf="total === 0; else ok" >
-    <ion-label>
-      <ion-icon name="happy-outline"></ion-icon>
-      <h2>Not Found</h2>
-    </ion-label>
-  </div>
-</ion-list>
-
-
-<ng-template #loading>
-  <ion-progress-bar type="indeterminate"></ion-progress-bar>
-  <div class="spinner">
-    <ion-spinner name="crescent"></ion-spinner>
-  </div>
-</ng-template>
-
-<ng-template #ok>
-  <ion-item button *ngFor="let item of items$ | async;" [detail]="false">
-    <ion-label (click)="openService(item)">
-      <p class="date">{{ item.date_reg | amTimeAgo  }}</p>
-      <h1 class="code">{{ item.code }}</h1>
-      <p class="date">{{ item.status }}</p>
-      <h2 class="vehicle"> {{ item.vehicle_model?.brand }} {{ item.vehicle_model?.model }} </h2>
-    </ion-label>
-    <ion-buttons slot="end">
-      <ion-button (click)="goTochat(item)" *ngIf="item.status === 'ACCEPTED'">
-        <ion-icon slot="icon-only" name="chatbubbles-outline" class="icon-chat"></ion-icon>
-      </ion-button>
-      <ion-button (click)="openService(item)">
-        <ion-avatar slot="end" class="expert">
-          <img [src]="item.expert_icon" />
-        </ion-avatar>
-      </ion-button>
-    </ion-buttons>
-  </ion-item>
-</ng-template>
+<ion-item button [detail]="false" *ngIf="item">
+  <ion-label>
+    <p class="date">{{ '09-01-2022' | amTimeAgo  }}</p>
+    <p>{{ item._id }}</p>
+    <h2 class="code">{{ item.category.name }}</h2>
+    <h2 class="vehicle"> {{ item.brand.name }} {{ item.model.name }} </h2>
+  </ion-label>
+  <ion-buttons slot="end">
+    <ion-avatar slot="end" class="expert">
+      <img [src]="item.category.picture" [alt]="item.category.name"/>
+    </ion-avatar>
+  </ion-buttons>
+</ion-item>

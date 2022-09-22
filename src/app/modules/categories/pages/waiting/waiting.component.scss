@@ -2,8 +2,12 @@
 ion-header, ion-footer {
   ion-toolbar {
     --background: #fafafa;
+    ion-title {
+      --color: #080F18;
+    }
   }
 }
+
 ion-content {
   --background: #fafafa;
   ion-list {
@@ -16,7 +20,7 @@ ion-content {
     background-color: #fafafa;
     // color: #4d4d4d;
     ion-item {
-      --background: rgb(215, 215, 215);
+      --background: rgb(233, 233, 233);
       --detail-icon-color: red;
       ion-label, ion-icon, .ion-accordion-toggle-icon {
         --color: #4d4d4d;
@@ -76,4 +80,16 @@ ion-content {
 .status {
   font-size: 14px;
   font-weight: 600;
+}
+
+.chat {
+  ion-item {
+    --background: #fafafa;
+    --color: var(--ion-meka-primary);
+  }
+}
+
+
+agm-map  {
+  height: 400px;
 }

@@ -11,11 +11,11 @@ export const environment = {
   },
   production: false,
   api: {
-    url: 'https://api.meka.do/api',
-    version: 'v1',
-    headers: {
-      // 'Content-Type':  'application/application/x-www-form-urlencoded'
-    },
+    // url: 'http://18.216.189.14:3000/api',
+    url: 'http://localhost:3000/api',
+    version: 'v2',
     admin: {email: 'knaimero@gmail.com', password: 'meka123'}
-  }
+  },
+  maps: 'AIzaSyAylhtwYmgO_nuFZsQzvm_z6vAOvbEk80Q',
+  mapbox: 'pk.eyJ1IjoiaGVjdG9yY2FuYWltZXJvIiwiYSI6ImNsM292aWxpbzBzaHMzY3V2dGdzNnIzMWgifQ.fv7vU-ZTPUvlKe3VWmnpXA',
 };

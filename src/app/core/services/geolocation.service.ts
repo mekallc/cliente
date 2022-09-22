@@ -23,6 +23,7 @@ export class GeolocationService {
 
   currentPosition2 = () => {
     Geolocation.getCurrentPosition()
+    .then(() => {})
     .catch(async (err) => {
       const alert = await this.alertCtrl.create({
         header: 'ERROR', mode: 'ios',

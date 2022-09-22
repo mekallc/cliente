@@ -1,14 +1,13 @@
-import { Component, OnInit, AfterViewInit, Input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, Input, AfterViewInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AlertController, LoadingController, ModalController, NavController } from '@ionic/angular';
 
-import { Observable } from 'rxjs';
+import { Observable, timer } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 
+import { Geolocation } from '@capacitor/geolocation';
+import { UtilsService } from '@core/services/utils.service';
 import { CameraService } from '@core/services/camera.service';
-import { GeolocationService } from '@core/services/geolocation.service';
 import { DbCategoriesService } from '@modules/categories/services/db-categories.service';
-import { CompanyModalComponent } from '@modules/categories/pages/company/company-modal.component';
 
 import { Store } from '@ngrx/store';
 import * as actions from '@store/actions';
@@ -18,11 +17,10 @@ import { AppState } from '@store/app.state';
   selector: 'app-mechanics',
   templateUrl: './mechanics.component.html',
   styleUrls: ['./mechanics.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MechanicsComponent implements OnInit, AfterViewInit {
 
-  @Input() expert: number;
+  @Input() category: any;
 
   formReactive: FormGroup;
   brands$: Observable<any[]>;
@@ -42,79 +40,93 @@ export class MechanicsComponent implements OnInit, AfterViewInit {
 
   constructor(
     private fb: FormBuilder,
-    private nav: NavController,
+    private uService: UtilsService,
     private store: Store<AppState>,
     private db: DbCategoriesService,
-    private geo: GeolocationService,
-    private modalCtrl: ModalController,
-    private alertCtrl: AlertController,
     private cameraService: CameraService,
-    private loadingCtrl: LoadingController,
   ) { }
 
   ngOnInit() {
     this.loadReactiveForm();
+    this.getData();
+    console.log(this.formReactive);
+  }
+
+  ngAfterViewInit(): void {
+    this.setDataForm();
+  }
+
+  getData() {
     this.vehicles$ = this.db.getVehicles();
   }
 
-  async ngAfterViewInit() {
-    const { coords } = await this.geo.currentPosition();
-    this.coordinates = coords;
-  }
   onSubmit = async () => {
-    this.setReactive();
-    const load = await this.loadingCtrl.create({ message: 'Loading...' });
-    await load.present();
-    this.store.dispatch(actions.itemAdd({ item: this.formReactive.value }));
-    this.store.select('item')
-    .pipe(filter(row => !row.loading), map(res => res.item))
-    .subscribe(async (res) => {
-      this.store.dispatch(actions.statusLoad());
-      load.dismiss();
+    await this.setReactive();
+    const item = this.formReactive.value;
+    console.log('VALUE ', item);
+    await this.uService.load({ message: 'Loading...' });
+    this.store.dispatch(actions.itemAdd({ item }));
+    timer(500).subscribe(() =>{
+      this.uService.loadDimiss();
       this.formReactive.reset();
-      const modal = await this.modalCtrl.create({ component: CompanyModalComponent, componentProps: { res } });
-      await modal.present();
-      this.nav.navigateRoot('pages/home');
-    }, async (err) => {
-      load.dismiss();
-      const alert = await this.alertCtrl.create({
-        header: 'ERROR', message: err.error.description, buttons: ['OK'] });
-      await alert.present();
+      this.uService.navigate('service-open');
     });
   };
 
-  fiterBrand = (ev: any) => {
+  getBrand = (ev: any) => {
     this.brands$ = this.db.getBrand(ev.detail.value);
   };
 
-  filterModel = (ev: any) => {
+  getModels = (ev: any) => {
     this.models$ = this.db.getModel(ev.detail.value);
-
   };
 
   loadReactiveForm = () => {
     this.formReactive = this.fb.group({
-      description: ['', [Validators.required, Validators.minLength(4)]],
-      type_expert: [''], type_company: [1],
-      vehicle_model: ['', Validators.required],
-      latitude: [''], longitude: [''], distance: [],
-      year: [''], pictures: [''], company_request: [0]
+      description: ['Test #1', [Validators.required, Validators.minLength(4)]],
+      vehicle: ['', Validators.required],
+      user: ['', Validators.required],
+      brand: ['', Validators.required],
+      model: ['', Validators.required],
+      category: ['', Validators.required],
+      latitude: [''],
+      longitude: [''],
+      year: ['2020'],
+      pictures: [''],
     });
   };
 
-  setReactive = () => {
-    this.formReactive.controls.type_expert.setValue(+this.expert);
-    this.formReactive.controls.latitude.setValue(this.coordinates.latitude);
-    this.formReactive.controls.longitude.setValue(this.coordinates.longitude);
+  setReactive = async () => {
     this.formReactive.controls.pictures.setValue(this.capture);
+    const position = await Geolocation.getCurrentPosition();
+    if(position) {
+      this.formReactive.controls.latitude.setValue(position.coords.latitude);
+      this.formReactive.controls.longitude.setValue(position.coords.longitude);
+    }
+
   };
 
   capturePhoto = async () => {
     const photo = await this.cameraService.takePhoto();
-    this.capture.push(photo);
+    if (photo) {
+      this.capture.push(photo);
+    }
+    console.log(this.capture);
   };
 
   removeCapture = (id: string) => {
     this.capture = this.capture.filter((row: any) => row !== id);
   };
+
+  // SETFORM USER
+  private setDataForm() {
+    this.formReactive.controls.category.setValue(this.category);
+    this.store.select('user')
+    .pipe(filter(row => !row.loading), map((res: any) => res.user))
+    .subscribe((res) => {
+      console.log(res);
+      // eslint-disable-next-line no-underscore-dangle
+      this.formReactive.controls.user.setValue(res._id);
+    });
+  }
 }

@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { StorageService } from '@core/services/storage.service';
 import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({
@@ -7,11 +8,22 @@ import { TranslateService } from '@ngx-translate/core';
 
 export class TraslationService {
 
-  constructor( private translate: TranslateService ) {
-    translate.addLangs(['en', 'es', 'po']);
+  constructor(
+    storage: StorageService,
+    private translate: TranslateService
+    ) {
+    translate.addLangs(['en', 'es', 'pt']);
     translate.setDefaultLang('es');
     const browserLang = translate.getBrowserLang();
-    translate.use(browserLang.match(/en|es/) ? browserLang : 'es');
+    storage.getStorage('language').then(res => {
+      if(res === 2) {
+        translate.use(browserLang.match(/en|es/) ? browserLang : 'en');
+      } else if(res === 3) {
+        translate.use(browserLang.match(/en|es/) ? browserLang : 'pt');
+      } else {
+        translate.use(browserLang.match(/en|es/) ? browserLang : 'es');
+      }
+    });
   }
 
   use = (lang: string) => this.translate.use(lang);

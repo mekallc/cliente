@@ -6,6 +6,7 @@ import { IonicModule } from '@ionic/angular';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { GetProfilePage } from './get-profile.page';
+import { StarsWidgetModule } from '@modules/rate/widgets/stars/stars.module';
 import { SignUpPageRoutingModule } from './get-profile-routing.module';
 import { ChangePasswordComponent } from '@modules/users/widgets/change-password/change-password.component';
 import { EditarComponent } from '@modules/users/widgets/editar/editar.component';
@@ -16,6 +17,7 @@ import { EditarComponent } from '@modules/users/widgets/editar/editar.component'
     IonicModule,
     CommonModule,
     TranslateModule,
+    StarsWidgetModule,
     ReactiveFormsModule,
     SignUpPageRoutingModule
   ],

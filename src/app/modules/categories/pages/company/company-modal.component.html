@@ -1,74 +1,71 @@
 <ion-header class="ion-no-border">
-  <ion-toolbar>
-    <ion-buttons slot="end">
-      <ion-button (click)="onClose()">
-        <ion-icon slot="icon-only" name="close-circle"></ion-icon>
-      </ion-button>
+  <ion-toolbar mode="ios">
+    <ion-buttons slot="start" *ngIf="!item$">
+      <ion-back-button defaultHref="/pages/home"></ion-back-button>
     </ion-buttons>
-    <ion-title>{{ "CHOOSE PROVIDER" | translate | uppercase }}</ion-title>
+    <ion-title>{{ "CHOOSE PROVIDER" | translate | titlecase }}</ion-title>
   </ion-toolbar>
 </ion-header>
-<ion-content>
-  <ion-segment mode="ios" value="maps" (ionChange)="segment($event)">
-    <ion-segment-button value="maps">
-      <ion-label>{{ "MAPS" | translate | titlecase }}</ion-label>
-    </ion-segment-button>
-    <ion-segment-button value="list">
+<ion-content *ngIf="(item$ | async) as item">
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button color="danger" (click)="onCancelService(item)">
+      <ion-icon name="trash"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+  <ion-segment mode="ios" [value]="value" (ionChange)="segment($event)">
+    <ion-segment-button value="LIST">
       <ion-label>{{ "LIST" | translate | titlecase }}</ion-label>
     </ion-segment-button>
+    <ion-segment-button value="MAPS">
+      <ion-label>{{ "MAPS" | translate | titlecase }}</ion-label>
+    </ion-segment-button>
   </ion-segment>
-  <div *ngIf="value === 'maps'; else list">
-    <agm-map [latitude]="+res.latitude" [longitude]="+res.longitude" [zoom]="18">
-      <agm-marker  *ngFor="let item of companies$ | async"
-      [latitude]="item.distance.latitude"
-      [longitude]="item.distance.longitude"
-      [iconUrl]="item.type_company === 'MECHANICAL' ? './assets/images/icon-mechanics.png': './assets/images/icon-parts.png'"
-      [markerDraggable]="false">
-        <agm-info-window >
-          <h5 class="mb-0" style="color: #000">{{ item.name }}</h5>
-          <app-stars-widget [num]="getRandom()"></app-stars-widget>
-          <p class="mb-0 ion-text-wrap" style="color: #000">{{ item.address }}</p>
-          <ion-button (click)="clickedMarker(item)" size="small" color="danger">
-            {{ "SERVICE.SEND" | translate | uppercase }}
+  <div class="mt-1" *ngIf="value === 'MAPS'; else list">
+    <agm-map
+      [latitude]="position.latitude"
+      [longitude]="position.longitude"
+      [zoom]="16"
+      [disableDefaultUI]="false">
+      <agm-marker [latitude]="position.latitude"
+      [longitude]="position.longitude"></agm-marker>
+      <agm-marker *ngFor="let provider of provider$ | async as list"
+        [latitude]="provider.latitude"
+        [longitude]="provider.longitude">
+        <agm-info-window>
+          <ion-label>
+            <p style="font-weight: 400; margin-bottom: .15rem">Distancia {{ provider.distance }}</p>
+            <h2 style="margin-bottom: .20rem;">{{ provider.name }}</h2>
+            <p class="mb-1">{{ provider.address }}</p>
+          </ion-label>
+          <ion-button size="small" (click)="sendProviderService(item, provider)" color="danger">
+            {{ 'SERVICE.SEND' | translate }}
           </ion-button>
-          <ion-button (click)="onView(item, res.id)" color="primary" size="small">
-            {{ "SERVICE.VIEW INFO" | translate | titlecase }}
+          <ion-button size="small" (click)="onViewProfileProvider(item, position)" color="primary">
+            {{ 'SERVICE.VIEW INFO' | translate }}
           </ion-button>
         </agm-info-window>
       </agm-marker>
     </agm-map>
   </div>
+  <ng-template #list>
+    <ion-list>
+      <ion-item *ngFor="let provider of provider$ | async">
+        <ion-label>
+          <h3>{{ provider.name }}</h3>
+          <app-stars-widget></app-stars-widget>
+          <p>
+            {{ "SERVICE.DISTANCE" | translate | titlecase }}
+            {{ provider.distance }}
+          </p>
+          <p class="ion-text-wrap">{{ provider.address }}</p>
+          <ion-button (click)="sendProviderService(item, provider)" color="danger" size="small" class="me-2">
+            {{ "SERVICE.SEND" | translate | uppercase }}
+          </ion-button>
+          <ion-button (click)="onViewProfileProvider(item, provider)" color="primary" size="small">
+            {{ "SERVICE.VIEW INFO" | translate | uppercase }}
+          </ion-button>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+  </ng-template>
 </ion-content>
-<ion-footer class="ion-no-border">
-  <ion-toolbar mode="ios" color="danger">
-    <ion-title mode="ios" (click)="onCancelService(res.id)">
-      {{ "SERVICE.DELETE" | translate | uppercase }}
-    </ion-title>
-  </ion-toolbar>
-</ion-footer>
-
-<ng-template #list>
-  <ion-list>
-    <ion-item *ngFor="let item of companies$ | async">
-      <ion-label>
-        <h3>{{ item.name }}</h3>
-        <app-stars-widget [num]="getRandom()"></app-stars-widget>
-        <p>
-          {{ "SERVICE.DISTANCE" | translate | titlecase }}
-          {{ item.distance.distance }}
-        </p>
-        <p>
-          {{ "SERVICE.TIME" | translate | titlecase }}
-          {{ item.distance.duration }}
-        </p>
-        <p class="ion-text-wrap">{{ item.address }}</p>
-        <ion-button (click)="clickedMarker(item)" color="danger" size="small" class="me-2">
-          {{ "SERVICE.SEND" | translate | uppercase }}
-        </ion-button>
-        <ion-button (click)="onView(item, res.id)" color="primary" size="small">
-          {{ "SERVICE.VIEW INFO" | translate | titlecase }}
-        </ion-button>
-      </ion-label>
-    </ion-item>
-  </ion-list>
-</ng-template>

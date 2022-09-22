@@ -4,6 +4,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from '@store/app.state';
 import { Observable } from 'rxjs';
 import { map, tap, delay, filter } from 'rxjs/operators';
+import { AuthService } from '@modules/users/services/auth.service';
 import { StorageService } from 'src/app/core/services/storage.service';
 
 @Component({
@@ -19,6 +20,7 @@ export class GetProfilePage implements AfterViewInit {
   segment = 'editar';
 
   constructor(
+    private db: AuthService,
     private navCtrl: NavController,
     private store: Store<AppState>,
   ) { }
@@ -26,7 +28,6 @@ export class GetProfilePage implements AfterViewInit {
   ngAfterViewInit() {
     this.user$ = this.store.select('user')
     .pipe(filter(row => !row.loading), map((res: any) => res.user));
-    this.user$.subscribe(console.log);
   }
 
   segmentChanged = (ev: any) => {

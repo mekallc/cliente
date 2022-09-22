@@ -1,15 +1,17 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { UserEffects } from './user.effects';
 import { ItemEffects } from './item.effects';
+import { RatingEffects } from './rating.effects';
 import { ExpertEffects } from './expert.effects';
-import { StatusEffects } from './status.effects';
-import { ServiceEffects } from './service.effects';
-import { HistoryEffects } from './history.effects';
-import { AcceptedEffects } from './accepted.effects';
-import { InProcessEffects } from './in_process.effects';
+import { FinishedEffects } from './finished.effects';
+import { CancelledEffects } from './cancelled.effects';
 
 
 export const EffectsArray: any[] = [
-  UserEffects, ServiceEffects, InProcessEffects, HistoryEffects, AcceptedEffects,
-  ItemEffects, StatusEffects, ExpertEffects,
+  UserEffects,
+  ItemEffects,
+  ExpertEffects,
+  RatingEffects,
+  FinishedEffects,
+  CancelledEffects,
 ];

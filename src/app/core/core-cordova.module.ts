@@ -4,7 +4,6 @@ import { Globalization } from '@ionic-native/globalization/ngx';
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
 import { NativeGeocoder } from '@ionic-native/native-geocoder/ngx';
 import { NativePageTransitions } from '@ionic-native/native-page-transitions/ngx';
-import { PhotoViewer } from '@ionic-native/photo-viewer/ngx';
 
 
 @NgModule({
@@ -12,7 +11,6 @@ import { PhotoViewer } from '@ionic-native/photo-viewer/ngx';
   imports: [],
   providers: [
     HTTP,
-    PhotoViewer,
     Globalization,
     NativeStorage,
     NativeGeocoder,

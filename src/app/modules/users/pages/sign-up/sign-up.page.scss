@@ -72,17 +72,6 @@ ion-content, ion-footer, ion-header, ion-toolbar {
   --background: #fafafa;
   background: #fafafa;
 }
-ion-footer {
-  --background: var(--ion-meka-primary);
-  background: var(--ion-meka-primary);
-  ion-toolbar {
-    --background: var(--ion-meka-primary);
-    background: var(--ion-meka-primary);
-    ion-button {
-      --color: #fff;
-    }
-  }
-}
 
 
 @media(max-width: 767px) {

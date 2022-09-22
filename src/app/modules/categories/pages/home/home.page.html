@@ -1,31 +1,31 @@
 <app-header></app-header>
 <ion-content>
-  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
-    <ion-refresher-content
-      pullingIcon="chevron-down-circle-outline"
-      pullingText="Pull to refresh"
-      refreshingSpinner="circles"
-      refreshingText="Refreshing...">
-    </ion-refresher-content>
-  </ion-refresher>
-  <ion-segment mode="ios" [value]="toggle" (ionChange)="segmentChanged($event)">
-    <ion-segment-button value="OPEN">
-      <ion-label>REQUESTS</ion-label>
+  <ion-segment class="sticky-top" mode="ios" [value]="toggle" (ionChange)="segmentChanged($event)">
+    <ion-segment-button value="FINISHED">
+      <ion-label>{{ 'FINISHED' | translate }}</ion-label>
     </ion-segment-button>
-    <ion-segment-button value="IN_PROCESS">
-      <ion-label>IN PROCESS</ion-label>
-    </ion-segment-button>
-    <ion-segment-button value="ACCEPTED">
-      <ion-label>ACCEPTED</ion-label>
+    <ion-segment-button value="CANCELLED">
+      <ion-label>{{ 'CANCELLED' | translate }}</ion-label>
     </ion-segment-button>
   </ion-segment>
-  <ng-template [ngIf]="toggle === 'OPEN'">
-    <app-service-status-list [type]="toggle"></app-service-status-list>
+  <ion-progress-bar type="indeterminate" *ngIf="progress"></ion-progress-bar>
+  <ng-template [ngIf]="toggle === 'FINISHED'">
+    <ion-list lines="none" *ngIf="finished$; else notFound">
+      <ng-container *ngFor="let item of finished$ | async">
+        <app-service-status-list [item]="item"></app-service-status-list>
+      </ng-container>
+    </ion-list>
   </ng-template>
-  <ng-template [ngIf]="toggle === 'IN_PROCESS'">
-    <app-service-status-list [type]="toggle"></app-service-status-list>
-  </ng-template>
-  <ng-template [ngIf]="toggle === 'ACCEPTED'">
-    <app-service-status-list [type]="toggle"></app-service-status-list>
+  <ng-template [ngIf]="toggle === 'CANCELLED'">
+    <ion-list lines="none">
+      <ng-container *ngFor="let item of cancelled$ | async">
+        <app-service-status-list [item]="item"></app-service-status-list>
+      </ng-container>
+    </ion-list>
   </ng-template>
 </ion-content>
+<ng-template #notFound>
+  <ion-text color="primary">
+    <h1>Awesome text</h1>
+  </ion-text>
+</ng-template>

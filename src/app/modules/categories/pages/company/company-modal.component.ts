@@ -1,7 +1,9 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-import { ModalController, AlertController, LoadingController } from '@ionic/angular';
+/* eslint-disable no-underscore-dangle */
+import { Component, OnInit } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
-import { delay, map } from 'rxjs/operators';
+import { filter, map, switchMap } from 'rxjs/operators';
+import { Geolocation, Position } from '@capacitor/geolocation';
 
 import { Store } from '@ngrx/store';
 import * as actions from '@store/actions';
@@ -9,7 +11,7 @@ import { AppState } from '@store/app.state';
 
 import { DbCategoriesService } from '../../services/db-categories.service';
 import { CompanyViewModalComponent } from '../company-view-modal/company-view-modal.component';
-declare let google: any;
+import { UtilsService } from '@core/services/utils.service';
 
 @Component({
   selector: 'app-company-modal',
@@ -19,127 +21,132 @@ declare let google: any;
 
 export class CompanyModalComponent implements OnInit {
 
-  @Input() res: any;
-  @ViewChild('map', { static: false }) mapElement: ElementRef;
+  item$: Observable<any>;
+  provider$: Observable<any>;
+  position: any;
+  value = 'LIST';
 
-  map: any;
-  value = 'maps';
+  latLng: any;
+  address: string;
+  showMaps = false;
+  map: mapboxgl.Map;
+  style = 'mapbox://styles/mapbox/streets-v11';
+  service: any = [];
+
+  res: any;
+  maps: any;
   companies$: Observable<any[]>;
+  coords: any = [];
+  latitude: number;
+  longitude: number;
+
 
   constructor(
     private store: Store<AppState>,
+    private uService: UtilsService,
     private db: DbCategoriesService,
-    private modalCtrl: ModalController,
-    private alertCtrl: AlertController,
-    private loadingCtrl: LoadingController,
+    private translate: TranslateService,
   ) { }
 
-  ngOnInit() {
-    this.getData();
+
+  async ngOnInit(): Promise<void> {
+    await this.currentPosition();
   }
 
-  getData = () => {
-    this.companies$ = this.db.getCompanies(1, 2, this.res.latitude, this.res.longitude)
-    .pipe(map((res: any) => res.search));
-  };
+  segment(ev: any): void {
+    this.value = ev.detail.value;
+  }
 
-  clickedMarker = async (item: any) => {
-    const data = {
-      status: 'IN_PROCESS',
-      company_request: item.id,
-      distance: item.distance.distance,
-      duration: item.distance.duration
-    };
-    const alert = await this.alertCtrl.create({
-      header: 'Info', message: 'Do you want to send the service to this provider?',
-      buttons:[
+  async currentPosition(): Promise<void> {
+    await this.uService.load({ message: 'Carregando Informacion...'});
+    const position: Position = await Geolocation.getCurrentPosition();
+    if (position) {
+      this.position =  {
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude
+      };
+    }
+    this.getService();
+    this.getProvider();
+    this.uService.loadDimiss();
+  }
+
+  getService() {
+    this.item$ = this.store.select('item')
+    .pipe(filter(row => !row.loading), map((res: any) => res.item));
+  }
+
+  getProvider() {
+    this.provider$ = this.item$.pipe(
+      switchMap(res => {
+        const data = this.setDataSearchProvider(res);
+        return this.db.getProviderByServise(data).pipe(
+          map((provider: any) => this.sortProviderNearBord(provider))
+        );
+      })
+    );
+  }
+
+  loadPage = (service: any) => this.res = service;
+
+  async sendProviderService(service: any, provider: any) {
+    const data = { company: provider._id, status: 'in_process' };
+    await this.uService.alert({
+      header: 'Atención',
+      message: this.translate.instant('DO_YOU_WANT_TO_SEND_THE_SERVICE_TO_THIS_PROVIDER'),
+      buttons: [
         { text: 'Cancel', role: 'cancel', },
-        {
-          text: 'Okay',
-          id: 'confirm-button',
+        { text: 'Okay', id: 'confirm-button',
           handler: async () => {
-            const loading = await this.loadingCtrl.create({ message: 'Loading...' });
-            loading.present();
-            this.store.dispatch(actions.itemUpdate({ id: this.res.id, data }));
-            this.store.dispatch(actions.statusChanged({ status: 'IN_PROCESS'}));
-            loading.dismiss();
-            this.modalCtrl.dismiss();
+            await this.uService.load({ message: this.translate.instant('PROCESSING'), duration: 1500 });
+            this.store.dispatch(actions.itemUpdate({ id: service._id, data }));
+            this.uService.navigate('/pages/home');
           }
         }
       ]
     });
-    await alert.present();
-  };
-  viewProfile = (item: any) => console.log(`clicked the marker:`, item);
-
-  mapClicked = (ev: any) => null;
-
-  markerDragEnd(m: marker, ev: any) {
-    console.log('dragEnd', m, ev);
   }
 
-  loadMap() {
-    const latLng = new google.maps.LatLng(this.res.latitude, this.res.longitude);
-    const marker = new google.maps.Marker({ position: latLng });
-    const mapOptions = {
-      zoom: 15, center: latLng,
-      disableDefaultUI:true,
-      gestureHandling: 'none',
-      keyboardShortcuts: false,
-      mapTypeId: google.maps.MapTypeId.ROADMAP
-    };
-    this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
-    marker.setMap(this.map);
-  }
-
-  onView = async (company: any, id: number) => {
-    const modal = await this.modalCtrl.create({
+  async onViewProfileProvider(service: any, provider: any): Promise<void> {
+    await this.uService.modal({
+      mode: 'ios',
+      initialBreakpoint: 0.85,
+      breakpoints: [0, 0.85, 1],
       component: CompanyViewModalComponent,
-      componentProps: { company, id }
+      componentProps: { service, provider }
     });
-    modal.present();
-  };
+  }
 
-  onCancelService = async (id: number) => {
-    const alert = await this.alertCtrl.create({
-      header: 'Info',
-      message: 'Will you cancel this service?',
+  async onCancelService(service: any): Promise<void> {
+    await this.uService.alert({
+      header: 'Atención',
+      message: this.translate.instant('WILL_YOU_CANCEL_THIS_SERVICE'),
       buttons:[
         { text: 'Cancel', role: 'cancel', },
-        {
-          text: 'Okay',
-          id: 'confirm-button',
-          handler: async () => {
-            const loading = await this.loadingCtrl.create({ message: 'Loading...' });
-            loading.present();
-            this.db.cancelService(id).pipe(delay(700)).subscribe(
-              () => this.dispatch(),
-              (err) => console.log('Error ', err)
-            );
-            loading.dismiss();
-            this.modalCtrl.dismiss();
-          }
-        }
+        { text: 'Okay', handler: async () => this.cancelservice(service._id) }
       ]
     });
-    await alert.present();
   };
 
-  dispatch = () => {
-    this.store.dispatch(actions.loadService({ status: 'OPEN'}));
-    this.store.dispatch(actions.loadInProcess());
-  };
+  private async cancelservice(id: string): Promise<void> {
+    await this.uService.load({ message: this.translate.instant('PROCESSING') });
+    this.store.dispatch(actions.itemDelete({ id }));
+    this.uService.navigate('/pages/home');
+    this.uService.loadDimiss();
+  }
 
-  public getRandom = () => Math.floor(Math.random() * (5 - 1 + 1) + 1);
-  segment = (ev: any) => this.value = ev.detail.value;
-  onClose = () => this.modalCtrl.dismiss();
+  private sortProviderNearBord(objs: any) {
+    return objs.sort((a: any,b: any): 0 | 1 | -1 =>
+      (a.distance.distance > b.distance.distance) ? 1 :
+      ((b.distance.distance > a.distance.distance) ? -1 : 0));
+  }
 
-}
-
-
-interface marker {
-	lat: number;
-	lng: number;
-	label?: string;
-	draggable: boolean;
+  private setDataSearchProvider(res) {
+    return {
+      user: res.user._id,
+      category: res.category._id,
+      latitude: this.position.latitude,
+      longitude: this.position.longitude
+    };
+  }
 }

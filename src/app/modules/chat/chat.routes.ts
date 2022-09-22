@@ -10,6 +10,11 @@ const app: Routes = [
     path: 'room',
     loadChildren: () => import('./pages/rooms/rooms.module')
       .then( m => m.RoomsChatPageModule)
+  },
+  {
+    path: 'service',
+    loadChildren: () => import('./pages/room/room.module')
+      .then( m => m.RoomChatPageModule)
   }
 ];
 

@@ -10,15 +10,15 @@ import { StorageService } from '@core/services/storage.service';
 export class PushService {
   constructor(
     private ms: MasterService,
-    private storage: StorageService
-    ) { }
+    private storage: StorageService,
+  ) { }
 
 
-  initPush = (): void => {
+  initPush(): void {
     this.registerNotifications();
     this.addListeners();
     this.getDeliveredNotifications();
-  };
+  }
 
   registerNotifications = async () => {
     let permStatus = await PushNotifications.checkPermissions();
@@ -48,7 +48,6 @@ export class PushService {
   };
 
   updateToken = async (token: any)=>{
-    console.log(token);
     this.ms.changeToken(token).subscribe((res) => {});
   };
 }

@@ -1,5 +1,5 @@
 <app-header></app-header>
-<ion-content>
+<ion-content *ngIf="!service; else active">
   <div class="container mt-4">
     <div class="row justify-content-center mb-5">
       <div class="col-12 col-md-10">
@@ -13,8 +13,7 @@
         </ion-segment>
       </div>
     </div>
-    <app-mechanics *ngIf="segment === 'mechanics';else replace"
-      [expert]="expert"></app-mechanics>
+    <app-mechanics *ngIf="segment === 'mechanics';else replace" [category]="expert"></app-mechanics>
     <ng-template #replace>
       <app-parts [expert]="expert"></app-parts>
     </ng-template>
@@ -26,7 +25,19 @@
 
   </div>
 </ion-content>
-<ng-template #replacement>
-
+<ng-template #active>
+  <ion-content>
+    <div class="container mt-4">
+      <div class="row justify-content-center">
+        <div class="col-7 col-md-4">
+          <ion-img src="./assets/active.gif"></ion-img>
+        </div>
+        <div class="col-12">
+          <ion-text color="meka">
+            <h3>{{ 'GLOBAL.MESAGE_SERVICE_ACTIVE' | translate }}</h3>
+          </ion-text>
+        </div>
+      </div>
+    </div>
+  </ion-content>
 </ng-template>
-<!--  -->

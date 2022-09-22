@@ -1,103 +1,120 @@
-<ion-content [fullscreen]="true">
-  <ion-header class="ion-no-border">
-    <ion-toolbar mode="ios">
-      <ion-buttons slot="end">
-        <ion-button (click)="onClose()">
-          <ion-icon slot="icon-only" name="close"></ion-icon>
-        </ion-button>
-      </ion-buttons>
-    </ion-toolbar>
-  </ion-header>
-  <!-- Basic -->
+<ion-header class="ion-no-border">
+  <ion-toolbar mode="ios">
+    <ion-buttons slot="start">
+      <ion-button (click)="onClose()">
+        <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>{{ 'TABS.SERVICES' | translate | titlecase }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content *ngIf="(service$ | async) as service">
   <ion-list lines="none">
     <ion-item>
       <ion-label>
-        <h1 class="code"> {{ res.code }} </h1>
-        <h3 class="status">{{ res.status }}</h3>
+        <h1 class="code">{{ service.status | titlecase | translate }}</h1>
+        <h1 class="status"> {{ service._id }} </h1>
       </ion-label>
     </ion-item>
   </ion-list>
   <div class="container">
     <ion-accordion-group value="detail" mode="ios">
       <ion-accordion value="detail">
-        <ion-item slot="header">
+        <ion-item slot="header" lines="none">
           <ion-icon slot="start" name="list"></ion-icon>
-          <ion-label><b>Details</b></ion-label>
+          <ion-label><strong>{{ 'DETAILS' | translate | titlecase}}</strong></ion-label>
         </ion-item>
         <ion-list lines="none" slot="content">
           <ion-item>
-            <ion-icon slot="start" name="calendar-outline"></ion-icon>
-            <ion-label>{{ res.date_reg | date: 'dd-MM-yyyy'}}</ion-label>
-          </ion-item>
-          <ion-item>
             <ion-icon slot="start" name="time-outline"></ion-icon>
-            <ion-label>{{ res.date_reg | date: 'hh:mm'}}</ion-label>
+            <ion-label>
+              {{ service.createdAt | date: 'dd-MM-yyyy'}}
+              {{ service.createdAt | date: 'hh:mm'}}
+            </ion-label>
           </ion-item>
           <ion-item>
             <ion-icon slot="start" name="car-outline"></ion-icon>
             <ion-label class="ion-text-wrap">
-              {{ res.vehicle_model?.brand }} {{ res.vehicle_model?.model }}
-              <span *ngIf="res.year"> {{res.year}}</span>
+              {{ service.brand.name }} {{ service.model.name }}
+              <span *ngIf="service.year"> {{service.year}}</span>
             </ion-label>
           </ion-item>
           <ion-item>
             <ion-icon slot="start" name="reader-outline"></ion-icon>
             <ion-label>
-              <p class="categoria"> {{ res.type_expert }}</p>
-              <p class="description ion-text-wrap"> {{ res.description }}</p>
+              <p class="categoria"> {{ service.category.name | translate }}</p>
+              <p class="description ion-text-wrap"> {{ service.description }}</p>
             </ion-label>
           </ion-item>
         </ion-list>
       </ion-accordion>
-      <ion-accordion value="location">
-        <ion-item slot="header">
+      <!-- <ion-accordion value="location">
+        <ion-item slot="header" lines="none">
           <ion-icon slot="start" name="location-outline"></ion-icon>
-          <ion-label><b>Location</b></ion-label>
+          <ion-label><strong>{{ 'LOCATION' | translate | titlecase}}</strong></ion-label>
         </ion-item>
         <ion-list slot="content">
           <ion-item class="map-wrapper">
-            <div #map id="map"></div>
+            <agm-map [latitude]="service.latitude" [longitude]="service.longitude" [zoom]="18">
+              <agm-marker [latitude]="service.latitude" [longitude]="service.longitude">
+              </agm-marker>
+            </agm-map>
           </ion-item>
         </ion-list>
-      </ion-accordion>
+      </ion-accordion> -->
       <ion-accordion value="photos">
-        <ion-item slot="header">
+        <ion-item slot="header" lines="none">
           <ion-icon slot="start" name="image-outline"></ion-icon>
-          <ion-label><b>Photos</b></ion-label>
+          <ion-label><strong>{{ 'PHOTOS' | translate | titlecase}}</strong></ion-label>
         </ion-item>
-        <ion-list slot="content" *ngIf="res.pictures.length > 0; else notFound">
+        <ion-list slot="content" *ngIf="service.photos.length > 0; else notFound">
           <ion-item class="photo">
             <ion-slides mode="ios" scrollbar="ios" [options]="slideOpts">
-              <ion-slide *ngFor="let item of res.pictures">
-                <img [src]="item.picture" class="img-fluid" (click)="openPicture(item.picture)">
+              <ion-slide *ngFor="let item of service.photos">
+                <img [src]="item" class="img-fluid" (click)="openPicture(item)" alt="Photos">
               </ion-slide>
             </ion-slides>
           </ion-item>
         </ion-list>
       </ion-accordion>
-      <ion-accordion value="chat" *ngIf="res.status === 'ACCEPTED'">
-        <ion-item slot="header">
-          <ion-icon slot="start" name="chatbubbles-outline"></ion-icon>
-          <ion-label><b>Chat</b></ion-label>
+      <ion-accordion value="company" *ngIf="(provider$ | async) as provider">
+        <ion-item slot="header" lines="none">
+          <ion-icon slot="start" name="image-outline"></ion-icon>
+          <ion-label><strong>{{ 'PROVIDER' | translate | titlecase }}</strong></ion-label>
         </ion-item>
-        <ion-list slot="content" lines="none" *ngIf="(room$ | async); else notFound">
-          <ion-item button detail (click)="onChat(res.company_request.id)">
-            <ion-label>
-              {{ res.company_request.name }}
+        <ion-list lines="none" slot="content">
+          <ion-item>
+            <ion-label class="ion-text-wrap">{{ provider.name }}</ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-label class="ion-text-wrap">{{ provider.address }}</ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-label class="ion-text-wrap">
+              <h4>Categorias: </h4>
+              <span *ngFor="let item of provider.categories">{{ item.name }}, </span>
             </ion-label>
           </ion-item>
         </ion-list>
       </ion-accordion>
     </ion-accordion-group>
+    <div class="chat my-4" *ngIf="service.status === 'accepted'">
+      <ion-item lines="none" button detail mode="ios" (click)="onChat(service._id)">
+        <ion-label>CHAT</ion-label>
+      </ion-item>
+    </div>
   </div>
 </ion-content>
-<ion-footer class="ion-no-border">
+<ion-footer class="ion-no-border" *ngIf="(service$ | async) as service">
   <ion-toolbar>
-    <ion-button mode="ios" expand="full" fill="clear" (click)="onCancelService(res)"
-      *ngIf="res.status === 'IN_PROCESS' || res.status === 'ACCEPTED'"
-      color="danger"> Cancel Service </ion-button>
-    <ion-button mode="ios" expand="full" fill="clear" (click)="onDeleteService(res.id)" *ngIf="res.status === 'OPEN'"
-    color="danger"> Delete Service </ion-button>
+    <ion-button mode="ios" expand="full" fill="clear" (click)="onCancelService(service)"
+      *ngIf="service.status === 'in_process' || service.status === 'accepted'"
+      color="danger"> {{ 'SERVICE.CANCEL' | translate | uppercase }}
+    </ion-button>
+    <ion-button mode="ios" expand="full" fill="clear"
+      (click)="onDeleteService(service._id)" *ngIf="service.status === 'open'" color="danger">
+      {{ 'SERVICE.DELETE' | translate | uppercase }}
+    </ion-button>
   </ion-toolbar>
 </ion-footer>
 
@@ -106,7 +123,7 @@
   <ion-list slot="content">
     <ion-item>
       <ion-label>
-        <p class="text-center"> Not Found! </p>
+        <p class="text-center"> {{ 'NOT_FOUND' | translate | uppercase }} </p>
       </ion-label>
     </ion-item>
   </ion-list>

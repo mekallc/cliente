@@ -23,15 +23,19 @@ export class HomeWidgetComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.categories$ = this.loadData();
+    this.loadData();
   }
 
-  loadData = () => this.store.select('expert')
+  loadData = () => {
+    this.categories$ = this.store.select('expert')
     .pipe(filter(row => !row.loading), map(res => res.items));
+  };
 
   goToSolicitud = (item: any) =>
-    this.router.navigate(['pages', 'solicitud', 'home',item.id]);
+    // eslint-disable-next-line no-underscore-dangle
+    this.router.navigate(['pages', 'solicitud', 'home',item._id]);
 
-  onToogleCategories = () => this.toogleCategory = !this.toogleCategory;
+  onToogleCategories = () =>
+    this.toogleCategory = !this.toogleCategory;
 
 }

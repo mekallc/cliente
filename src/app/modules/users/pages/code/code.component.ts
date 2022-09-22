@@ -29,8 +29,8 @@ export class CodeUserComponent implements OnInit {
 
   load = () => {
     this.formControl = this.fb.group({
-      password: ['', Validators.required],
-      email: ['', [Validators.email, Validators.required]],
+      password: ['123456', Validators.required],
+      email: ['web@condor.com.br', [Validators.email, Validators.required]],
       code: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(4)]],
     });
   };

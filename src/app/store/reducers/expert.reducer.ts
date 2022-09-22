@@ -12,6 +12,9 @@ const expertReducerMap = createReducer(
 
   on(actions.expertLoaded, (state, { items }) =>
     ({ ...state, loading: false, items })),
+
+  on(actions.expertError, (state, { error }) =>
+    ({...state, loading: false, error })),
 );
 
 export const expertReducer = (state: any, action: any) => expertReducerMap(state, action);

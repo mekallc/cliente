@@ -1,37 +1,51 @@
-import { Component, OnInit } from '@angular/core';
-import { ConnectService } from '@modules/chat/services/connect.service';
-import { Store } from '@ngrx/store';
-import { AppState } from '@store/app.state';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
-
+import { ConnectService } from '@modules/chat/services/connect.service';
+import { IntegratedService } from '@core/services/integrated.service';
+import { ChatService } from '@core/services/chat.service';
 @Component({
   selector: 'app-pages',
   templateUrl: './pages.page.html',
   styleUrls: ['./pages.page.scss'],
 })
-export class PagesPage implements OnInit {
+export class PagesPage implements OnInit, AfterViewInit {
 
   chats$: Observable<any>;
+  total$: Observable<number|any>;
   count: number | 0;
+  notification = false;
+
 
   constructor(
-    private store: Store<AppState>,
-    private chatService: ConnectService
+    private conn: ConnectService,
+    private chatService: ChatService,
+    private intService: IntegratedService,
   ) {}
 
-  ngOnInit(): void {
-    this.getData();
+  async ngOnInit(): Promise<void> {
+    this.intService.pageStates();
+    await this.intService.onServiceStatus();
   }
 
-  getData = () => {
-    const items$ = this.store.select('accepted').pipe(filter((row: any) => !row.loading), map((res: any) => res.accepted));
-    items$.pipe().subscribe((res: any) => {
-      this.chatService.unReadMessageServiceChat(res).subscribe((one: any) => {
-        this.count = this.sum(one);
-      });
-    });
+  ngAfterViewInit() {
+    console.log('PAGES PAGE');
+    this.getServiceStatus();
+  }
+
+  getServiceStatus() {
+    this.intService.onServiceStatus();
+    this.chatService.getMessage()
+    .subscribe(res => console.log(res));
+  }
+
+  getChatNotification = (item: any) => {
+    this.total$ = this.conn.unReadMessage(item).pipe(map((res: any) => res?.length));
   };
 
+
+
   private sum = (items: any) => items.reduce((a: any, b: any) => a + (b.unread || 0), 0);
+
+
 }

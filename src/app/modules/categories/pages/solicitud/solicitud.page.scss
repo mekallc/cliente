@@ -1,5 +1,5 @@
 ion-content {
-  --background: #F0F3F8;
+  --background: #fff;
   ion-segment {
     height: 50px;
     ion-segment-button {
@@ -38,5 +38,23 @@ ion-content {
         }
       }
     }
+  }
+}
+
+ion-text {
+  h2 , h3, h4{
+    padding: 0 10px;
+    color: var(--ion-meka-primary);
+    text-align: justify;
+  }
+}
+
+.icon {
+  margin-top: 1.5rem;
+  text-align: center;
+  ion-icon {
+    color: var(--ion-meka-primary);
+    font-size: 104px;
+    --ionicon-stroke-width: 12px;
   }
 }
