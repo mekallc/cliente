@@ -1,4 +1,5 @@
 export const environment = {
+  production: true,
   firebase: {
     projectId: 'meka-app',
     appId: '1:882572463657:web:96f5f79d52d0ef1ae69638',
@@ -11,10 +12,10 @@ export const environment = {
   },
   api: {
     // url: 'http://18.216.189.14:3000/api',
-    url: 'http://localhost:3000/api',
-    version: 'v2',
+    url: 'http://192.168.250.114:3000',
+    version: 'api/v2',
     admin: {email: 'knaimero@gmail.com', password: 'meka123'}
   },
   maps: 'AIzaSyAylhtwYmgO_nuFZsQzvm_z6vAOvbEk80Q',
-  production: true
+  mapbox: ''
 };

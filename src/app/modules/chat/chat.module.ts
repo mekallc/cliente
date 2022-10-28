@@ -5,11 +5,11 @@ import { IonicModule } from '@ionic/angular';
 import { chatRoute } from './chat.routes';
 
 @NgModule({
-  declarations: [],
   imports: [
     chatRoute,
     IonicModule,
     CommonModule,
-  ]
+  ],
+  providers: []
 })
 export class ChatModule { }

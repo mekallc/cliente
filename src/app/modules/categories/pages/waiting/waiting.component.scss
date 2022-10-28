@@ -84,12 +84,11 @@ ion-content {
 
 .chat {
   ion-item {
-    --background: #fafafa;
-    --color: var(--ion-meka-primary);
+    --border-radius: 25px;
   }
 }
 
 
 agm-map  {
-  height: 400px;
+  height: 300px;
 }

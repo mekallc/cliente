@@ -1,30 +1,25 @@
-import { Observable } from 'rxjs';
-import { Component, Input, OnInit } from '@angular/core';
-import { App } from '@capacitor/app';
-import { LinksService } from '@core/services/links.service';
-import { LoadingController, MenuController, ModalController } from '@ionic/angular';
-import { StorageService } from '@core/services/storage.service';
+import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
+import { MenuController } from '@ionic/angular';
 import { AuthService } from '@modules/users/services/auth.service';
-import { SoporteChatPage } from '@modules/chat/pages/soporte/soporte.page';
+import { Observable } from 'rxjs';
 import { PostContentsWidgetComponent } from '@modules/contents/widget/post/post.component';
 import { RateApp } from 'capacitor-rate-app';
 import { AppState } from '@store/app.state';
 import { Store } from '@ngrx/store';
-import { UserModel } from '@core/model/user.interfaces';
 import { filter, map } from 'rxjs/operators';
 import { Browser, OpenOptions } from '@capacitor/browser';
-import { ValueAccessor } from '@ionic/angular/directives/control-value-accessors/value-accessor';
+import { UtilsService } from '@core/services/utils.service';
 
 @Component({
   selector: 'app-side-menu-widget',
   templateUrl: './side-menu-widget.component.html',
   styleUrls: ['./side-menu-widget.component.scss'],
 })
-export class SideMenuWidgetComponent implements OnInit {
+export class SideMenuWidgetComponent implements OnInit, AfterViewInit {
 
   @Input() appVersion: any;
   user$: Observable<any>;
-  score$: Observable<number|any>;
+  score$: Observable<any>;
 
   appPages = [
     { title: 'Home', url: '/home', },
@@ -34,66 +29,79 @@ export class SideMenuWidgetComponent implements OnInit {
   menus = [ 'SIDEMENU.TERM_OF_USE' ];
 
   social = [
-    { icon: 'logo-facebook', name: 'SIDEMENU.FANPAGE_FB', url: 'https://www.facebook.com/Meka-108821827303515' },
+    {
+      icon: 'logo-facebook',
+      name: 'SIDEMENU.FANPAGE_FB',
+      url: 'https://www.facebook.com/Meka-108821827303515'
+    }
   ];
 
 
   constructor(
     private menu: MenuController,
     private store: Store<AppState>,
-    private storage: StorageService,
+    private uService: UtilsService,
     private authService: AuthService,
-    private linkService: LinksService,
-    private modalCtrl: ModalController,
-    private loadCtrl: LoadingController,
   ) { }
 
   ngOnInit() {
-    this.user$ = this.store.select('user').pipe(map((res: any) => res.user));
-    this.score$ = this.store.select('rating')
-    .pipe(
-      filter(row => !row.loading),
-      map((res: any) => res.total !== null ? res.total: 0),
-      map((res: number) => res.toFixed(1))
-    );
+    this.user$ = this.store.select('user')
+      .pipe(map((res: any) => res.user));
   }
 
-  signOut = async () => {
+  ngAfterViewInit() {
+    this.getData();
+  }
+
+  getData() {
+    this.score$ = this.store.select('score')
+    .pipe(
+      filter(row => !row.loading),
+      map(({ item }: any) => item),
+    );
+    this.score$.subscribe(res => console.log(res));
+  }
+
+
+  async signOut(): Promise<void> {
     this.menu.close();
-    const load = await this.loadCtrl.create({ duration: 3000, message: 'Loading...' });
-    await load.present();
+    await this.uService.load({ duration: 3000, message: 'Loading...' });
     this.authService.signOut();
-    await load.dismiss();
   };
 
-  onLink = (url: string) => this.linkService.onLink(url);
+  onLink(url: string): void {
+    this.menu.close();
+    this.uService.navigate(url);
+  }
 
-  onPost = async (title: string) => {
-    const modal = await this.modalCtrl.create({
-      component: PostContentsWidgetComponent, componentProps: { title }
+  async onPost(title: string): Promise<void> {
+    this.menu.close();
+    await this.uService.modal({
+      component: PostContentsWidgetComponent,
+      componentProps: { title }
     });
-    await modal.present();
   };
 
-  onModalChat = async () => {
-    this.linkService.onLink('chat/soporte');
-    // const modal = await this.modalCtrl.create({ component: SoporteChatPage });
-    // await modal.present();
+  onModalChat(): void {
+    this.uService.navigate('chat/soporte');
   };
 
-  onAppRate = async () => {
-    const info = await RateApp.requestReview();
+  async onAppRate(): Promise<void>{
+    await RateApp.requestReview();
   };
 
-  openBrowser = async (url: string) => {
+  async openBrowser(url: string): Promise<void>{
     const options: OpenOptions = { url, toolbarColor: '#222428' };
     await Browser.open(options);
   };
 
-  getName = (first: string, last: string) => {
-    const a = first.slice(0,1);
-    const b = last.slice(0,1);
-    const value = a + b;
-    return value;
+  getName(first: string, last: string): string {
+    if (first) {
+      const a = first.slice(0,1);
+      const b = last.slice(0,1);
+      const value = a + b;
+      return value;
+    }
+    return `mk`;
   };
 }

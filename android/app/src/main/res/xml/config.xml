@@ -28,6 +28,10 @@
     <param name="android-package" value="org.apache.cordova.globalization.Globalization"/>
   </feature>
 
+  <feature name="InAppBrowser">
+    <param name="android-package" value="org.apache.cordova.inappbrowser.InAppBrowser"/>
+  </feature>
+
   <feature name="NativeGeocoder">
     <param name="android-package" value="cordova.plugin.nativegeocoder.NativeGeocoder"/>
   </feature>

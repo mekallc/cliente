@@ -29,8 +29,6 @@ export class CompanyModalComponent implements OnInit {
   latLng: any;
   address: string;
   showMaps = false;
-  map: mapboxgl.Map;
-  style = 'mapbox://styles/mapbox/streets-v11';
   service: any = [];
 
   res: any;
@@ -89,7 +87,7 @@ export class CompanyModalComponent implements OnInit {
 
   loadPage = (service: any) => this.res = service;
 
-  async sendProviderService(service: any, provider: any) {
+  async sendProviderService(service: any, provider: any): Promise<void> {
     const data = { company: provider._id, status: 'in_process' };
     await this.uService.alert({
       header: 'Atención',
@@ -108,6 +106,7 @@ export class CompanyModalComponent implements OnInit {
   }
 
   async onViewProfileProvider(service: any, provider: any): Promise<void> {
+    console.log('PROVIDER ', provider);
     await this.uService.modal({
       mode: 'ios',
       initialBreakpoint: 0.85,

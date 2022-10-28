@@ -8,6 +8,7 @@ export interface AppState {
   expert: reducers.ExpertState;
   finished: reducers.FinishedState;
   cancelled: reducers.CancelledState;
+  score: reducers.ScoreState;
 }
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -18,4 +19,5 @@ export const ROOT_REDUCERS: ActionReducerMap<AppState> = {
   expert: reducers.expertReducer,
   finished: reducers.finishedReducer,
   cancelled: reducers.cancelledReducer,
+  score: reducers.scoreReducer,
 };

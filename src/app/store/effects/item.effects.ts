@@ -5,7 +5,7 @@ import { map, mergeMap, catchError, tap } from 'rxjs/operators';
 import * as actions from '../actions';
 import { DbCategoriesService } from '@modules/categories/services/db-categories.service';
 import { UtilsService } from '@core/services/utils.service';
-import { ChatService } from '@core/services/chat.service';
+import { MasterService } from '@core/services/master.service';
 
 @Injectable()
 
@@ -37,12 +37,10 @@ export class ItemEffects {
   update$ = createEffect(() =>
     this.actions$.pipe(
       ofType(actions.itemUpdate),
-      mergeMap((action: any) => this.db.sendService(action.id, action.data)
+      mergeMap((action: any) => this.updateService(action.id, action.data)
         .pipe(
-          map((item: any) => {
-            this.chatService.joinRoom(`service-${item._id}`);
-            return actions.itemLoaded({ item });
-          }),
+          tap(res => console.log(res)),
+          map((item: any) => actions.itemLoaded({ item })),
           catchError(async ({ error }) => actions.itemError({ error }))
         )
       )
@@ -59,7 +57,7 @@ export class ItemEffects {
   delete$ = createEffect(() =>
     this.actions$.pipe(
       ofType(actions.itemDelete),
-      mergeMap((action: any) => this.db.cancelService(action.id)
+      mergeMap((action: any) => this.db.sendService(action.id, { status: 'cancelled' })
         .pipe(
           map((item) => actions.itemLoaded({ item: null })),
           catchError(async ({ error }) => actions.itemError({ error }))
@@ -84,6 +82,10 @@ export class ItemEffects {
     private actions$: Actions,
     private uService: UtilsService,
     private db: DbCategoriesService,
-    private chatService: ChatService,
+    private ms: MasterService,
   ) {}
+
+  updateService(id: string, data: any) {
+    return this.ms.patch2Master(`services/${id}`, data);
+  }
 }

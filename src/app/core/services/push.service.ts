@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
-import { PushNotifications } from '@capacitor/push-notifications';
+import { PushNotifications, PushNotificationSchema } from '@capacitor/push-notifications';
 import { MasterService } from '@core/services/master.service';
 import { StorageService } from '@core/services/storage.service';
+import { LocalNotifications, ScheduleOptions } from '@capacitor/local-notifications';
+
 
 @Injectable({
   providedIn: 'root'
@@ -31,23 +33,32 @@ export class PushService {
     await PushNotifications.register();
   };
 
-  addListeners = async () => {
-    await PushNotifications.addListener('registration', async (token: any) => {
-      await this.storage.setStorage('push', token.value);
-      await this.updateToken(token.value);
+  addListeners = () => {
+    PushNotifications.addListener('registration', async (token: any) => {
+      console.log('TOKEN VDD', token.value);
+      await this.storage.setStorage('oPush', token.value);
     });
-    await PushNotifications.addListener('registrationError', err => {
+    PushNotifications.addListener('registrationError', err => {
       console.error('Registration error: ', err.error);
     });
-    await PushNotifications.addListener('pushNotificationReceived', notification => { });
-    await PushNotifications.addListener('pushNotificationActionPerformed', notification => { });
+    PushNotifications.addListener('pushNotificationReceived',
+    async (notification: PushNotificationSchema): Promise<void> => {
+      console.log('Push notification received: ', notification);
+      const not: ScheduleOptions = {
+        notifications: [{
+          id: Date.now(),
+          body: notification.body,
+          title: notification.title,
+          ongoing: false,
+        }]
+      };
+      const result = await LocalNotifications.schedule(not);
+      console.log(result);
+    });
+    PushNotifications.addListener('pushNotificationActionPerformed', notification => { });
   };
 
   getDeliveredNotifications = async () => {
     const notificationList = await PushNotifications.getDeliveredNotifications();
-  };
-
-  updateToken = async (token: any)=>{
-    this.ms.changeToken(token).subscribe((res) => {});
   };
 }

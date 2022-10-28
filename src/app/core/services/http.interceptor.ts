@@ -18,7 +18,7 @@ export default class ApiInterceptor implements HttpInterceptor {
     console.log(request.url);
     const promise = this.storage.getStorage('userClient');
     if (
-    request.url.includes('setting')  ||
+    request.url.includes('services')  ||
     request.url.includes('user/add') ||
     request.url.includes('user/change-password') ||
     request.url.includes('master/countries') ||

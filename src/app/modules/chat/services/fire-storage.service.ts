@@ -34,6 +34,27 @@ export class FireStorageService {
     }
   };
 
+  uploadSoporte = async (room: string, file: any | null): Promise<string> => {
+    let url;
+    const currentDate = Date.now() + '.png';
+    const filename = this.base64ToImage(file);
+    const path = `soporte/${room}/${currentDate}`; {
+      if (file) {
+        try {
+          const storageRef = ref(this.storage, path);
+          const task = uploadBytesResumable(storageRef, filename);
+          this.uploadPercent = percentage(task);
+          await task;
+          url = await getDownloadURL(storageRef);
+        } catch(e: any) {
+          console.error(e);
+        }
+      } else {
+        // handle invalid file
+      }
+      return url;
+    }
+  };
   uploadAudio = async (room: string, file: any | null): Promise<string> => {
     let url;
     const currentDate = Date.now() + '.wav';

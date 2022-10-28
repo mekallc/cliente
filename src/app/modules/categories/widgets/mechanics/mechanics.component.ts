@@ -12,6 +12,7 @@ import { DbCategoriesService } from '@modules/categories/services/db-categories.
 import { Store } from '@ngrx/store';
 import * as actions from '@store/actions';
 import { AppState } from '@store/app.state';
+import { StorageService } from '@core/services/storage.service';
 
 @Component({
   selector: 'app-mechanics',
@@ -42,6 +43,7 @@ export class MechanicsComponent implements OnInit, AfterViewInit {
     private fb: FormBuilder,
     private uService: UtilsService,
     private store: Store<AppState>,
+    private storage: StorageService,
     private db: DbCategoriesService,
     private cameraService: CameraService,
   ) { }
@@ -52,22 +54,21 @@ export class MechanicsComponent implements OnInit, AfterViewInit {
     console.log(this.formReactive);
   }
 
-  ngAfterViewInit(): void {
-    this.setDataForm();
+  async ngAfterViewInit(): Promise<void> {
+    await this.setDataForm();
   }
 
   getData() {
     this.vehicles$ = this.db.getVehicles();
   }
 
-  onSubmit = async () => {
+  async onSubmit(): Promise<void> {
     await this.setReactive();
     const item = this.formReactive.value;
     console.log('VALUE ', item);
-    await this.uService.load({ message: 'Loading...' });
+    await this.uService.load({ message: 'Loading...', duration: 750 });
     this.store.dispatch(actions.itemAdd({ item }));
-    timer(500).subscribe(() =>{
-      this.uService.loadDimiss();
+    timer(750).subscribe(() =>{
       this.formReactive.reset();
       this.uService.navigate('service-open');
     });
@@ -119,14 +120,10 @@ export class MechanicsComponent implements OnInit, AfterViewInit {
   };
 
   // SETFORM USER
-  private setDataForm() {
+  private async setDataForm() {
     this.formReactive.controls.category.setValue(this.category);
-    this.store.select('user')
-    .pipe(filter(row => !row.loading), map((res: any) => res.user))
-    .subscribe((res) => {
-      console.log(res);
-      // eslint-disable-next-line no-underscore-dangle
-      this.formReactive.controls.user.setValue(res._id);
-    });
+    const user: any = await this.storage.getStorage('oUser');
+    // eslint-disable-next-line no-underscore-dangle
+    this.formReactive.controls.user.setValue(user._id);
   }
 }

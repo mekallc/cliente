@@ -40,13 +40,10 @@ export class SolicitudPage implements OnInit {
         return res.item;
       }),
     );
-    this.service$.subscribe((res) => console.log(res));
   };
 
   serviceActive(service: any) {
-    console.log('SERVICE ', service);
     if (service !== null) {
-      console.log('SERVICE ', service);
       this.service = true;
     }
   }

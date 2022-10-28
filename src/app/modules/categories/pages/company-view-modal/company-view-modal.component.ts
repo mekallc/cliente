@@ -1,18 +1,19 @@
 /* eslint-disable no-underscore-dangle */
-import { Component, Input } from '@angular/core';
+import { AfterViewInit, Component, Input } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
 
 import * as actions from '@store/actions';
 import { AppState } from '@store/app.state';
 import { UtilsService } from '@core/services/utils.service';
+import { timer } from 'rxjs';
 
 @Component({
   selector: 'app-company-view-modal',
   templateUrl: './company-view-modal.component.html',
   styleUrls: ['./company-view-modal.component.scss'],
 })
-export class CompanyViewModalComponent {
+export class CompanyViewModalComponent implements AfterViewInit {
 
   @Input() service: any;
   @Input() provider: any;
@@ -23,6 +24,13 @@ export class CompanyViewModalComponent {
     private uService: UtilsService,
     private translate: TranslateService,
   ) { }
+
+    ngAfterViewInit() {
+      timer(500).subscribe(() => {
+        console.log('SERVICE ', this.service);
+        console.log('PROVIDER ', this.provider);
+      });
+    }
 
   onClose = (): Promise<boolean> =>
     this.uService.modalDimiss();

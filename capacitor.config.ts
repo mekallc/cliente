@@ -17,17 +17,13 @@ const config: CapacitorConfig = {
       iconColor: '#4d4d4d',
       sound: 'beep.wav',
     },
+    CapacitorCookies: {
+      enabled: true,
+    },
   },
   android: {
     allowMixedContent: true
   },
-  // cordova: {
-  //   preferences: {
-  //     LottieFullScreen: 'true',
-  //     LottieHideAfterAnimationEnd: 'true',
-  //     LottieAnimationLocation: 'public/assets/splash.json'
-  //   }
-  // },
   server: {
     cleartext: true,
     url: 'http://192.168.250.114:8101',

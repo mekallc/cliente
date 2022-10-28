@@ -1,15 +1,13 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
 import { AlertController, NavController } from '@ionic/angular';
-import { map, take } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 
-import { Login, Register } from './interfaces';
+import { Login } from './interfaces';
 import { MasterService } from '@core/services/master.service';
 import { StorageService } from 'src/app/core/services/storage.service';
-import { loadUser } from '@store/actions/user.actions';
 import { AppState } from '@store/app.state';
-
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -25,22 +23,14 @@ export class AuthService {
   ) { }
 
   //TODO: Autoriza el accesso
-  signIn(data: Login) {
-    return this.ms.postMaster('users/login-cliente', data).pipe(
-      take(1),
-      map(async (res: any) => {
-        await this.storage.setStorage('oAccess', res.access);
-        await this.storage.setStorage('oUser', res.user);
-        this.store.dispatch(loadUser(res));
-        return res;
-      })
-    );
+  signIn(data: Login): Observable<any> {
+    return this.ms.postMaster('users/login-cliente', data);
   }
 
   // TODO: Crea un usuario
-  signUp(data: any) {
+  signUp(data: any): Observable<Promise<boolean>> {
     return this.ms.postMaster( 'users', data).pipe(
-      map(async (res: any) => {
+      map(async (res: any): Promise<boolean> => {
         console.log(res);
         await this.storage.setStorage('oProfile', res);
         return this.navCtrl.navigateRoot('/user/signIn');
@@ -49,7 +39,7 @@ export class AuthService {
   }
 
   // TODO: Desloga la app
-  signOut = async () => {
+  async signOut(): Promise<boolean> {
     await this.storage.clearStorages();
     return this.navCtrl.navigateRoot('/user/signIn');
   };
@@ -57,16 +47,13 @@ export class AuthService {
   // TODO: Get Countries
   getCountries = () => this.ms.getMaster('/tables/countries');
 
-  updateToken = (token: string) => this.ms.changeToken(token);
+  changePassword(data: any): Observable<any> {
+    return this.ms.postMaster('auth/change-password', data);
+  }
 
-  changePassword = (data: any) =>
-    this.ms.postMaster('user/change-password/', data);
-
-  forgotSenha = (data: any) =>
-    this.ms.postMaster('user/password-code/', data);
-
-  codeValidate = (data: any) =>
-    this.ms.postMaster('user/change-password-code/', data);
+  forgotSenha(data: any): Observable<any> {
+    return this.ms.postMaster('auth/forgot-password', data);
+  }
 
   alertErr = async (message: string) => {
     const alert = await this.alertCtrl.create(
@@ -75,14 +62,4 @@ export class AuthService {
   };
 
   getRating = () => this.ms.getMaster('ratings/');
-
-  private refreshUser = async (user: any) => {
-    await this.storage.removeStorage('userClient');
-    await this.storage.setStorage('userClient', user);
-  };
-
-  private refreshToken = async (token: string) => {
-    await this.storage.removeStorage('tokenClient');
-    await this.storage.setStorage('tokenClient', token);
-  };
 }

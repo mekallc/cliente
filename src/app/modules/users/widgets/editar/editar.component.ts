@@ -1,14 +1,17 @@
+import { catchError } from 'rxjs/operators';
+/* eslint-disable no-underscore-dangle */
 import { StorageService } from '@core/services/storage.service';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AlertController, LoadingController } from '@ionic/angular';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { Observable, timer } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 
 import * as actions from '@store/actions';
 import { AppState } from '@store/app.state';
 import { MasterService } from '@core/services/master.service';
+import { UtilsService } from '@core/services/utils.service';
 
 @Component({
   selector: 'app-editar',
@@ -29,41 +32,28 @@ export class EditarComponent implements OnInit {
     private fb: FormBuilder,
     private ms: MasterService,
     private store: Store<AppState>,
+    private uService: UtilsService,
     private storage: StorageService,
-    private loadCtrl: LoadingController,
-    private alertCtrl: AlertController,
   ) { }
 
   ngOnInit() {
-    this.loadForm();
-    this.loadData();
-    this.countries$ = this.ms.getMaster('master/countries/');
+    this.getData();
   }
 
-  onSubmit = async () => {
+  getData() {
+    this.loadForm();
+    this.loadData();
+    this.countries$ = this.ms.getMaster('tables/countries');
+  }
+
+
+  async onSubmit(): Promise<void> {
     if(this.registerForm.invalid) { return; }
     const data = this.registerForm.value;
+    await this.uService.load({message: 'Procesando...'});
     await this.storage.setStorageValue('language', data.language);
-    delete data.language;
-    const load = await this.loadCtrl.create({message: 'Loading...'});
-    load.present();
-    const value = this.registerForm.value;
-    this.ms.patch2Master('user/upd/', value).subscribe(
-      (user: any) => {
-        console.log('USER EDIT ', user);
-        load.dismiss();
-        this.store.dispatch(actions.loadUser(user));
-      },
-      async (err: any) => {
-        load.dismiss();
-        console.log(err);
-        const alert = await this.alertCtrl.create({
-          header: 'Error', message: err.error.error, buttons:['OK']});
-        await alert.present();
-      }
-    );
+    this.processingData(this.user._id, data);
   };
-
 
   loadForm = () => {
     this.registerForm = this.fb.group({
@@ -77,21 +67,34 @@ export class EditarComponent implements OnInit {
   };
 
   loadData = () => {
-    this.store.select('user')
-    .pipe(filter(row => !row.loading), map(res => res.user))
-    .subscribe((res: any) => {
+    if (this.user) {
+      const res = this.user;
       this.registerForm.controls.first_name.setValue(res.first_name);
       this.registerForm.controls.last_name.setValue(res.last_name);
       this.registerForm.controls.email.setValue(res.email);
       this.registerForm.controls.phone.setValue(res.phone);
       this.registerForm.controls.country.setValue(res.country);
       this.registerForm.controls.language.setValue(+res.language);
-      this.loadCountry(res.language);
-    });
+    }
   };
 
-  loadCountry = (country: string) => {
-    this.ms.getMaster(`master/countries/`);
-
-  };
+  private processingData(id: string, data: any) {
+    this.ms.patch2Master(`users/${id}`, data)
+    .pipe(
+      catchError(async (error: any) => {
+        this.uService.loadDimiss();
+        await this.uService.alert({
+          header: 'Error',
+          message: error.message,
+          buttons:['OK']
+        });
+      })
+    )
+    .subscribe(
+      (user: any) => {
+        this.uService.loadDimiss();
+        this.store.dispatch(actions.loadUser(user));
+      },
+    );
+  }
 }

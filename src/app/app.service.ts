@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { App, AppInfo } from '@capacitor/app';
 import { Device } from '@capacitor/device';
 import { TraslationService } from '@core/language/traslation.service';
+import { UtilsService } from '@core/services/utils.service';
 import { Globalization } from '@ionic-native/globalization/ngx';
 import { Platform } from '@ionic/angular';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -18,6 +19,7 @@ export class AppService {
     private platform: Platform,
     private global: Globalization,
     public traslate: TraslationService,
+    private uService: UtilsService,
   ) {}
 
   setVersion$  = (items: AppInfo) => this.version$.next(items);
@@ -39,5 +41,9 @@ export class AppService {
       await lottie.splashscreen.hide();
       await lottie.splashscreen.show('public/assets/splash.json', false);
     }
+  }
+
+  closeModal() {
+    this.uService.modalDimiss();
   }
 }

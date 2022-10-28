@@ -1,8 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+/* eslint-disable @typescript-eslint/naming-convention */
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ChatService } from '@core/services/chat.service';
+import { Camera, CameraResultType } from '@capacitor/camera';
 import { StorageService } from '@core/services/storage.service';
 import { UtilsService } from '@core/services/utils.service';
+import { Observable, timer } from 'rxjs';
+import { IonContent } from '@ionic/angular';
+import { ChatFireService } from '@core/services/chat-fire.service';
 import { FireStorageService } from '@modules/chat/services/fire-storage.service';
 
 @Component({
@@ -11,52 +15,90 @@ import { FireStorageService } from '@modules/chat/services/fire-storage.service'
   styleUrls: ['room.page.scss'],
 })
 export class RoomChatPage implements OnInit {
+  @ViewChild(IonContent, { static: false }) content: IonContent;
   uid: string;
-  message: string;
-  public chat$ = this.chatService.chatBehavior$;
+  activeMessage = false;
+  public users = 0;
+  public message = '';
+  public messages: string[] = [];
+  public messages$: Observable<any[]>;
+
   constructor(
-    private fs: FireStorageService,
     private uService: UtilsService,
     private storage: StorageService,
-    private chatService: ChatService,
     private activatedRoute: ActivatedRoute,
+    private chatFireService: ChatFireService,
+    private storageService: FireStorageService,
   ) {}
 
   ngOnInit(): void {
-    this.activatedRoute.params.subscribe(({uid}) =>
-      this.getData(uid));
-    this.chat$.subscribe(res => console.log(res));
+    this.activatedRoute.params
+    .subscribe(({uid}) => this.getData(uid));
   }
 
   async onSubmit(): Promise<void> {
     if(this.message) {
-      const oUser = await this.user();
-      const payload = {
-        message: this.message,
-        user: {
-          // eslint-disable-next-line no-underscore-dangle
-          id: oUser._id,
-          first_name: oUser.first_name,
-          last_name: oUser.last_name
-        },
-        room: this.uid,
-        date: new Date()
-      };
-      this.chatService.sendMessage(payload);
+      await this.sendMessage('MSG', this.message);
       this.message = '';
     }
   }
 
-  onClose = () =>
+  getMessage(uid: string) {
+    this.messages$ = this.chatFireService.getMessages(uid);
+    this.scrollToBottomLabel();
+  }
+
+  scrollToBottomLabel() {
+    const id = document.getElementById('id-0');
+    // console.log(id);
+    // this.content.scrollToPoint(0,id.offsetTop-60,700);
+  }
+
+  async setCamera() {
+    const image = await Camera.getPhoto({
+      width: 500, height: 500, quality: 60, allowEditing: false, resultType: CameraResultType.DataUrl
+    });
+    const url = await this.storageService.upload(this.uid, image.dataUrl);
+    if(url) {
+      await this.sendMessage('IMG', url);
+    }
+  }
+
+  onClose(): void {
     this.uService.navigate('pages/home');
+  }
+
+  onEventInput(ev: any) {
+    if(ev.length > 0) {
+      this.activeMessage = true;
+    } else {
+      this.activeMessage = false;
+    }
+  }
+
+  private async sendMessage(type_message: string, message: string) {
+    const { _id }: any = await this.storage.getStorage('oUser');
+    const payload: Payload = {
+      message, owner: _id, date: new Date(),
+      type_user: 0, type_message, view_message: false,
+    };
+    await this.chatFireService.sendMessage(payload, this.uid);
+  }
 
   private getData(uid: string) {
-    this.chatService.joinRoom(uid);
     this.uid = uid;
+    this.getMessage(uid);
+    this.chatFireService.readMessages(uid)
+      .subscribe(() => null);
   }
 
-  private async user() {
-    return await this.storage.getStorage('oUser');
-  }
+}
 
+export interface Payload {
+  message: string;
+  owner: string;
+  date: Date;
+  type_user: number;
+  type_message: string;
+  view_message: boolean;
 }

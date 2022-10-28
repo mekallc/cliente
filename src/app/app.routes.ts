@@ -1,6 +1,6 @@
+import { AuthGuard } from '@modules/users/services/auth.guard';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
-import { KeyAuthGuard } from '@core/keycloak/keycloak.guard';
-import { AuthGuard } from 'src/app/modules/users/services/auth.guard';
+
 const routes: Routes = [
   {
     path: 'pages', canActivate: [AuthGuard],
@@ -21,7 +21,7 @@ const routes: Routes = [
     loadChildren: () => import('@modules/categories/pages/company/company.module')
       .then(m => m.CompanyModule) },
 
-  { path: 'in-progress',
+  { path: 'in-progress',  canActivate: [AuthGuard],
     loadChildren: () => import('@modules/categories/pages/waiting/waiting.module')
       .then( m => m.WaitingModule) },
 

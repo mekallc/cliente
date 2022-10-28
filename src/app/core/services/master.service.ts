@@ -33,8 +33,8 @@ export class MasterService {
     return this.http.patch(`${url}/${version}/${collection}`, data);
   }
 
-  changeToken(token_user: string) {
-    return this.http.patch(`${url}/${version}/notification/token/`, { token_user });
+  changeToken(user: string, push: string) {
+    return this.http.patch(`${url}/${version}/users/${user}`, { push });
   }
 
   getBanner = (lat: number, lng: number): Observable<any> =>  this.http.get<any>(

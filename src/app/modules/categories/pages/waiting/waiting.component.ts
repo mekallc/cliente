@@ -1,7 +1,7 @@
 // eslint-disable-next-line max-len
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, Input } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { Observable } from 'rxjs';
+import { Observable, timer } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { AppState } from '@store/app.state';
@@ -16,10 +16,10 @@ declare let google: any;
   templateUrl: './waiting.component.html',
   styleUrls: ['./waiting.component.scss'],
 })
-export class WaitingComponent implements OnInit, AfterViewInit {
+export class WaitingComponent implements OnInit {
 
-  service$: Observable<any>;
-  provider$: Observable<any>;
+  @Input() res: any;
+  iconCompany = 'https://meka-server.s3.us-east-2.amazonaws.com/app/icons/01.svg';
   openImage = false;
   slideOpts = { spaceBetween: 10, slidesPerView: 2.3, };
 
@@ -30,25 +30,7 @@ export class WaitingComponent implements OnInit, AfterViewInit {
     private translate: TranslateService,
   ) { }
 
-  ngOnInit() {
-    this.getData();
-  }
-
-  ngAfterViewInit(): void { }
-
-  getData = () => {
-    this.service$ = this.store.select('item').pipe(
-      filter(row => !row.loading),
-      map((res: any) => {
-        this.getProvider(res.item.company);
-        return res.item;
-      }),
-    );
-  };
-
-  getProvider(company: string) {
-    this.provider$ = this.ms.getMaster(`companies/${company}`);
-  }
+  ngOnInit() { }
 
   onChat = (room: any,) => {
     this.uService.navigate(`chat/service/${room}`);
@@ -68,13 +50,16 @@ export class WaitingComponent implements OnInit, AfterViewInit {
     });
   };
 
-  onClose = () => this.uService.navigate('pages/home');
+  onClose(): void {
+    this.uService.modalDimiss();
+  }
   toogle = () => this.openImage = !this.openImage;
   openPicture = (url: string) => console.log('Photo Viewer');
 
   private async executeOnCancel(item: any): Promise<void> {
     await this.uService.load({ message: this.translate.instant('PROCESSING') });
-    this.store.dispatch(actions.itemDelete({ id: item.id }));
+    // eslint-disable-next-line no-underscore-dangle
+    this.store.dispatch(actions.itemDelete({ id: item._id }));
     this.uService.loadDimiss();
     this.uService.navigate('/pages/home');
   };

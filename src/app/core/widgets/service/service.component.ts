@@ -1,4 +1,5 @@
-import { Component, OnInit, OnChanges, SimpleChanges, ChangeDetectionStrategy } from '@angular/core';
+import { WaitingComponent } from './../../../modules/categories/pages/waiting/waiting.component';
+import { Component, OnInit, OnChanges, SimpleChanges, ChangeDetectionStrategy, AfterViewInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '@store/app.state';
 import { Observable } from 'rxjs';
@@ -11,39 +12,36 @@ import { MasterService } from '@core/services/master.service';
   templateUrl: './service.component.html',
   styleUrls: ['./service.component.scss'],
 })
-export class ServiceComponent implements OnInit {
+export class ServiceComponent implements AfterViewInit {
 
   service$: Observable<any>;
-  provider$: Observable<any>;
 
   constructor(
-    private ms: MasterService,
     private store: Store<AppState>,
     private uService: UtilsService,
   ) { }
-
-  ngOnInit() {
+  ngAfterViewInit(): void {
     this.getData();
   }
 
   getData(): void {
     this.service$ = this.store.select('item')
     .pipe(filter(row => !row.loading),
-    map((res: any) => {
-      this.getProvider(res.item);
-      return res.item;
-    }));
+    map(({ item }: any) => item));
     this.service$.subscribe(res => console.log(res));
   }
 
-  getProvider(service: any) {
-    if (service) {
-      this.provider$ = this.ms.getMaster(`companies/${service.company}`);
-    }
+  openService(res: any){
+    this.openWaiting(res);
   }
 
-  openService = () => {
-    this.uService.navigate('in-progress');
-  };
-
+  private async openWaiting(res: any): Promise<void> {
+    await this.uService.modal({
+      mode: 'ios',
+      initialBreakpoint: 1,
+      breakpoints: [0, .5, 1],
+      component: WaitingComponent,
+      componentProps: { res },
+   });
+  }
 }

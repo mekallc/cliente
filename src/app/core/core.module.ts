@@ -10,7 +10,6 @@ import { environment } from 'src/environments/environment';
 import ApiInterceptor from '@core/services/http.interceptor';
 import { NgxMapboxGLModule } from 'ngx-mapbox-gl';
 import { LanguageModule } from '@core/language/language.module';
-import { CodeUserModule } from '@modules/users/pages/code/code.module';
 import { TranslateModule } from '@ngx-translate/core';
 
 // eslint-disable-next-line prefer-arrow/prefer-arrow-functions
@@ -22,13 +21,12 @@ export function playerFactory() { return player; }
     CommonModule,
     MomentModule,
     LanguageModule,
-    CodeUserModule,
     LanguageModule,
     TranslateModule,
     HttpClientModule,
-    AgmCoreModule.forRoot({ apiKey: environment.maps, libraries: ['places'] }),
     LottieModule.forRoot({ player: playerFactory }),
-    NgxMapboxGLModule.withConfig({ accessToken: environment.mapbox, })
+    NgxMapboxGLModule.withConfig({ accessToken: environment.mapbox, }),
+    AgmCoreModule.forRoot({ apiKey: environment.maps, libraries: ['places'] }),
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: ApiInterceptor, multi: true },

@@ -5,6 +5,7 @@ import { RatingEffects } from './rating.effects';
 import { ExpertEffects } from './expert.effects';
 import { FinishedEffects } from './finished.effects';
 import { CancelledEffects } from './cancelled.effects';
+import { ScoreEffects } from './score.effects';
 
 
 export const EffectsArray: any[] = [
@@ -14,4 +15,5 @@ export const EffectsArray: any[] = [
   RatingEffects,
   FinishedEffects,
   CancelledEffects,
+  ScoreEffects,
 ];

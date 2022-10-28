@@ -39,11 +39,12 @@ export class BannersWidgetComponent implements OnInit {
         longitude: position.coords.longitude,
       };
       this.entry$ = this.ms.postMaster('banners/client', data);
-      this.entry$.subscribe(res => console.log(res));
+      this.entry$.subscribe(res => console.log('BANNER ', res));
     }
   };
 
   goToCompany(id: string) {
+    console.log(id);
     this.ms.getMaster(`companies/${id}`)
     .subscribe(async (provider: any) => {
       if(provider) {

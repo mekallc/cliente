@@ -16,7 +16,7 @@ export class AuthGuard implements CanActivate {
   ) {}
 
   async canActivate(route: ActivatedRouteSnapshot): Promise<boolean> {
-    const result = await this.storage.getStorage('oAccess');
+    const result = await this.storage.getStorage('oUser');
     if (!result) {
       this.nav.navigateRoot('/user/signIn');
       return false;
