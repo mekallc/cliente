@@ -1,4 +1,7 @@
 ion-tabs{
+  --background: none;
+  background: none;
+
   ion-tab-bar {
     --background: #080F18;
     border-radius: 15px 15px 0 0;
@@ -12,4 +15,7 @@ ion-tabs{
     border-top: 2px solid rgb(200, 181, 42);
   }
 }
+
+.text-white {color: #fafafa; }
+.text-danger { visibility: hidden;  }
 

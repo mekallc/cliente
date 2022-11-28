@@ -29,3 +29,9 @@ npm-debug.log*
 /platforms
 /plugins
 /www
+/.angular
+/.firebase
+# Firebase
+.firebase
+*-debug.log
+.runtimeconfig.json

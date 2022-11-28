@@ -1,8 +1,14 @@
-<ion-slides mode="ios" [options]="options">
-  <ion-slide>
-    <img src="./assets/images/banners.png" class="img-fluid" alt="">
-  </ion-slide>
-  <ion-slide>
-    <img src="./assets/images/banners-1.png" class="img-fluid" alt="">
-  </ion-slide>
-</ion-slides>
+<div class="px-2 pt-2 pb-5">
+  <ion-slides mode="ios" [options]="options">
+    <ion-slide *ngFor="let item of entry$ | async">
+      <a [href]="item.url" *ngIf="!item.display; else company">
+        <img [src]="item.picture" class="img-fluid" [alt]="item.name">
+      </a>
+      <ng-template #company>
+        <div (click)="goToCompany(item.url)">
+          <img [src]="item.picture" class="img-fluid" [alt]="item.name">
+        </div>
+      </ng-template>
+    </ion-slide>
+  </ion-slides>
+</div>

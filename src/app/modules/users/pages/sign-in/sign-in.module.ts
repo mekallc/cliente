@@ -10,9 +10,9 @@ import { SignInPageRoutingModule } from './sign-in-routing.module';
 
 @NgModule({
   imports: [
-    CommonModule,
     FormsModule,
     IonicModule,
+    CommonModule,
     TranslateModule,
     ReactiveFormsModule,
     SignInPageRoutingModule

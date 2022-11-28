@@ -1,66 +1,38 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { NavController } from '@ionic/angular';
+import { Store } from '@ngrx/store';
+import { AppState } from '@store/app.state';
+import { Observable } from 'rxjs';
+import { map, tap, delay, filter } from 'rxjs/operators';
+import { AuthService } from '@modules/users/services/auth.service';
 import { StorageService } from 'src/app/core/services/storage.service';
-import { TablesService } from 'src/app/core/services/tables.service';
-import { AlertController, LoadingController } from '@ionic/angular';
-import { AuthService } from 'src/app/modules/users/services/auth.service';
 
 @Component({
   selector: 'app-get-profile',
   templateUrl: './get-profile.page.html',
   styleUrls: ['./get-profile.page.scss'],
 })
-export class GetProfilePage implements OnInit {
+export class GetProfilePage implements AfterViewInit {
 
-  registerForm: FormGroup;
-  user: any = [];
+  load = true;
+  user$: Observable<any>;
   countries: any = [];
-  idioma = [
-    { name: 'Ingles (USA)', iso: 'en' },
-    { name: 'Español (Latinoamerica)', iso: 'es' },
-    { name: 'Portugues (Brasil)', iso: 'po' }
-  ];
+  segment = 'editar';
 
   constructor(
-    private fb: FormBuilder,
-    private auth: AuthService,
-    private storage: StorageService,
-    private alertCtrl: AlertController,
-    private loadCtrl: LoadingController,
-    private tablesService: TablesService,
+    private db: AuthService,
+    private navCtrl: NavController,
+    private store: Store<AppState>,
   ) { }
 
-  async ngOnInit() {
-    this.loadForm();
-    this.user = await this.storage.getStorage('user');
-    console.log(this.user);
-    const { access } = await this.auth.getRootToken();
-    this.countries = await this.tablesService.getCountries(access);
+  ngAfterViewInit() {
+    this.user$ = this.store.select('user')
+    .pipe(filter(row => !row.loading), map((res: any) => res.user));
   }
 
-  onSubmit = async () => {
-    if(this.registerForm.invalid) { return; }
-    const load = await this.loadCtrl.create({message: 'Loading...'});
-    load.present();
-    const value = this.registerForm.value;
-    const data = {
-      email: value.email, country: value.country,
-      password: value.password, last_name: value.lastname,
-      fist_name: value.firstname, phone: `+${value.country + value.phone}`
-    };
-    this.auth.signUp(data).then((res) => {
-      load.dismiss();
-      this.auth.signIn({ email: res.email, password: value.password });
-    }).catch((err) => console.log(err));
+  segmentChanged = (ev: any) => {
+    this.segment = ev.detail.value;
   };
 
-  loadForm = () => {
-    this.registerForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      firstname: ['', [Validators.required, Validators.minLength(4)]],
-      lastname: ['', [Validators.required, Validators.minLength(4)]],
-      phone: ['', Validators.required],
-      country: ['', Validators.required]
-    });
-  };
+  onBack = () => this.navCtrl.navigateRoot('');
 }

@@ -1,48 +1,38 @@
 import { NgModule } from '@angular/core';
 import { RouteReuseStrategy } from '@angular/router';
-import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
-
-import {TranslateModule, TranslateLoader} from '@ngx-translate/core';
-import {TranslateHttpLoader} from '@ngx-translate/http-loader';
-
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
-import { NativePageTransitions } from '@ionic-native/native-page-transitions/ngx';
-import { Globalization } from '@ionic-native/globalization/ngx';
-import { HTTP } from '@ionic-native/http/ngx';
-import { LottieModule } from 'ngx-lottie';
-import player from 'lottie-web';
-import { MomentModule } from 'ngx-moment';
 
 import { appRoute } from './app.routes';
 import { AppComponent } from './app.component';
-import { TraslationService } from './core/services/traslation.service';
+import { CoreModule } from '@core/core.module';
+import { AppService } from 'src/app/app.service';
+import { FirebaseModule } from '@core/firebase.module';
+import { CoreStoreModule } from '@store/core-store.module';
+import { CoreCordovaModule } from '@core/core-cordova.module';
+import { SideMenuWidgetModule } from '@core/widgets/side-menu-widget/side-menu-widget.module';
+import { SocketIoConfig, SocketIoModule } from 'ngx-socket-io';
+import { environment } from 'src/environments/environment';
 
-// eslint-disable-next-line prefer-arrow/prefer-arrow-functions
-export function HttpLoaderFactory(httpClient: HttpClient) {
-  return new TranslateHttpLoader(httpClient);
-}
-
-// eslint-disable-next-line prefer-arrow/prefer-arrow-functions
-export function playerFactory() { return player; }
+const config: SocketIoConfig = { url: environment.api.url, options: {} };
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
   imports: [
     appRoute,
-    MomentModule,
+    CoreModule,
     BrowserModule,
-    HttpClientModule,
+    FirebaseModule,
+    CoreStoreModule,
+    CoreCordovaModule,
+    SideMenuWidgetModule,
     IonicModule.forRoot(),
-    LottieModule.forRoot({ player: playerFactory }),
-    TranslateModule.forRoot({ loader: { provide: TranslateLoader, useFactory: HttpLoaderFactory, deps: [HttpClient] } })
+    SocketIoModule.forRoot(config),
   ],
   providers: [
-    HTTP,
-    Globalization,
-    TraslationService,
-    NativePageTransitions,
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
+    AppService,
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

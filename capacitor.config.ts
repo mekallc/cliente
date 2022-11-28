@@ -1,33 +1,33 @@
-/* eslint-disable @typescript-eslint/quotes */
 import { CapacitorConfig } from '@capacitor/cli';
-
 const config: CapacitorConfig = {
-  appId: 'com.devcreativo.mekaapp',
-  appName: 'meka-cliente',
+  appId: 'com.mekadevelopments.cliente',
+  appName: 'Meka',
   webDir: 'www',
-  bundledWebRuntime: false,
+  bundledWebRuntime: true,
   plugins: {
     PushNotifications: {
-      presentationOptions: ["badge", "sound", "alert"],
+      presentationOptions: ['badge', 'sound', 'alert'],
     },
     SplashScreen: {
+      launchShowDuration: 0,
       launchAutoHide: false,
-      splashImmersive: false,
-      splashFullScreen: false,
-      launchShowDuration: 500,
-      backgroundColor: "#080f18",
-      androidScaleType: "CENTER_INSIDE",
-      androidSplashResourceName: "splash",
+    },
+    LocalNotifications: {
+      smallIcon: 'ic_stat_ionic_logo',
+      iconColor: '#4d4d4d',
+      sound: 'beep.wav',
+    },
+    CapacitorCookies: {
+      enabled: true,
     },
   },
   android: {
     allowMixedContent: true
   },
-  server: {
-    cleartext: true,
-    url: 'http://192.168.250.163:8100',
-    // url: 'https://guayoyo-inc.web.app/'
-  },
+  // server: {
+  //   cleartext: true,
+  //   url: 'http://192.168.250.114:8101',
+  // },
 };
 
 export default config;

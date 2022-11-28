@@ -41,7 +41,7 @@
       "HI": "Hi",
       "NEED_SOME_HELP_TODAY": "Need some help today?"
     },
-    "LAST_REPAIRED": { "TITLE": "Last Repaired"}
+    "LAST_REPAIRED": { "TITLE": "My Open Services"}
   },
   "SIDEMENU": {
     "PROFILE": "Profile",
@@ -49,7 +49,7 @@
     "SIGN_OUT":"Sign out",
     "PAGES":"Pages",
     "HELP_CENTER":"Help center",
-    "TERM_OF_USE":"Ter of use",
+    "TERM_OF_USE":"Term of use",
     "ABOUT":"About Meka",
     "SOCIAL":"Social",
     "RATING_APP":"Rate the App",

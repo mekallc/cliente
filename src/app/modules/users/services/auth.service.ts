@@ -1,14 +1,13 @@
-import { AlertController, NavController } from '@ionic/angular';
 import { Injectable } from '@angular/core';
-import { HTTP } from '@ionic-native/http/ngx';
-import { environment } from 'src/environments/environment';
-import jwt_decode from 'jwt-decode';
-import * as moment from 'moment';
+import { AlertController, NavController } from '@ionic/angular';
+import { map } from 'rxjs/operators';
+import { Store } from '@ngrx/store';
 
+import { Login } from './interfaces';
+import { MasterService } from '@core/services/master.service';
 import { StorageService } from 'src/app/core/services/storage.service';
-import { Router } from '@angular/router';
-
-const api = environment.api;
+import { AppState } from '@store/app.state';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -16,95 +15,51 @@ const api = environment.api;
 export class AuthService {
 
   constructor(
-    private http: HTTP,
-    private router: Router,
+    private ms: MasterService,
     private navCtrl: NavController,
+    private store: Store<AppState>,
     private storage: StorageService,
     private alertCtrl: AlertController,
-  ) {
-    this.decoded();
+  ) { }
+
+  //TODO: Autoriza el accesso
+  signIn(data: Login): Observable<any> {
+    return this.ms.postMaster('users/login-cliente', data);
   }
 
-  /** Tokens */
-  signIn = async (data: any): Promise<any> => {
-    try {
-      const result = await this.http.post(`${api.url}/${api.version}/setting/token/`, data, api.headers);
-      console.log(result.data);
-      if (!result.data || !result.data.length) { return []; }
-      this.setStorage(result.data);
-      this.router.navigate(['pages', 'home']);
-      this.getTokenRefresh();
-    } catch (err) {
-      const error = JSON.parse(err);
-      const alert = await this.alertCtrl.create({header: 'Error', message: error.detail });
-      await alert.present();
-      return err;
-    }
-  };
+  // TODO: Crea un usuario
+  signUp(data: any): Observable<Promise<boolean>> {
+    return this.ms.postMaster( 'users', data).pipe(
+      map(async (res: any): Promise<boolean> => {
+        console.log(res);
+        await this.storage.setStorage('oProfile', res);
+        return this.navCtrl.navigateRoot('/user/signIn');
+      })
+    );
+  }
 
-  getRootToken = async (): Promise<any> => {
-    const data = api.admin;
-    try {
-      const result = await this.http.post(`${api.url}/${api.version}/setting/token/`, data, api.headers);
-      if (!result.data || !result.data.length) { return []; }
-      const user = JSON.parse(result.data);
-      return user.access;
-    } catch (err) {
-      console.error('An error occurred loading all customers:', err);
-      return [];
-    }
-  };
-
-  signUp = async (data: any): Promise<any> =>{
-    try {
-      const result = await this.http.post(`${api.url}/${api.version}/user/add/`, data, api.headers);
-      return this.handle(result);
-    } catch (err) {
-      console.error('An error occurred loading all customers:', err);
-      return err;
-    }
-  };
-
-  signOut = async () => {
-    await this.storage.removeStorage('token');
+  // TODO: Desloga la app
+  async signOut(): Promise<boolean> {
+    await this.storage.clearStorages();
     return this.navCtrl.navigateRoot('/user/signIn');
   };
 
-  decoded = async () => {
-    const token = await this.storage.getStorage('token');
-    if (token) {
-      const { exp } = jwt_decode(token) as any;
-      const hour = moment.unix(exp).diff(moment(), 'hours');
-      if (hour === 1) {
-        this.getTokenRefresh();
-      }
-    }
-  };
-  private setStorage = async (result: any) => {
-    const user = JSON.parse(result);
-    await this.storage.setStorage('token', { access: user.access, refresh: user.refresh });
-    delete user.access;
-    delete user.refresh;
-    await this.storage.setStorage('user', user);
-    await this.storage.getStorage('token');
-  };
-  private getTokenRefresh = async (token?: string): Promise<any> => {
-    try {
-      if (!token) {
-        const  tok = await this.storage.getStorage('token');
-        token = tok.refresh;
-      };
-      const result = await this.http.post(`${api.url}/${api.version}/setting/token/refresh/`, { refresh: token }, api.headers);
-      const user = this.handle(result);
-      await this.storage.setStorage('token', user.access);
-    } catch (err) {
-      console.error('An error occurred loading all customers:', err);
-      return [];
-    }
+  // TODO: Get Countries
+  getCountries = () => this.ms.getMaster('/tables/countries');
+
+  changePassword(data: any): Observable<any> {
+    return this.ms.postMaster('auth/change-password', data);
+  }
+
+  forgotSenha(data: any): Observable<any> {
+    return this.ms.postMaster('auth/forgot-password', data);
+  }
+
+  alertErr = async (message: string) => {
+    const alert = await this.alertCtrl.create(
+      { header: 'Error', message, buttons: ['OK'], mode:'ios'});
+    await alert.present();
   };
 
-  private handle = (result: any) => {
-    if (!result.data || !result.data.length) { return []; }
-    return JSON.parse(result.data);
-  };
+  getRating = () => this.ms.getMaster('ratings/');
 }

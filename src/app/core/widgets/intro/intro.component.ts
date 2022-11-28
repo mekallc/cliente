@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';import { Store } from '@ngrx/store';
+import { AppState } from '@store/app.state';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { StorageService } from 'src/app/core/services/storage.service';
 
 @Component({
@@ -8,13 +11,13 @@ import { StorageService } from 'src/app/core/services/storage.service';
 })
 export class IntroWidgetComponent implements OnInit {
 
-  user: any;
+  user$: Observable<any>;
   constructor(
-    private storage: StorageService
+    private store: Store<AppState>
   ) { }
 
-  async ngOnInit() {
-    this.user = await this.storage.getStorage('user');
+  ngOnInit() {
+    this.user$ = this.store.select('user').pipe(map((res: any) => res.user));
   }
 
 }

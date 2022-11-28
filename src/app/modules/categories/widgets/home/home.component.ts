@@ -1,39 +1,41 @@
-import { NavController } from '@ionic/angular';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { map, filter } from 'rxjs/operators';
+import { Store } from '@ngrx/store';
+import { AppState } from '@store/app.state';
 
 @Component({
   selector: 'app-widget-categories',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HomeWidgetComponent {
 
-  totalCategories = 6;
+export class HomeWidgetComponent implements OnInit {
+
   toogleCategory = false;
-  categories = [
-    { icon: './assets/images/icons/01.svg', name: 'CATEGORIES.TYPE.MECANICS' },
-    { icon: './assets/images/icons/02.svg', name: 'CATEGORIES.TYPE.ELECTRICAL' },
-    { icon: './assets/images/icons/03.svg', name: 'CATEGORIES.TYPE.BRAKES' },
-    { icon: './assets/images/icons/04.svg', name: 'CATEGORIES.TYPE.SUSPENSION' },
-    { icon: './assets/images/icons/05.svg', name: 'CATEGORIES.TYPE.MAINTENANCE' },
-    { icon: './assets/images/icons/06.svg', name: 'CATEGORIES.TYPE.TRANSMISSION' },
-    { icon: './assets/images/icons/07.svg', name: 'CATEGORIES.TYPE.TIRES' },
-    { icon: './assets/images/icons/08.svg', name: 'CATEGORIES.TYPE.OIL_CHANGE' },
-    { icon: './assets/images/icons/09.svg', name: 'CATEGORIES.TYPE.AIR_CONDITIONING' }
-  ];
+  categories$: Observable<any[]>;
+
   constructor(
-    private nav: NavController,
-    private router: Router
+    private router: Router,
+    private store: Store<AppState>,
   ) {}
 
-  goToSolicitud = (item: any) => {
-    console.log(item);
-    console.log('/pages/solicitud');
-    this.router.navigate(['pages', 'solicitud'], { state: item } );
-    // this.nav.navigateForward(`/pages/solicitud`);
+  ngOnInit() {
+    this.loadData();
+  }
+
+  loadData = () => {
+    this.categories$ = this.store.select('expert')
+    .pipe(filter(row => !row.loading), map(res => res.items));
   };
 
-  onToogleCategories = () => this.toogleCategory = !this.toogleCategory;
+  goToSolicitud = (item: any) =>
+    // eslint-disable-next-line no-underscore-dangle
+    this.router.navigate(['pages', 'solicitud', 'home',item._id]);
+
+  onToogleCategories = () =>
+    this.toogleCategory = !this.toogleCategory;
 
 }

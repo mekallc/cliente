@@ -1,3 +1,4 @@
+import { FactoryService } from './../../services/factory.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -7,8 +8,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SearchListPage implements OnInit {
 
-  constructor() {}
+  constructor(
+    private db: FactoryService
+  ) {}
 
-  async ngOnInit() {}
+  ngOnInit() {
+    this.db.getCompaniesLocation();
+  }
 
 }

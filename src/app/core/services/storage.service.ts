@@ -1,26 +1,34 @@
 import { Injectable } from '@angular/core';
-import { Storage } from '@capacitor/storage';
+import { Preferences } from '@capacitor/preferences';
 
 @Injectable({
   providedIn: 'root'
 })
 export class StorageService {
 
-
   setStorage = async (key: string, value: any) => {
-    await Storage.set({ key, value: JSON.stringify(value)});
+    await Preferences.set({ key, value: JSON.stringify(value)});
+  };
+
+  setStorageValue = async (key: string, value: any) => {
+    await Preferences.set({ key, value});
   };
 
   getStorage = async (key: string) => {
-    const { value } = await Storage.get({ key });
+    const { value } = await Preferences.get({ key });
     return JSON.parse(value);
   };
 
+  getStorageValue = async (key: string) => {
+    const { value } = await Preferences.get({ key });
+    return value;
+  };
+
   removeStorage = async (key: string) => {
-    await Storage.remove({ key });
+    await Preferences.remove({ key });
   };
 
   clearStorages = async () => {
-    await Storage.clear();
+    await Preferences.clear();
   };
 }

@@ -1,64 +1,70 @@
-import { Router } from '@angular/router';
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { StorageService } from 'src/app/core/services/storage.service';
-import { IonSlides, NavController, AlertController, LoadingController } from '@ionic/angular';
-import { AuthService } from 'src/app/modules/users/services/auth.service';
+import { IonSlides, AlertOptions } from '@ionic/angular';
+
+import { UtilsService } from '@core/services/utils.service';
+import { StorageService } from '@core/services/storage.service';
+import { AuthService } from '@modules/users/services/auth.service';
+import { catchError, of } from 'rxjs';
+import { AppState } from '@store/app.state';
+import { Store } from '@ngrx/store';
+import * as actions from '@store/actions';
 
 @Component({
   selector: 'app-sign-in',
   templateUrl: './sign-in.page.html',
   styleUrls: ['./sign-in.page.scss'],
 })
-export class SignInPage implements OnInit, AfterViewInit {
-
+export class SignInPage implements OnInit {
   @ViewChild('slides') slides: IonSlides;
   options = { initialSlide: 0, };
+
   loginForm: FormGroup;
   forgotPasswordForm: FormGroup;
 
   constructor(
     private fb: FormBuilder,
-    private auth: AuthService,
-    private nav: NavController,
-    private router: Router,
+    private db: AuthService,
+    private store: Store<AppState>,
+    private uService: UtilsService,
     private storage: StorageService,
-    private alertCtrl: AlertController,
-    private loadCtrl: LoadingController,
   ) { }
 
   ngOnInit() {
     this.loadForm();
   }
 
-  ngAfterViewInit() {
-    this.slides.lockSwipes(true);
-  };
-
-  onSubmit = async () => {
+  async onSubmit(): Promise<void> {
     if (this.loginForm.invalid) { return; }
-    const load = await this.loadCtrl.create({message: 'Loading...'});
-    await load.present();
-    console.log(this.loginForm.value);
-    this.auth.signIn(this.loginForm.value)
-    .then(async (res) => {
-      await load.dismiss();
-    })
-    .catch(async (err) => {
-      await load.dismiss();
-      console.log(err);
-    });
-  };
+    await this.uService.load({message: 'Loading...'});
+    this.login(this.loginForm.value);
+  }
 
-  onForgotPassword = () => console.log('óoSubmit');
+  onSubmitForgotPassword = async () => {
+    const form = this.forgotPasswordForm;
+    if (form.invalid) { return; }
+    await this.uService.load({message: 'Loading...'});
+    this.db.forgotSenha(form.value).subscribe(
+      async (res) => {
+        this.uService.loadDimiss();
+        await this.storage.setStorage('oChange', res);
+        const opts: AlertOptions = {
+          header: 'INFO', buttons: ['Ok'],
+          message: 'A code was sent to your email',
+        };
+        await this.uService.alert(opts);
+      }
+    );
+    this.goToSlides(0);
+  };
 
   loadForm = () => {
     this.loginForm = this.fb.group({
-      email: ['knaimero@gmail.com', [Validators.required, Validators.email]],
-      password: ['meka123', [Validators.required, Validators.minLength(4)]],
+      username: ['web@condor.com.br', [Validators.required, Validators.email]],
+      password: ['admin', [Validators.required, Validators.minLength(4)]],
     });
     this.forgotPasswordForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
+      username: ['', [Validators.required, Validators.email]],
     });
   };
 
@@ -68,5 +74,23 @@ export class SignInPage implements OnInit, AfterViewInit {
     this.slides.lockSwipes(true);
   };
 
-  onRegister = () => this.nav.navigateForward('/user/signUp');
+  onRegister = () => this.uService.navigate('/user/signUp');
+
+  login(data: any) {
+    this.db.signIn(data)
+    .pipe(catchError(async (error: any) => {
+      this.uService.loadDimiss();
+      await this.uService.alert({
+        mode:'ios', header: 'Error', buttons: ['OK'],
+        message: error.error_description || error.message,
+      });
+    }))
+    .subscribe(async (res: any) => {
+      this.uService.loadDimiss();
+      await this.storage.setStorage('oAccess', res.access);
+      await this.storage.setStorage('oUser', res.user);
+      this.store.dispatch(actions.loadUser(res));
+      this.uService.navigate('/pages/home');
+    });
+  }
 }

@@ -21,9 +21,27 @@ ion-slides {
       }
       .items {
         text-align: left !important;
-        width: 70%;
+        width: 80%;
         padding: .5rem;
+        position: relative;
+        .code {
+          font-weight: 600;
+          font-size: 12px;
+        }
+        .date {
+          font-size: 11px;
+          float: right;
+          text-align: right;
+        }
       }
     }
   }
+}
+
+.spinner {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 120px;
 }

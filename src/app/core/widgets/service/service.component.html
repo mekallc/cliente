@@ -1,0 +1,21 @@
+<ng-container *ngIf="(service$ | async) as service" >
+  <section id="service" class="mb-3" (click)="openService(service)">
+    <div class="container" *ngIf="service.status === 'in_process' || service.status === 'accepted'">
+      <ion-card mode="md">
+        <ion-card-content>
+          <ion-item lines="none">
+            <ion-label>
+              <h2>{{ service._id }}</h2>
+              <p>{{ service.status | translate | uppercase }}</p>
+              <h3><strong>{{ service.company.name }}</strong></h3>
+            </ion-label>
+            <ion-icon
+              [color]="service.status === 'in_process' ? 'warning' : 'success'"
+              slot="end" name="ellipse" size="large"></ion-icon>
+          </ion-item>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </section>
+</ng-container>
+

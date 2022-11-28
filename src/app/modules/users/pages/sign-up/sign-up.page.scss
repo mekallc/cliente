@@ -1,4 +1,5 @@
 ion-content {
+  --background: #fafafa;
   .head {
     ion-label {
       h1 {
@@ -22,6 +23,7 @@ ion-content {
     }
     ion-label {
       margin-bottom: .7rem !important;
+      --color: #515151;
     }
     ion-input, ion-datetime, ion-select {
       border-radius: 15px;
@@ -61,25 +63,14 @@ ion-content {
     margin: 0 auto;
     ion-avatar {
       margin: 0 auto;
-      width: 150px;
-      height: 150px;
+      width: 130px;
+      height: 130px;
     }
   }
 }
 ion-content, ion-footer, ion-header, ion-toolbar {
-  --background: #F0F3F8;
-  background: #F0F3F8;
-}
-ion-footer {
-  --background: var(--ion-meka-primary);
-  background: var(--ion-meka-primary);
-  ion-toolbar {
-    --background: var(--ion-meka-primary);
-    background: var(--ion-meka-primary);
-    ion-button {
-      --color: #fff;
-    }
-  }
+  --background: #fafafa;
+  background: #fafafa;
 }
 
 
