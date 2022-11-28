@@ -11,7 +11,10 @@ import { FirebaseModule } from '@core/firebase.module';
 import { CoreStoreModule } from '@store/core-store.module';
 import { CoreCordovaModule } from '@core/core-cordova.module';
 import { SideMenuWidgetModule } from '@core/widgets/side-menu-widget/side-menu-widget.module';
+import { SocketIoConfig, SocketIoModule } from 'ngx-socket-io';
+import { environment } from 'src/environments/environment';
 
+const config: SocketIoConfig = { url: environment.api.url, options: {} };
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
@@ -24,6 +27,7 @@ import { SideMenuWidgetModule } from '@core/widgets/side-menu-widget/side-menu-w
     CoreCordovaModule,
     SideMenuWidgetModule,
     IonicModule.forRoot(),
+    SocketIoModule.forRoot(config),
   ],
   providers: [
     AppService,

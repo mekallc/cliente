@@ -1,4 +1,3 @@
-/* eslint-disable no-underscore-dangle */
 import { Store } from '@ngrx/store';
 import { Injectable } from '@angular/core';
 import { filter, map } from 'rxjs/operators';
@@ -9,6 +8,7 @@ import { UtilsService } from '@core/services/utils.service';
 import { MasterService } from '@core/services/master.service';
 import { StorageService } from '@core/services/storage.service';
 import { RatingModalComponent } from '@modules/rate/pages/rating-modal/rating-modal.component';
+import { Socket } from 'ngx-socket-io';
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +16,7 @@ import { RatingModalComponent } from '@modules/rate/pages/rating-modal/rating-mo
 
 export class IntegratedService {
   private constructor(
+    private socket: Socket,
     private ms: MasterService,
     private uService: UtilsService,
     private store: Store<AppState>,
@@ -25,6 +26,8 @@ export class IntegratedService {
   async initStates(): Promise<[] | null> {
     const user = await this.storage.getStorage('oUser');
     if (user) {
+      this.socket.emit('joinUser', user._id);
+      this.socket.emit('serviceUser', user._id);
       this.store.dispatch(actions.loadUser(user));
       this.store.dispatch(actions.itemLoad({ user: user._id }));
       this.store.dispatch(actions.initScore({ user: user._id }));

@@ -39,7 +39,7 @@ export class BannersWidgetComponent implements OnInit {
         longitude: position.coords.longitude,
       };
       this.entry$ = this.ms.postMaster('banners/client', data);
-      this.entry$.subscribe(res => console.log('BANNER ', res));
+      // this.entry$.subscribe(res => console.log('BANNER ', res));
     }
   };
 

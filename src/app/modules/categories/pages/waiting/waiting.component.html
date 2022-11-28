@@ -40,6 +40,12 @@
             </ion-label>
           </ion-item>
           <ion-item>
+            <ion-icon slot="start" name="walk-outline"></ion-icon>
+            <ion-label>
+              <p class="categoria"> {{ res.distance | unitConverted }}</p>
+            </ion-label>
+          </ion-item>
+          <ion-item>
             <ion-icon slot="start" name="reader-outline"></ion-icon>
             <ion-label>
               <p class="categoria"> {{ res.category.name | translate }}</p>

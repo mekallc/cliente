@@ -1,11 +1,13 @@
-import { WaitingComponent } from './../../../modules/categories/pages/waiting/waiting.component';
-import { Component, OnInit, OnChanges, SimpleChanges, ChangeDetectionStrategy, AfterViewInit } from '@angular/core';
+import { WaitingComponent } from '@modules/categories/pages/waiting/waiting.component';
+import { Component, AfterViewInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '@store/app.state';
 import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { UtilsService } from '@core/services/utils.service';
-import { MasterService } from '@core/services/master.service';
+import { Socket } from 'ngx-socket-io';
+import { RateComponent } from '@modules/rate/rate.component';
+
 
 @Component({
   selector: 'app-service',
@@ -14,9 +16,10 @@ import { MasterService } from '@core/services/master.service';
 })
 export class ServiceComponent implements AfterViewInit {
 
-  service$: Observable<any>;
+  service$: Observable<any> = this.socket.fromEvent('changeMessage');
 
   constructor(
+    private socket: Socket,
     private store: Store<AppState>,
     private uService: UtilsService,
   ) { }
@@ -25,10 +28,17 @@ export class ServiceComponent implements AfterViewInit {
   }
 
   getData(): void {
-    this.service$ = this.store.select('item')
-    .pipe(filter(row => !row.loading),
-    map(({ item }: any) => item));
-    this.service$.subscribe(res => console.log(res));
+    this.service$.subscribe(async res => {
+      console.log(res);
+      if (res.status === 'finished') {
+        await this.setRating(res);
+      }
+    });
+    // this.service$ = this.store.select('item')
+    // .pipe(
+    //   filter(row => !row.loading),
+    //   map((res: any) => res.item)
+    // );
   }
 
   openService(res: any){
@@ -43,5 +53,15 @@ export class ServiceComponent implements AfterViewInit {
       component: WaitingComponent,
       componentProps: { res },
    });
+  }
+
+  private async setRating(res: any) {
+    await this.uService.modal({
+      mode: 'ios',
+      initialBreakpoint: 0.9,
+      breakpoints: [0, 0.5, 1],
+      component: RateComponent,
+      componentProps: { service: res }
+    });
   }
 }

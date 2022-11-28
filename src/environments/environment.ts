@@ -20,8 +20,7 @@ export const environment = {
   },
   api: {
     version: 'api/v2',
-    url: 'http://192.168.250.114:3000',
-    // url: 'http://18.216.189.14:3000/api',
+    url: 'https://api.meka.do',
   },
   maps: 'AIzaSyAylhtwYmgO_nuFZsQzvm_z6vAOvbEk80Q',
   mapbox: ''

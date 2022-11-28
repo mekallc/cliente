@@ -24,10 +24,10 @@ const config: CapacitorConfig = {
   android: {
     allowMixedContent: true
   },
-  server: {
-    cleartext: true,
-    url: 'http://192.168.250.114:8101',
-  },
+  // server: {
+  //   cleartext: true,
+  //   url: 'http://192.168.250.114:8101',
+  // },
 };
 
 export default config;

@@ -15,8 +15,20 @@ export class ChatFireService {
   async createRoom(service: any) {
     return fs.setDoc(fs.doc(this.fireStore, `services/${service._id}`), {
       customer: service.user,
-      company: service.company
+      status: service.status,
+      company: service?.company,
+      createdAt: fs.Timestamp.fromMillis(new Date().getTime())
     });
+  }
+
+  async getRoom(uid: string) {
+    const docRef =fs.doc(this.fireStore, 'services', uid);
+    const docSnap = await fs.getDoc(docRef);
+    return docSnap.data();
+  }
+
+  async removeRoom(uid: string) {
+    return fs.deleteDoc(fs.doc(this.fireStore, `services/${uid}`));
   }
 
   async sendMessage(data: any, service) {

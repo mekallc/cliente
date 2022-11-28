@@ -2,7 +2,7 @@
 	"appId": "com.mekadevelopments.cliente",
 	"appName": "Meka",
 	"webDir": "www",
-	"bundledWebRuntime": false,
+	"bundledWebRuntime": true,
 	"plugins": {
 		"PushNotifications": {
 			"presentationOptions": [
@@ -26,5 +26,9 @@
 	},
 	"android": {
 		"allowMixedContent": true
+	},
+	"server": {
+		"cleartext": true,
+		"url": "http://192.168.250.114:8101"
 	}
 }

@@ -2,7 +2,7 @@ import { createReducer, on } from '@ngrx/store';
 import * as actions from '../actions';
 
 export interface ItemState { item: any; loading: boolean; error: any  };
-export const itemState: ItemState = { loading: false, item: [], error: null };
+export const itemState: ItemState = { loading: false, item: null, error: null };
 
 const itemReducerMap = createReducer(
   itemState,

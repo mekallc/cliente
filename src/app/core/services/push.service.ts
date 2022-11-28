@@ -36,6 +36,7 @@ export class PushService {
   addListeners = () => {
     PushNotifications.addListener('registration', async (token: any) => {
       console.log('TOKEN VDD', token.value);
+      await this.updateToken(token.value);
       await this.storage.setStorage('oPush', token.value);
     });
     PushNotifications.addListener('registrationError', err => {
@@ -61,4 +62,13 @@ export class PushService {
   getDeliveredNotifications = async () => {
     const notificationList = await PushNotifications.getDeliveredNotifications();
   };
+
+  private async updateToken(push: string) {
+    console.log('PUSH ', push);
+    const user = await this.storage.getStorage('oUser');
+    if(user) {
+      this.ms.patch2Master(`users/${user._id}`, { push })
+      .subscribe(res => console.log(res));
+    }
+  }
 }

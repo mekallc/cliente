@@ -47,22 +47,22 @@ export class PagesPage implements OnInit, AfterViewInit {
   };
 
   setRating() {
-    this.store.select('item')
-    .pipe(
-      filter(row => !row.loading),
-      map((res: any) => res.item)
-    )
-    .subscribe(async (res: any) => {
-      if (res && res.status === 'finished') {
-        await this.uService.modal({
-          mode: 'ios',
-          initialBreakpoint: 0.9,
-          breakpoints: [0, 0.5, 1],
-          component: RateComponent,
-          componentProps: { service: res }
-        });
-      }
-    });
+    // this.store.select('item')
+    // .pipe(
+    //   filter(row => !row.loading),
+    //   map((res: any) => res.item)
+    // )
+    // .subscribe(async (res: any) => {
+    //   if (res && res.status === 'finished') {
+    //     await this.uService.modal({
+    //       mode: 'ios',
+    //       initialBreakpoint: 0.9,
+    //       breakpoints: [0, 0.5, 1],
+    //       component: RateComponent,
+    //       componentProps: { service: res }
+    //     });
+    //   }
+    // });
   }
 
   private sum = (items: any) => items.reduce((a: any, b: any) => a + (b.unread || 0), 0);

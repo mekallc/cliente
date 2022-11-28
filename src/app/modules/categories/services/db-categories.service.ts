@@ -80,7 +80,6 @@ export class DbCategoriesService {
 
   // TODO: Busqueda de Servicio OPEN, IN_PROCESS, ACCEPTED
   getServiceActive(user: string) {
-    console.log('USER ', user);
     return this.ms.getMaster(`services/user/${user}`);
   }
 

@@ -59,7 +59,6 @@ export class SideMenuWidgetComponent implements OnInit, AfterViewInit {
       filter(row => !row.loading),
       map(({ item }: any) => item),
     );
-    this.score$.subscribe(res => console.log(res));
   }
 
 

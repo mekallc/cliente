@@ -1,4 +1,3 @@
-/* eslint-disable no-underscore-dangle */
 import { Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
@@ -88,7 +87,9 @@ export class CompanyModalComponent implements OnInit {
   loadPage = (service: any) => this.res = service;
 
   async sendProviderService(service: any, provider: any): Promise<void> {
-    const data = { company: provider._id, status: 'in_process' };
+    const distance = this.getDistance(service, provider);
+    console.log(distance);
+    const data = { company: provider._id, status: 'in_process', distance };
     await this.uService.alert({
       header: 'Atención',
       message: this.translate.instant('DO_YOU_WANT_TO_SEND_THE_SERVICE_TO_THIS_PROVIDER'),
@@ -127,6 +128,14 @@ export class CompanyModalComponent implements OnInit {
     });
   };
 
+  private getDistance(p1: any, p2: any) {
+    const data1 = { latitude: p1.latitude, longitude: p1.longitude };
+    const data2 = { latitude: p2.latitude, longitude: p2.longitude };
+    console.log(data1);
+    console.log(data2);
+    return this.uService.distance(data1, data2);
+  }
+
   private async cancelservice(id: string): Promise<void> {
     await this.uService.load({ message: this.translate.instant('PROCESSING') });
     this.store.dispatch(actions.itemDelete({ id }));
@@ -140,9 +149,10 @@ export class CompanyModalComponent implements OnInit {
       ((b.distance.distance > a.distance.distance) ? -1 : 0));
   }
 
-  private setDataSearchProvider(res) {
+  private setDataSearchProvider(res: any) {
+    console.log(res);
     return {
-      user: res.user._id,
+      user: res.user._id ? res.user._id : '',
       category: res.category._id,
       latitude: this.position.latitude,
       longitude: this.position.longitude

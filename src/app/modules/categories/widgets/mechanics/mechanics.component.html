@@ -12,7 +12,8 @@
           </ion-item>
           <ion-item class="mb-2">
             <ion-label>{{ "BRAND" | translate | titlecase }}</ion-label>
-            <ion-select interface="action-sheet" placeholder="Select..." (ionChange)="getModels($event)" formControlName="brand">
+            <ion-select interface="action-sheet" placeholder="Select..." formControlName="brand"
+              (ionChange)="getModels($event)">
               <ion-select-option [value]="item._id"  *ngFor="let item of brands$ | async">{{ item.name }}</ion-select-option>
             </ion-select>
           </ion-item>

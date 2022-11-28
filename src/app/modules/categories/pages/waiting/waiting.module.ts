@@ -4,9 +4,10 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
-
-import { WaitingComponent } from '@modules/categories/pages/waiting/waiting.component';
 import { AgmCoreModule } from '@agm/core';
+
+import { CorePipeModule } from '@core/pipe/pipe.module';
+import { WaitingComponent } from '@modules/categories/pages/waiting/waiting.component';
 
 const app: Routes = [
   { path: '', component: WaitingComponent }
@@ -20,6 +21,7 @@ const app: Routes = [
     IonicModule,
     CommonModule,
     AgmCoreModule,
+    CorePipeModule,
     TranslateModule,
     RouterModule.forChild(app)
   ]

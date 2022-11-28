@@ -2,7 +2,6 @@ import { Component, OnInit, Input, AfterViewInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { Observable, timer } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
 
 import { Geolocation } from '@capacitor/geolocation';
 import { UtilsService } from '@core/services/utils.service';
@@ -65,7 +64,6 @@ export class MechanicsComponent implements OnInit, AfterViewInit {
   async onSubmit(): Promise<void> {
     await this.setReactive();
     const item = this.formReactive.value;
-    console.log('VALUE ', item);
     await this.uService.load({ message: 'Loading...', duration: 750 });
     this.store.dispatch(actions.itemAdd({ item }));
     timer(750).subscribe(() =>{
@@ -79,6 +77,7 @@ export class MechanicsComponent implements OnInit, AfterViewInit {
   };
 
   getModels = (ev: any) => {
+    console.log(ev);
     this.models$ = this.db.getModel(ev.detail.value);
   };
 

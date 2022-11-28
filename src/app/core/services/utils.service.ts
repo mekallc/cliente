@@ -46,7 +46,23 @@ export class UtilsService {
 
   toastDimiss = () => this.toastCtrl.dismiss();
 
-  // Platform
+  distance(positionA: Position, positionB: Position): number {
+    const radius: any = 0.017453292519943295;
+    const cos: any = Math.cos;
+    const temp: number =
+      0.5 -
+      cos((positionA.latitude - positionB.latitude) * radius) / 2 +
+      (cos(positionB.latitude * radius) *
+        cos(positionA.latitude * radius) *
+        (1 - cos((positionA.longitude - positionB.longitude) * radius))) /
+        2;
+    const asin: number = 12742 * Math.asin(Math.sqrt(temp));
+    const total = ((asin * 100) / 100).toFixed(2);
+    return +total;
+  }
+}
 
-
+export interface Position {
+  latitude: number;
+  longitude: number;
 }

@@ -61,6 +61,7 @@ export class WaitingComponent implements OnInit {
     // eslint-disable-next-line no-underscore-dangle
     this.store.dispatch(actions.itemDelete({ id: item._id }));
     this.uService.loadDimiss();
+    this.uService.modalDimiss();
     this.uService.navigate('/pages/home');
   };
 }
