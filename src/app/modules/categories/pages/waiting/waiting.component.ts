@@ -32,8 +32,9 @@ export class WaitingComponent implements OnInit {
 
   ngOnInit() { }
 
-  onChat = (room: any,) => {
+  onChat(room: any): void {
     this.uService.navigate(`chat/service/${room}`);
+    this.uService.modalDimiss();
   };
 
   async onCancelService(item: any): Promise<void> {

@@ -15,7 +15,8 @@
     </div>
     <app-mechanics *ngIf="segment === 'mechanics';else replace" [category]="expert"></app-mechanics>
     <ng-template #replace>
-      <app-parts [expert]="expert"></app-parts>
+      <app-mechanics [autopart]="true" [category]="expert"></app-mechanics>
+      <!-- <app-parts [expert]="expert"></app-parts> -->
     </ng-template>
 
     <div class="row justify-content-center mb-3">

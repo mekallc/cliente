@@ -35,14 +35,8 @@ end
 
 target 'App' do
   capacitor_pods
-  pod 'Firebase/Core'
-  pod 'Firebase/Crashlytics'
-  pod 'Firebase/Messaging'
-  pod 'Firebase/Performance'
-  pod 'Firebase/Analytics'
   # Add your Pods here
 end
-
 
 post_install do |installer|
   assertDeploymentTarget(installer)

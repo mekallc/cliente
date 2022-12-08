@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { map, mergeMap, catchError, tap } from 'rxjs/operators';
-import { finishedLoad, finishedLoaded, finishedError } from '../actions/finished.actions';
-import { DbCategoriesService } from '@modules/categories/services/db-categories.service';
+import { map, mergeMap, catchError } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import * as action from '../actions';
+import { MasterService } from '@core/services/master.service';
 
 
 
@@ -10,17 +11,21 @@ import { DbCategoriesService } from '@modules/categories/services/db-categories.
 export class FinishedEffects {
   history$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(finishedLoad),
-      mergeMap(() => this.db.getStatusServices('closed')
+      ofType(action.finishedLoad),
+      mergeMap(({ user }: any) => this.getData(user, 'closed')
         .pipe(
-          map((finished) => finishedLoaded({ finished })),
-          catchError(async ({ error }) => finishedError({ error }))
+          map((finished) => action.finishedLoaded({ finished })),
+          catchError(async ({ error }) => action.finishedError({ error }))
         )
       )
     )
   );
   constructor(
     private actions$: Actions,
-    private db: DbCategoriesService
+    private db: MasterService
   ) {}
+
+  getData = (user: string, status: string): Observable<any[]> =>
+    this.db.getMaster(`services/user/${user}/status/${status}`);
+
 }

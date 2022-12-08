@@ -31,6 +31,21 @@
         </ion-item>
       </ion-list>
     </ion-accordion>
+    <ion-accordion value="payment">
+      <ion-item class="title" slot="header">
+        <ion-icon slot="start" name="list"></ion-icon>
+        <ion-label><strong>{{ 'PAYMENT' | translate | titlecase }}</strong></ion-label>
+      </ion-item>
+      <ion-list lines="none" slot="content">
+        <ion-item>
+          <ion-label class="ion-text-wrap">
+            <ion-badge color="primary" *ngFor="let code of provider.payment" class="mx-1">
+              {{ code }}
+            </ion-badge>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-accordion>
     <ion-accordion value="services">
       <ion-item class="title" slot="header">
         <ion-icon slot="start" name="list"></ion-icon>
@@ -46,15 +61,15 @@
         </ion-item>
       </ion-list>
     </ion-accordion>
-    <ion-accordion value="location">
+    <!-- <ion-accordion value="location">
       <ion-item class="title" slot="header">
         <ion-icon slot="start" name="location-outline"></ion-icon>
         <ion-label><strong>{{ 'LOCATION' | translate | titlecase }}</strong></ion-label>
       </ion-item>
-      <ion-list slot="content">
+      <ion-list lines="none" slot="content">
         <agm-map
-          [latitude]="+provider.latitude"
-          [longitude]="+provider.longitude"
+          [latitude]="provider.latitude"
+          [longitude]="provider.longitude"
           [zoom]="18">
           <agm-marker
             [latitude]="+provider.latitude"
@@ -62,7 +77,7 @@
           </agm-marker>
         </agm-map>
       </ion-list>
-    </ion-accordion>
+    </ion-accordion> -->
     <ion-accordion value="comments">
       <ion-item class="title" slot="header">
         <ion-icon slot="start" name="chatbubble-outline"></ion-icon>

@@ -21,8 +21,8 @@ export class IntegratedService {
     private uService: UtilsService,
     private store: Store<AppState>,
     private storage: StorageService,
-  ) { }
 
+  ) { }
   async initStates(): Promise<[] | null> {
     const user = await this.storage.getStorage('oUser');
     if (user) {
@@ -31,16 +31,15 @@ export class IntegratedService {
       this.store.dispatch(actions.loadUser(user));
       this.store.dispatch(actions.itemLoad({ user: user._id }));
       this.store.dispatch(actions.initScore({ user: user._id }));
+      this.store.dispatch(actions.finishedLoad({ user: user._id }));
+      this.store.dispatch(actions.cancelledLoad({ user: user._id }));
+      this.store.dispatch(actions.expertLoad());
     } else {
       return null;
     }
   };
 
-  pageStates() {
-    this.store.dispatch(actions.expertLoad());
-    this.store.dispatch(actions.finishedLoad());
-    this.store.dispatch(actions.cancelledLoad());
-  }
+  pageStates() {}
 
   // INGRESA EL ROOM SI EL SERVICIO ESTA ABIERTO
   onServiceStatus() {

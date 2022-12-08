@@ -6,8 +6,8 @@ export const cancelledState: CancelledState = { loading: false, cancelled: null,
 
 const cancelledReducerMap = createReducer(
   cancelledState,
-  on(actions.cancelledLoad, (state) => ({
-    ...state, loading: true })),
+  on(actions.cancelledLoad, (state, { user }) => ({
+    ...state, loading: true, user })),
 
   on(actions.cancelledLoaded, (state, { cancelled }) => ({
     ...state, loading: false, cancelled, total: cancelled.length })),

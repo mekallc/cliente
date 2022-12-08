@@ -1,6 +1,8 @@
 import { createAction, props } from '@ngrx/store';
 
-export const finishedLoad = createAction('[FINISHED] Load');
+export const finishedLoad = createAction(
+  '[FINISHED] Load', props<{ user: string }>()
+);
 
 export const finishedLoaded = createAction(
   '[FINISHED] Loaded', props<{ finished: any}>()

@@ -1,6 +1,8 @@
 import { createAction, props } from '@ngrx/store';
 
-export const cancelledLoad = createAction('[CANCELLED] Load');
+export const cancelledLoad = createAction(
+  '[CANCELLED] Load', props<{ user: string}>()
+);
 
 export const cancelledLoaded = createAction(
   '[CANCELLED] Loaded', props<{ cancelled: any}>()

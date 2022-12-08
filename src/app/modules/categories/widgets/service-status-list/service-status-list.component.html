@@ -1,13 +1,15 @@
-<ion-item button [detail]="false" *ngIf="item">
-  <ion-label>
-    <p class="date">{{ '09-01-2022' | amTimeAgo  }}</p>
-    <p>{{ item._id }}</p>
-    <h2 class="code">{{ item.category.name }}</h2>
-    <h2 class="vehicle"> {{ item.brand.name }} {{ item.model.name }} </h2>
-  </ion-label>
-  <ion-buttons slot="end">
-    <ion-avatar slot="end" class="expert">
-      <img [src]="item.category.picture" [alt]="item.category.name"/>
-    </ion-avatar>
-  </ion-buttons>
-</ion-item>
+<ng-container *ngIf="item">
+  <ion-item button [detail]="false" (click)="openService(item)">
+    <ion-label>
+      <p class="date">{{ '09-01-2022' | amTimeAgo  }}</p>
+      <p>{{ item._id }}</p>
+      <h2 class="code">{{ item.category.name }}</h2>
+      <h2 class="vehicle"> {{ item.brand.name }} {{ item.model.name }} </h2>
+    </ion-label>
+    <ion-buttons slot="end">
+      <ion-avatar slot="end" class="expert">
+        <img [src]="item.category.picture" [alt]="item.category.name"/>
+      </ion-avatar>
+    </ion-buttons>
+  </ion-item>
+</ng-container>

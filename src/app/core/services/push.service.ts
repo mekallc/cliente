@@ -67,8 +67,7 @@ export class PushService {
     console.log('PUSH ', push);
     const user = await this.storage.getStorage('oUser');
     if(user) {
-      this.ms.patch2Master(`users/${user._id}`, { push })
-      .subscribe(res => console.log(res));
+      this.ms.patch2Master(`users/${user._id}`, { push }).subscribe(() => null);
     }
   }
 }

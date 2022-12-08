@@ -101,6 +101,7 @@ export class ItemEffects {
   }
 
   createService(item: any) {
+    console.log('STORE', item);
     return this.ms.postMaster('services/user', item);
   }
 

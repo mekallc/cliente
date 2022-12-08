@@ -1,6 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Observable, of, timer } from 'rxjs';
 import { NavController } from '@ionic/angular';
+import { UtilsService } from '@core/services/utils.service';
+import { WaitingComponent } from '@modules/categories/pages/waiting/waiting.component';
 
 
 @Component({
@@ -15,12 +17,19 @@ export class ServiceStatusListComponent implements OnInit {
   total: number;
 
   constructor(
-    private nav: NavController,
+    private uService: UtilsService
   ) { }
 
   ngOnInit() {
-    timer(1000).subscribe(() => {
-      console.log('STATUS ', this.item);
+  }
+
+  async openService(res: any): Promise<void> {
+    await this.uService.modal({
+      mode: 'ios',
+      initialBreakpoint: 1,
+      breakpoints: [0, .7, .9],
+      componentProps: { res },
+      component: WaitingComponent
     });
   }
 }

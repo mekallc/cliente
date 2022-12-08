@@ -107,6 +107,28 @@
           </ion-list>
         </ion-accordion>
       </ng-container>
+      <ng-container *ngIf="res.comment">
+        <ion-accordion value="comentario">
+          <ion-item slot="header" lines="none">
+            <ion-icon slot="start" name="chatbubbles-outline"></ion-icon>
+            <ion-label><strong>{{ 'COMMENT' | translate | titlecase }}</strong></ion-label>
+          </ion-item>
+          <ion-list lines="none" slot="content">
+            <ion-item>
+              <ion-label class="ion-text-wrap ion-text-center">
+                <h2 class="">Tu clasificacion:</h2>
+                <app-stars-widget [score]="res.comment.score_customer"></app-stars-widget>
+              </ion-label>
+            </ion-item>
+            <ion-item>
+              <ion-label class="ion-text-wrap">
+                <h2>Comentarios:</h2>
+                <p>{{ res.comment.comment_customer }}</p>
+              </ion-label>
+            </ion-item>
+          </ion-list>
+        </ion-accordion>
+      </ng-container>
     </ion-accordion-group>
     <div class="chat my-4" *ngIf="res.status === 'accepted'">
       <ion-item lines="none" button detail mode="ios" (click)="onChat(res._id)" color="warning">

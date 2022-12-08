@@ -46,7 +46,9 @@ export class DbCategoriesService {
 
   getIcone = () => this.ms.getMaster('master/expert/');
 
-
+    setPhotos(data: any) {
+      return this.ms.postMaster('services/user/photo', data);
+    }
   getServicesClosed = () => this.ms.getMaster(`service/request/history/?ordering=-date_reg`).pipe(map((res: any) => res.search));
 
   // TODO: Get Categories

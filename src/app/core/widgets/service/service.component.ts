@@ -29,7 +29,6 @@ export class ServiceComponent implements AfterViewInit {
 
   getData(): void {
     this.service$.subscribe(async res => {
-      console.log(res);
       if (res.status === 'finished') {
         await this.setRating(res);
       }

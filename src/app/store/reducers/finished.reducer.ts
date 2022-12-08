@@ -6,8 +6,8 @@ export const finishedState: FinishedState = { loading: false, finished: null, er
 
 const finishedReducerMap = createReducer(
   finishedState,
-  on(finishedLoad, (state) => ({
-    ...state, loading: true })),
+  on(finishedLoad, (state, { user }) => ({
+    ...state, loading: true, user })),
 
   on(finishedLoaded, (state, { finished }) => ({
     ...state, loading: false, finished, total: finished.length })),

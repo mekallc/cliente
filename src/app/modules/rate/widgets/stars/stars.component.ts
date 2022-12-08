@@ -12,16 +12,23 @@ import { filter, map, tap } from 'rxjs/operators';
 export class StarsComponent implements AfterViewInit {
 
   @Input() type = true;
+  @Input() score: number;
   @Output() value = new EventEmitter();
   score$: Observable<number|any>;
   data = [];
+  scoreFinal = 0;
 
   constructor(
     private store: Store<AppState>,
   ) { }
 
   ngAfterViewInit(): void {
-    this.getScore();
+    // this.getScore();
+    this.getData();
+  }
+
+  getData() {
+    this.createArray(this.score);
   }
 
   createArray = (num: number = 4) => {

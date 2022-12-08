@@ -28,6 +28,12 @@
             <ion-input formControlName="year" inputmode="numeric" maxlength="4" minlength="4"
               placeholder="YYYY"></ion-input>
           </ion-item>
+          <ion-item lines="none" class="mb-2" *ngIf="autopart">
+            <ion-label>{{ "CONDITION" | translate | titlecase }}</ion-label>
+            <ion-select interface="action-sheet" placeholder="Select..." formControlName="condition">
+              <ion-select-option [value]="item._id"  *ngFor="let item of conditions$ | async">{{ item.name | translate }}</ion-select-option>
+            </ion-select>
+          </ion-item>
           <ion-item>
             <ion-label position="stacked">{{ "PROBLEM" | translate | titlecase }}</ion-label>
             <ion-textarea [rows]="3" [autoGrow]="true" formControlName="description"></ion-textarea>
