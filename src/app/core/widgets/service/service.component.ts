@@ -7,6 +7,7 @@ import { filter, map } from 'rxjs/operators';
 import { UtilsService } from '@core/services/utils.service';
 import { Socket } from 'ngx-socket-io';
 import { RateComponent } from '@modules/rate/rate.component';
+import { SocketService } from '@core/services/socket.service';
 
 
 @Component({
@@ -21,14 +22,17 @@ export class ServiceComponent implements AfterViewInit {
   constructor(
     private socket: Socket,
     private store: Store<AppState>,
+    private socketService: SocketService,
     private uService: UtilsService,
   ) { }
   ngAfterViewInit(): void {
     this.getData();
-  }
+    this.service$.subscribe(res => console.log('SOCKET ', res));
 
+  }
   getData(): void {
     this.service$.subscribe(async res => {
+      console.log(res);
       if (res.status === 'finished') {
         await this.setRating(res);
       }

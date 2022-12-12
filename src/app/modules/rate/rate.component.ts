@@ -7,6 +7,7 @@ import { AppState } from '@store/app.state';
 import * as actions from '@store/actions';
 import { filter, map, Observable, timer } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
+import { ifError } from 'assert';
 
 @Component({
   selector: 'app-rate',
@@ -40,6 +41,10 @@ export class RateComponent implements OnInit {
         comment_company: this.comments,
       };
       this.sendComments(item, data);
+      timer(1000).subscribe(() => {
+        this.uService.loadDimiss();
+        this.uService.modalDimiss();
+      });
     });
   }
 
@@ -49,14 +54,11 @@ export class RateComponent implements OnInit {
 
   private sendComments(item: any, data: any) {
     this.ms.patch2Master(`comments/${item.comment._id}`, data).subscribe(() => {
+      item.status = 'closed';
       this.store.dispatch(actions.itemClosed({
         id: item._id,
-        data: { status: 'closed' }
+        data: item
       }));
-      timer(1500).subscribe(() => {
-        this.uService.loadDimiss();
-        this.uService.modalDimiss();
-      });
     });
   }
 

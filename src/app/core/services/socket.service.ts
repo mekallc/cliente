@@ -20,7 +20,7 @@ export class SocketService {
 
   getData() {
     this.socket.on('connection', data => {
-      console.log(data);
+      console.log('CONNECTION', data);
       this.socket.fromEvent('changeMessage')
       .subscribe((message) => {
         console.log('SOCKET ', message);

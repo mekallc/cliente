@@ -30,7 +30,9 @@ export class WaitingComponent implements OnInit {
     private translate: TranslateService,
   ) { }
 
-  ngOnInit() { }
+  ngOnInit() {
+    timer(500).subscribe(() => console.log('WAITING ', this.res));
+  }
 
   onChat(room: any): void {
     this.uService.navigate(`chat/service/${room}`);

@@ -71,7 +71,7 @@ export class ItemEffects {
   closed$ = createEffect(() =>
     this.actions$.pipe(
       ofType(actions.itemClosed),
-      mergeMap(({ id, data }) => this.db.sendService(id, data)
+      mergeMap(({ id, data }) => this.changeStatusService(id, data)
         .pipe(
           map(() => actions.itemLoaded({ item: null })),
           catchError(async ({ error }) => actions.itemError({ error }))

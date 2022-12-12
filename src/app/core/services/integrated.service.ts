@@ -9,6 +9,7 @@ import { MasterService } from '@core/services/master.service';
 import { StorageService } from '@core/services/storage.service';
 import { RatingModalComponent } from '@modules/rate/pages/rating-modal/rating-modal.component';
 import { Socket } from 'ngx-socket-io';
+import { SocketService } from './socket.service';
 
 @Injectable({
   providedIn: 'root'
@@ -21,8 +22,9 @@ export class IntegratedService {
     private uService: UtilsService,
     private store: Store<AppState>,
     private storage: StorageService,
+  ) {
 
-  ) { }
+  }
   async initStates(): Promise<[] | null> {
     const user = await this.storage.getStorage('oUser');
     if (user) {

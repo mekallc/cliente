@@ -36,7 +36,7 @@
             <ion-icon slot="start" name="car-outline"></ion-icon>
             <ion-label class="ion-text-wrap">
               {{ res.brand.name }} {{ res.model.name }}
-              <span *ngIf="res.year"> {{res.year}}</span>
+              <p><strong> {{ 'Año' }} {{res.year}}</strong></p>
             </ion-label>
           </ion-item>
           <ion-item>
@@ -69,21 +69,23 @@
           </div>
       </ion-accordion>
       </ng-container>
-      <ion-accordion value="photos">
-        <ion-item slot="header" lines="none">
-          <ion-icon slot="start" name="image-outline"></ion-icon>
-          <ion-label><strong>{{ 'PHOTOS' | translate | titlecase}}</strong></ion-label>
-        </ion-item>
-        <ion-list slot="content" *ngIf="res.pictures.length > 0; else notFound">
-          <ion-item class="photo">
-            <ion-slides mode="ios" scrollbar="ios" [options]="slideOpts">
-              <ion-slide *ngFor="let item of res.pictures">
-                <img [src]="item" class="img-fluid" (click)="openPicture(item)" alt="Photos">
-              </ion-slide>
-            </ion-slides>
+      <ng-container *ngIf="res?.pictures">
+        <ion-accordion value="photos">
+          <ion-item slot="header" lines="none">
+            <ion-icon slot="start" name="image-outline"></ion-icon>
+            <ion-label><strong>{{ 'PHOTOS' | translate | titlecase}}</strong></ion-label>
           </ion-item>
-        </ion-list>
-      </ion-accordion>
+          <ion-list slot="content" *ngIf="res.pictures.length > 0; else notFound">
+            <ion-item class="photo">
+              <ion-slides mode="ios" scrollbar="ios" [options]="slideOpts">
+                <ion-slide *ngFor="let item of res.pictures">
+                  <img [src]="item" class="img-fluid" (click)="openPicture(item)" alt="Photos">
+                </ion-slide>
+              </ion-slides>
+            </ion-item>
+          </ion-list>
+        </ion-accordion>
+      </ng-container>
       <ng-container>
         <ion-accordion value="company" *ngIf="res.company">
           <ion-item slot="header" lines="none">
