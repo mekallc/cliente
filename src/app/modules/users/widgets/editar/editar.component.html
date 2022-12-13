@@ -30,29 +30,22 @@
               <small>{{ "SIGN.ERROR.EMAIL" | translate }}</small>
             </ion-text>
           </ion-item>
-          <ion-item lines="none" class="phone-label mb-0">
-            <ion-label position="stacked">{{ "SIGN.PHONE" | translate }} <ion-text color="danger">*</ion-text></ion-label>
+          <ion-item class="country" lines="none">
+            <ion-label position="stacked">{{ "SIGN.COUNTRY" | translate }} <ion-text color="danger">*</ion-text></ion-label>
+            <ion-select [placeholder]="'SIGN.COUNTRY' | translate | titlecase" interface="action-sheet" formControlName="country">
+              <ion-select-option *ngFor="let item of countries$ | async" [value]="item.id">
+                (+{{ item.phone_code }}) {{ item.name  }}</ion-select-option>
+            </ion-select>
           </ion-item>
-          <div class="row g-0">
-            <div class="col-5 col-md-3">
-              <ion-item class="country" lines="none">
-                <ion-select [placeholder]="'SIGN.COUNTRY' | translate | titlecase" interface="action-sheet" formControlName="country">
-                  <ion-select-option *ngFor="let item of countries$ | async" [value]="item.id">
-                    (+{{ item.phone_code }}) {{ item.name  }}</ion-select-option>
-                </ion-select>
-              </ion-item>
-            </div>
-            <div class="col-7 col-md-9">
-              <ion-item class="phone" lines="none">
-                <ion-input required formControlName="phone" type="phone" inputmode="numeric" placeholder="0000-0000"></ion-input>
-              </ion-item>
-            </div>
-          </div>
-          <ion-item class="idima" lines="none">
+          <ion-item class="phone" lines="none">
+            <ion-label position="stacked">{{ "SIGN.PHONE" | translate }} <ion-text color="danger">*</ion-text></ion-label>
+            <ion-input required formControlName="phone" type="phone" inputmode="numeric" placeholder="0000-0000"></ion-input>
+          </ion-item>
+          <!-- <ion-item class="idima" lines="none">
             <ion-select placeholder="Idioma" interface="action-sheet" formControlName="language">
               <ion-select-option *ngFor="let item of idioma" [value]="item.id">{{ item.name  }}</ion-select-option>
             </ion-select>
-          </ion-item>
+          </ion-item> -->
         </ion-list>
       </div>
       <div class="col-8 mt-3">

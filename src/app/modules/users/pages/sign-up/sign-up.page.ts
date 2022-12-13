@@ -72,7 +72,7 @@ export class SignUpPage implements OnInit, AfterViewInit {
       phone: ['41998819501', Validators.required],
       country: ['6309309045569700077d42ae', Validators.required],
       password: ['admin', Validators.required],
-      language: ['', Validators.required],
+      language: [1],
       email: ['web1@condor.com.br', [Validators.required, Validators.email]],
       last_name: ['Velasques', [Validators.required, Validators.minLength(4)]],
       first_name: ['Alejandro', [Validators.required, Validators.minLength(4)]],

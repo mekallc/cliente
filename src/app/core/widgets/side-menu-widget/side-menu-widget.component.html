@@ -11,7 +11,7 @@
           <h4>{{ user.email }}</h4>
           <ng-container *ngIf="(score$ | async) as score">
               <p style="color: var(--ion-color-warning) !important">
-                <span style="font-weight: 600;">{{ score.score }}</span>
+                <span style="font-weight: 600;">{{ score.score.toFixed(1) }}</span>
                 <ion-icon color="warning" [name]="(score$ | async) === 0 ? 'star-outline': 'star'" class="ms-1"></ion-icon>
               </p>
               <p class="nivel">{{ score.nivel }}</p>
