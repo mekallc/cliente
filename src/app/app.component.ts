@@ -50,7 +50,7 @@ export class AppComponent implements OnInit {
         this.integrated.initStates();
         this.appService.getLanguage();
       } else {
-        this.appService.closeModal();
+        // this.appService.closeModal();
       }
     });
   };

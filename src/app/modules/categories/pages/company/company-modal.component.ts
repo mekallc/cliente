@@ -112,7 +112,7 @@ export class CompanyModalComponent implements OnInit {
     console.log('PROVIDER ', provider);
     await this.uService.modal({
       mode: 'ios',
-      initialBreakpoint: 0.85,
+      initialBreakpoint: 0.95,
       breakpoints: [0, 0.85, 1],
       component: CompanyViewModalComponent,
       componentProps: { service, provider }
@@ -152,8 +152,8 @@ export class CompanyModalComponent implements OnInit {
 
   private sortProviderNearBord(objs: any) {
     return objs.sort((a: any,b: any): 0 | 1 | -1 =>
-      (a.distance.distance > b.distance.distance) ? 1 :
-      ((b.distance.distance > a.distance.distance) ? -1 : 0));
+      (a.distance > b.distance) ? 1 :
+      ((b.distance > a.distance) ? -1 : 0));
   }
 
   private setDataSearchProvider(res: any) {

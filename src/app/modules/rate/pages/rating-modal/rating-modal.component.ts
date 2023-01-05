@@ -45,13 +45,10 @@ export class RatingModalComponent implements OnInit {
     const data = {
       score_company: this.form.value.score,
       comment_company: this.form.value.comment,
-      user: this.service.user._id
     };
-    console.log(data);
     await this.uService.load({ message: this.translate.instant('PROCESSING'), duration: 1300 });
     this.ms.patchMaster('comments/service', this.service._id, data)
     .subscribe((res) => {
-      console.log(res);
       this.store.dispatch(action.itemClosed({
         id: this.service._id,
         data: { status: 'closed' }

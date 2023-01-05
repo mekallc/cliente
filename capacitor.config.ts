@@ -3,14 +3,14 @@ const config: CapacitorConfig = {
   appId: 'com.mekadevelopments.cliente',
   appName: 'Meka',
   webDir: 'www',
-  bundledWebRuntime: false,
+  bundledWebRuntime: true,
   plugins: {
     PushNotifications: {
       presentationOptions: ['badge', 'sound', 'alert'],
     },
     SplashScreen: {
       launchShowDuration: 0,
-      launchAutoHide: false,
+      launchAutoHide: true,
     },
     LocalNotifications: {
       smallIcon: 'ic_stat_ionic_logo',
@@ -24,10 +24,17 @@ const config: CapacitorConfig = {
   android: {
     allowMixedContent: true
   },
-  // server: {
-  //   cleartext: true,
-  //   url: 'http://192.168.0.226:8102',
-  // },
+  cordova: {
+    preferences: {
+      LottieFullScreen: 'true',
+      LottieHideAfterAnimationEnd: 'true',
+      LottieAnimationLocation: 'public/assets/splash.json'
+    }
+  },
+  server: {
+    cleartext: true,
+    url: 'http://192.168.250.114:8105',
+  },
 };
 
 export default config;

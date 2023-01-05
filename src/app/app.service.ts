@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { App, AppInfo } from '@capacitor/app';
-import { Device } from '@capacitor/device';
+import { Device, DeviceInfo } from '@capacitor/device';
 import { TraslationService } from '@core/language/traslation.service';
 import { UtilsService } from '@core/services/utils.service';
 import { Globalization } from '@ionic-native/globalization/ngx';
@@ -32,11 +32,16 @@ export class AppService {
   getVersion$  = (): Observable<AppInfo> => this.version$.asObservable();
 
 
-  getLanguage = async () => {
-    const { value } = await this.global.getPreferredLanguage();
-    console.log('GLOBAL ', value);
-    if (value) { this.traslate.use(value.split('-')[0]); }
-    else { this.traslate.use('en');}
+  async getLanguage(): Promise<void> {
+    const info: DeviceInfo = await Device.getInfo();
+    if (info.platform !== 'web') {
+      const { value } = await this.global.getPreferredLanguage();
+      if (value) {
+        this.traslate.use(value.split('-')[0]);
+      } else {
+        this.traslate.use('en');
+      }
+    }
   };
 
   async showSplash() {
