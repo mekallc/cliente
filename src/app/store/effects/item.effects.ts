@@ -59,7 +59,7 @@ export class ItemEffects {
   delete$ = createEffect(() =>
     this.actions$.pipe(
       ofType(actions.itemDelete),
-      mergeMap((action: any) => this.db.sendService(action.id, { status: 'cancelled' })
+      mergeMap((action: any) => this.changeStatusService(action.id, action.data)
         .pipe(
           map((item) => actions.itemLoaded({ item: null })),
           catchError(async ({ error }) => actions.itemError({ error }))
@@ -107,6 +107,7 @@ export class ItemEffects {
 
   changeStatusService(id: string, item: any) {
     const data = { id, item };
+    console.log(data);
     this.socket.emit('joinService', id);
     this.socket.emit('changeStatusService', data);
     return this.socket.fromEvent('changeMessage');

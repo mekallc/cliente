@@ -36,7 +36,8 @@ export class CompanyModalComponent implements OnInit {
   coords: any = [];
   latitude: number;
   longitude: number;
-
+  pathIcon = './assets/images/location-home.png';
+  serviceIcon = './assets/images/location-services.png';
 
   constructor(
     private store: Store<AppState>,
@@ -55,7 +56,7 @@ export class CompanyModalComponent implements OnInit {
   }
 
   async currentPosition(): Promise<void> {
-    await this.uService.load({ message: 'Carregando Informacion...'});
+    await this.uService.load({ message: this.translate.instant('PROCESSING')});
     const position: Position = await Geolocation.getCurrentPosition();
     if (position) {
       this.position =  {
@@ -88,17 +89,18 @@ export class CompanyModalComponent implements OnInit {
 
   async sendProviderService(service: any, provider: any): Promise<void> {
     const distance = this.getDistance(service, provider);
-    console.log(distance);
-    const data = { company: provider._id, status: 'in_process', distance };
+    service.distance = distance;
+    service.status = 'in_process';
+    service.company = provider._id;
     await this.uService.alert({
-      header: 'Atención',
+      header: this.translate.instant('ALERT_INFO'),
       message: this.translate.instant('DO_YOU_WANT_TO_SEND_THE_SERVICE_TO_THIS_PROVIDER'),
       buttons: [
         { text: 'Cancel', role: 'cancel', },
         { text: 'Okay', id: 'confirm-button',
           handler: async () => {
             await this.uService.load({ message: this.translate.instant('PROCESSING'), duration: 1500 });
-            this.store.dispatch(actions.itemUpdate({ id: service._id, data }));
+            this.store.dispatch(actions.itemUpdate({ id: service._id, data: service }));
             this.uService.navigate('/pages/home');
           }
         }
@@ -119,14 +121,18 @@ export class CompanyModalComponent implements OnInit {
 
   async onCancelService(service: any): Promise<void> {
     await this.uService.alert({
-      header: 'Atención',
+      header: this.translate.instant('ALERT_WARNING'),
       message: this.translate.instant('WILL_YOU_CANCEL_THIS_SERVICE'),
       buttons:[
         { text: 'Cancel', role: 'cancel', },
-        { text: 'Okay', handler: async () => this.cancelservice(service._id) }
+        { text: 'Okay', handler: async () => this.cancelservice(service) }
       ]
     });
   };
+
+  onBack() {
+    this.uService.navigate('/pages/home');
+  }
 
   private getDistance(p1: any, p2: any) {
     const data1 = { latitude: p1.latitude, longitude: p1.longitude };
@@ -136,9 +142,10 @@ export class CompanyModalComponent implements OnInit {
     return this.uService.distance(data1, data2);
   }
 
-  private async cancelservice(id: string): Promise<void> {
+  private async cancelservice(service: any): Promise<void> {
+    service.status = 'cacelled';
     await this.uService.load({ message: this.translate.instant('PROCESSING') });
-    this.store.dispatch(actions.itemDelete({ id }));
+    this.store.dispatch(actions.itemDelete({ id: service._id, data: service }));
     this.uService.navigate('/pages/home');
     this.uService.loadDimiss();
   }
@@ -150,7 +157,6 @@ export class CompanyModalComponent implements OnInit {
   }
 
   private setDataSearchProvider(res: any) {
-    console.log(res);
     return {
       user: res.user._id ? res.user._id : '',
       category: res.category._id,

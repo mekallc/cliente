@@ -1,10 +1,21 @@
 {
+  "MECHANICAL WORKSHOP": "Mechanical Workshop",
+  "MECHANICAL": "Mechanical",
+  "AUTO PARTS SHOP": "AUTO PARTS SHOP",
+  "ALERT_WARNING": "WARNING",
+  "ALERT_INFO": "INFO",
+  "PROVIDER_INFO": "Info the provider",
   "GLOBAL": {
     "APP_NAME": "Meka",
     "ACCEPT": "Accept",
     "CANCEL": "Cancel",
     "EXPLORE_THE_BEST_PLACES_OF_THE_WORLD_MOST_VIBRANT_CITIES": "Explore the best places of the world's most vibrant cities!"
   },
+  "Cash": "Cash",
+  "Credit Card": "Credit Card",
+  "Transfer Bank": "Transfer Bank",
+  "Crypto": "Crypto",
+  "Paypal": "Paypal",
   "TABS": {
     "HOME": "Home",
     "SERVICES": "Services",

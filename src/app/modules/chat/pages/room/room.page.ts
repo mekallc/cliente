@@ -8,6 +8,7 @@ import { Observable, timer } from 'rxjs';
 import { IonContent } from '@ionic/angular';
 import { ChatFireService } from '@core/services/chat-fire.service';
 import { FireStorageService } from '@modules/chat/services/fire-storage.service';
+import { MasterService } from '@core/services/master.service';
 
 @Component({
   selector: 'app-room-hat',
@@ -22,10 +23,12 @@ export class RoomChatPage implements OnInit {
   public message = '';
   public messages: string[] = [];
   public messages$: Observable<any[]>;
+  service: any;
 
   constructor(
     private uService: UtilsService,
     private storage: StorageService,
+    private msService: MasterService,
     private activatedRoute: ActivatedRoute,
     private chatFireService: ChatFireService,
     private storageService: FireStorageService,
@@ -39,8 +42,19 @@ export class RoomChatPage implements OnInit {
   async onSubmit(): Promise<void> {
     if(this.message) {
       await this.sendMessage('MSG', this.message);
+      this.sendPush();
       this.message = '';
     }
+  }
+
+  sendPush() {
+    const data = {
+      token: this.service.company.user.push,
+      title: `Tienes un mensaje de ${this.service.company.name}`,
+      body: `${this.message.slice(0, 50)}...`
+    }
+    this.msService.postMaster('services/push/chat', data)
+      .subscribe((res) => console.log(res));
   }
 
   getMessage(uid: string) {
@@ -90,6 +104,11 @@ export class RoomChatPage implements OnInit {
     this.getMessage(uid);
     this.chatFireService.readMessages(uid)
       .subscribe(() => null);
+    this.msService.getMaster(`services/${uid}`)
+      .subscribe((res: any) => {
+        console.log(res);
+        this.service = res;
+      });
   }
 
 }

@@ -77,7 +77,7 @@
 </ion-content>
 <ion-footer class="ion-no-border">
   <ion-toolbar mode="ios">
-    <ion-button (click)="onSubmit()" expand="block" color="medium" shape="round" mode="ios">
+    <ion-button (click)="onSubmit()" [disabled]="registerForm.invalid" expand="block" color="primary" shape="round" mode="ios">
       {{ "SIGN.SEND" | translate }}
     </ion-button>
   </ion-toolbar>

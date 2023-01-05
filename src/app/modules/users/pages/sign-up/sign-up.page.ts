@@ -36,6 +36,7 @@ export class SignUpPage implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.loadForm();
+    console.log(this.registerForm);
     this.countries$ = this.ms.getMaster('tables/countries');
   }
 
@@ -69,13 +70,13 @@ export class SignUpPage implements OnInit, AfterViewInit {
   loadForm = () => {
     this.registerForm = this.fb.group({
       picture: [''],
-      phone: ['41998819501', Validators.required],
-      country: ['6309309045569700077d42ae', Validators.required],
-      password: ['admin', Validators.required],
+      phone: ['', Validators.required],
+      country: ['', Validators.required],
+      password: ['', Validators.required],
       language: [1],
-      email: ['web1@condor.com.br', [Validators.required, Validators.email]],
-      last_name: ['Velasques', [Validators.required, Validators.minLength(4)]],
-      first_name: ['Alejandro', [Validators.required, Validators.minLength(4)]],
+      email: ['', [Validators.required, Validators.email]],
+      last_name: ['', [Validators.required, Validators.minLength(4)]],
+      first_name: ['', [Validators.required, Validators.minLength(4)]],
     });
   };
 

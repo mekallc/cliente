@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IonSlides, AlertOptions } from '@ionic/angular';
+import { TranslateService } from '@ngx-translate/core';
 
 import { UtilsService } from '@core/services/utils.service';
 import { StorageService } from '@core/services/storage.service';
@@ -28,6 +29,7 @@ export class SignInPage implements OnInit {
     private store: Store<AppState>,
     private uService: UtilsService,
     private storage: StorageService,
+    private translate: TranslateService,
   ) { }
 
   ngOnInit() {
@@ -36,14 +38,14 @@ export class SignInPage implements OnInit {
 
   async onSubmit(): Promise<void> {
     if (this.loginForm.invalid) { return; }
-    await this.uService.load({message: 'Loading...'});
+    await this.uService.load({message: this.translate.instant('PROCESSING')});
     this.login(this.loginForm.value);
   }
 
   onSubmitForgotPassword = async () => {
     const form = this.forgotPasswordForm;
     if (form.invalid) { return; }
-    await this.uService.load({message: 'Loading...'});
+    await this.uService.load({message: this.translate.instant('PROCESSING')});
     this.db.forgotSenha(form.value).subscribe(
       async (res) => {
         this.uService.loadDimiss();
@@ -60,8 +62,8 @@ export class SignInPage implements OnInit {
 
   loadForm = () => {
     this.loginForm = this.fb.group({
-      username: ['web@condor.com.br', [Validators.required, Validators.email]],
-      password: ['admin', [Validators.required, Validators.minLength(4)]],
+      username: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(4)]],
     });
     this.forgotPasswordForm = this.fb.group({
       username: ['', [Validators.required, Validators.email]],

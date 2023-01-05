@@ -27,21 +27,14 @@ export class ServiceComponent implements AfterViewInit {
   ) { }
   ngAfterViewInit(): void {
     this.getData();
-    this.service$.subscribe(res => console.log('SOCKET ', res));
 
   }
   getData(): void {
     this.service$.subscribe(async res => {
-      console.log(res);
       if (res.status === 'finished') {
         await this.setRating(res);
       }
     });
-    // this.service$ = this.store.select('item')
-    // .pipe(
-    //   filter(row => !row.loading),
-    //   map((res: any) => res.item)
-    // );
   }
 
   openService(res: any){
@@ -55,7 +48,7 @@ export class ServiceComponent implements AfterViewInit {
       breakpoints: [0, .5, 1],
       component: WaitingComponent,
       componentProps: { res },
-   });
+    });
   }
 
   private async setRating(res: any) {

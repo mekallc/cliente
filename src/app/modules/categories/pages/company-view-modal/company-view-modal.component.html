@@ -1,6 +1,6 @@
 <ion-header class="ion-no-border">
   <ion-toolbar mode="ios">
-    <ion-title>Provider Service</ion-title>
+    <ion-title>{{ 'PROVIDER_INFO' | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 <ion-content>
@@ -17,7 +17,7 @@
         </ion-item>
         <ion-item>
           <ion-icon slot="start" name="build-outline"></ion-icon>
-          <ion-label>{{ provider.typeCompany.name | titlecase }}</ion-label>
+          <ion-label>{{ provider.typeCompany.name | translate |titlecase }}</ion-label>
         </ion-item>
         <ion-item>
           <ion-icon slot="start" name="business-outline"></ion-icon>
@@ -40,7 +40,7 @@
         <ion-item>
           <ion-label class="ion-text-wrap">
             <ion-badge color="primary" *ngFor="let code of provider.payment" class="mx-1">
-              {{ code }}
+              {{ code | translate }}
             </ion-badge>
           </ion-label>
         </ion-item>
@@ -55,7 +55,7 @@
         <ion-item>
           <ion-label  class="ion-text-wrap">
             <ion-badge *ngFor="let code of provider.categories" class="mx-1">
-              {{ code.name }}
+              {{ code.name | translate }}
             </ion-badge>
           </ion-label>
         </ion-item>

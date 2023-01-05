@@ -35,6 +35,7 @@ export class AppComponent implements OnInit {
   initializeApp = async (): Promise<void> => {
     await this.getLoadAppMobile();
     await this.platform.ready();
+    this.appService.getBanner();
     this.appService.getLanguage();
     this.integrated.initStates();
     this.token.validate();

@@ -14,7 +14,7 @@ const config: CapacitorConfig = {
     },
     LocalNotifications: {
       smallIcon: 'ic_stat_ionic_logo',
-      iconColor: '#4d4d4d',
+      iconColor: '#1F1F1F',
       sound: 'beep.wav',
     },
     CapacitorCookies: {

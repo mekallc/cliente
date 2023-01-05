@@ -101,9 +101,9 @@
             </ion-item>
             <ion-item>
               <ion-label class="ion-text-wrap">
-                <h2>Categorias: </h2>
+                <h2 class="mb-3">Categorias: </h2>
                 <ion-badge *ngFor="let item of res.company.categories" color="success" mode="ios" class="me-2">
-                  {{ item.name }}</ion-badge>
+                  {{ item.name | translate }}</ion-badge>
               </ion-label>
             </ion-item>
           </ion-list>

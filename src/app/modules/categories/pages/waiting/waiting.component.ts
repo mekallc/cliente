@@ -61,8 +61,9 @@ export class WaitingComponent implements OnInit {
 
   private async executeOnCancel(item: any): Promise<void> {
     await this.uService.load({ message: this.translate.instant('PROCESSING') });
+    item.status = 'cancelled';
     // eslint-disable-next-line no-underscore-dangle
-    this.store.dispatch(actions.itemDelete({ id: item._id }));
+    this.store.dispatch(actions.itemDelete({ id: item._id, data: item }));
     this.uService.loadDimiss();
     this.uService.modalDimiss();
     this.uService.navigate('/pages/home');

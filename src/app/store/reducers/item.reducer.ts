@@ -15,8 +15,8 @@ const itemReducerMap = createReducer(
   on(actions.itemUpdate, (state, { id, data }) =>
   ({ ...state, loading: true, id, data })),
 
-  on(actions.itemDelete, (state, { id }) =>
-  ({ ...state, loading: true, id, item: null })),
+  on(actions.itemDelete, (state, { id, data }) =>
+  ({ ...state, loading: true, id, data })),
 
   on(actions.itemClosed, (state, { id, data }) =>
   ({ ...state, loading: true, id, data })),

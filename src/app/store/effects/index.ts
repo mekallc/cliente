@@ -1,3 +1,4 @@
+import { BannersEffects } from './banners.effects';
 /* eslint-disable @typescript-eslint/naming-convention */
 import { UserEffects } from './user.effects';
 import { ItemEffects } from './item.effects';
@@ -15,5 +16,6 @@ export const EffectsArray: any[] = [
   RatingEffects,
   FinishedEffects,
   CancelledEffects,
+  BannersEffects,
   ScoreEffects,
 ];

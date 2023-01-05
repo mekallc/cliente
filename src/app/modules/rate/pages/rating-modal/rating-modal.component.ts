@@ -2,6 +2,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { timer } from 'rxjs';
 import { Store } from '@ngrx/store';
+import { TranslateService } from '@ngx-translate/core';
 
 import * as action from '@store/actions';
 import { AppState } from '@store/app.state';
@@ -25,6 +26,7 @@ export class RatingModalComponent implements OnInit {
     private ms: MasterService,
     private store: Store<AppState>,
     private uService: UtilsService,
+    private translate: TranslateService
   ) { }
 
 
@@ -41,14 +43,15 @@ export class RatingModalComponent implements OnInit {
 
   async onSubmit(): Promise<void> {
     const data = {
-      service: this.service._id,
-      score: this.form.value.score,
-      comment: this.form.value.comment,
+      score_company: this.form.value.score,
+      comment_company: this.form.value.comment,
       user: this.service.user._id
     };
     console.log(data);
-    await this.uService.load({ message: 'Procesando...', duration: 1300 });
-    this.ms.postMaster('comments', data).subscribe(() => {
+    await this.uService.load({ message: this.translate.instant('PROCESSING'), duration: 1300 });
+    this.ms.patchMaster('comments/service', this.service._id, data)
+    .subscribe((res) => {
+      console.log(res);
       this.store.dispatch(action.itemClosed({
         id: this.service._id,
         data: { status: 'closed' }

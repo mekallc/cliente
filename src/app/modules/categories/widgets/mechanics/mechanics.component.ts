@@ -36,6 +36,7 @@ export class MechanicsComponent implements OnInit, AfterViewInit {
   models$: Observable<any[]>;
   vehicles$: Observable<any[]>;
   conditions$: Observable<any[]>;
+  active = false;
 
   constructor(
     private fb: FormBuilder,
@@ -60,21 +61,16 @@ export class MechanicsComponent implements OnInit, AfterViewInit {
   getData() {
     this.vehicles$ = this.db.getVehicles();
     this.conditions$ = this.db.getTypeCondition();
+    this.getService();
   }
 
   async onSubmit(): Promise<void> {
-    const photos: { picture: string; service: string }[] = [];
+    let photos: any[];
     await this.setReactive();
     const item: any = this.formReactive.value;
-    if (this.capture.length > 0) {
-      this.capture.forEach(async (el: any) => {
-        const picture = await this.storageService.uploadService(uuidv4(), el);
-        const photosService: any = { picture };
-        photos.push(photosService);
-      });
-    }
-    item.pictures = photos;
-    await this.uService.load({ message: 'Salvando tu servicios...', duration: 750 });
+    item.pictures = this.capture;
+    console.log(item);
+    await this.uService.load({ message: 'Procesando tu servicio...', duration: 750 });
     this.store.dispatch(actions.itemAdd({ item }));
     timer(750).subscribe(() =>{
       this.formReactive.reset();
@@ -92,7 +88,7 @@ export class MechanicsComponent implements OnInit, AfterViewInit {
 
   loadReactiveForm = () => {
     this.formReactive = this.fb.group({
-      description: ['Test #1', [Validators.required, Validators.minLength(4)]],
+      description: ['', [Validators.required, Validators.minLength(4)]],
       vehicle: ['', Validators.required],
       user: ['', Validators.required],
       brand: ['', Validators.required],
@@ -100,7 +96,7 @@ export class MechanicsComponent implements OnInit, AfterViewInit {
       category: ['', Validators.required],
       latitude: [''],
       longitude: [''],
-      year: ['2020'],
+      year: [''],
       pictures: [''],
       type: [0],
     });
@@ -117,9 +113,10 @@ export class MechanicsComponent implements OnInit, AfterViewInit {
   };
 
   capturePhoto = async () => {
-    const photo = await this.cameraService.takePhoto();
+    const photo = await this.cameraService.takePhoto2();
     if (photo) {
-      this.capture.push(photo);
+      const picture = await this.storageService.uploadService(uuidv4(), photo);
+      this.capture.push(picture);
     }
   };
 
@@ -132,6 +129,16 @@ export class MechanicsComponent implements OnInit, AfterViewInit {
       this.formReactive.addControl('condition', new FormControl('', Validators.required));
       this.formReactive.controls.type.setValue(1);
     }
+  }
+
+  private getService() {
+    this.store.select('item')
+    .pipe(filter(row => !row.loading), map((res: any) => res.item))
+    .subscribe((res: any) => {
+      if (res) {
+        this.active = true;
+      }
+    });
   }
 
   // SETFORM USER

@@ -9,6 +9,7 @@ export interface AppState {
   finished: reducers.FinishedState;
   cancelled: reducers.CancelledState;
   score: reducers.ScoreState;
+  banner: reducers.BannerState;
 }
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -20,4 +21,5 @@ export const ROOT_REDUCERS: ActionReducerMap<AppState> = {
   finished: reducers.finishedReducer,
   cancelled: reducers.cancelledReducer,
   score: reducers.scoreReducer,
+  banner: reducers.bannerReducer,
 };

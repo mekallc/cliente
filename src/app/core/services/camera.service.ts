@@ -24,4 +24,15 @@ export class CameraService {
     // return this.sanitizer.bypassSecurityTrustResourceUrl(image && (image.dataUrl));
   };
 
+  async takePhoto2(): Promise<string> {
+    const image = await Camera.getPhoto({
+      quality: 50,
+      allowEditing: false,
+      width: 350,
+      height: 350,
+      resultType: CameraResultType.DataUrl,
+    });
+    return image.dataUrl;
+  };
+
 }

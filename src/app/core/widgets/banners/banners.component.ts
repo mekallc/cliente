@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { MasterService } from '@core/services/master.service';
-import { Geolocation, Position } from '@capacitor/geolocation';
-import { Observable } from 'rxjs';
+import {  Observable } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 import { UtilsService } from '@core/services/utils.service';
 import { CompanyViewModalComponent } from '@modules/categories/pages/company-view-modal/company-view-modal.component';
+import { Store } from '@ngrx/store';
+import { AppState } from '@store/app.state';
 
 
 @Component({
@@ -25,22 +27,19 @@ export class BannersWidgetComponent implements OnInit {
   constructor(
     private ms: MasterService,
     private uService: UtilsService,
+    private store: Store<AppState>,
   ) { }
 
   async ngOnInit() {
     await this.getBanner();
   }
 
-  async getBanner(): Promise<void> {
-    const position: Position = await Geolocation.getCurrentPosition();
-    if (position) {
-      const data = {
-        latitude: position.coords.latitude,
-        longitude: position.coords.longitude,
-      };
-      this.entry$ = this.ms.postMaster('banners/client', data);
-      // this.entry$.subscribe(res => console.log('BANNER ', res));
-    }
+  getBanner(): void {
+    this.entry$ = this.store.select('banner')
+    .pipe(
+      filter(flow => !flow.loading),
+      map((res: any) => res.items)
+    );
   };
 
   goToCompany(id: string) {

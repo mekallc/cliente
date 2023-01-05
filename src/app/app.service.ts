@@ -6,6 +6,10 @@ import { UtilsService } from '@core/services/utils.service';
 import { Globalization } from '@ionic-native/globalization/ngx';
 import { Platform } from '@ionic/angular';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { Geolocation, Position } from '@capacitor/geolocation';
+import { Store } from '@ngrx/store';
+import { AppState } from '@store/app.state';
+import * as actions from  '@store/actions';
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +24,7 @@ export class AppService {
     private global: Globalization,
     public traslate: TraslationService,
     private uService: UtilsService,
+    private store: Store<AppState>
   ) {}
 
   setVersion$  = (items: AppInfo) => this.version$.next(items);
@@ -45,5 +50,16 @@ export class AppService {
 
   closeModal() {
     this.uService.modalDimiss();
+  }
+
+  async getBanner(): Promise<any> {
+    const position: Position = await Geolocation.getCurrentPosition();
+    if (position) {
+      const data = {
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude,
+      };
+      this.store.dispatch(actions.bannerLoad({ data }));
+    }
   }
 }

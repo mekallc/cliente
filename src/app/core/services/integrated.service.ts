@@ -7,9 +7,7 @@ import { AppState } from '@store/app.state';
 import { UtilsService } from '@core/services/utils.service';
 import { MasterService } from '@core/services/master.service';
 import { StorageService } from '@core/services/storage.service';
-import { RatingModalComponent } from '@modules/rate/pages/rating-modal/rating-modal.component';
 import { Socket } from 'ngx-socket-io';
-import { SocketService } from './socket.service';
 
 @Injectable({
   providedIn: 'root'
@@ -27,6 +25,7 @@ export class IntegratedService {
   }
   async initStates(): Promise<[] | null> {
     const user = await this.storage.getStorage('oUser');
+    this.store.dispatch(actions.expertLoad());
     if (user) {
       this.socket.emit('joinUser', user._id);
       this.socket.emit('serviceUser', user._id);
@@ -35,13 +34,14 @@ export class IntegratedService {
       this.store.dispatch(actions.initScore({ user: user._id }));
       this.store.dispatch(actions.finishedLoad({ user: user._id }));
       this.store.dispatch(actions.cancelledLoad({ user: user._id }));
-      this.store.dispatch(actions.expertLoad());
     } else {
       return null;
     }
   };
 
-  pageStates() {}
+  pageStates() {
+    this.store.dispatch(actions.expertLoad());
+  }
 
   // INGRESA EL ROOM SI EL SERVICIO ESTA ABIERTO
   onServiceStatus() {

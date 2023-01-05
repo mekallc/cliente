@@ -19,7 +19,7 @@ export const itemClosed =
   createAction('[ITEM] CLOSED', props<{ id: string; data: any }>());
 
 export const itemDelete =
-  createAction('[ITEM] Delete', props<{ id: string}>());
+  createAction('[ITEM] Delete', props<{ id: string; data: any}>());
 
 export const itemStatus =
   createAction('[ITEM] Changed', props<{ item: any}>());

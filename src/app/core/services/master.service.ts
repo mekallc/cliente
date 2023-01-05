@@ -22,7 +22,6 @@ export class MasterService {
   }
 
   postMaster(collection: string, data: any) {
-    console.log(data);
     return this.http.post(`${url}/${version}/${collection}`, data);
   }
 

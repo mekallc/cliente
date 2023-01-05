@@ -8,6 +8,7 @@ import * as actions from '@store/actions';
 import { filter, map, Observable, timer } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { ifError } from 'assert';
+import { Socket } from 'ngx-socket-io';
 
 @Component({
   selector: 'app-rate',
@@ -22,6 +23,7 @@ export class RateComponent implements OnInit {
   score = 4;
 
   constructor(
+    private socket: Socket,
     private ms: MasterService,
     private store: Store<AppState>,
     private uService: UtilsService,
