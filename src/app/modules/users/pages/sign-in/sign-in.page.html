@@ -74,8 +74,8 @@
 </ion-content>
 <ion-footer class="ion-no-border">
   <ion-toolbar>
-    <ion-button (click)="onRegister()" expand="block" fill="clear" shape="round" mode="ios">
-      <span style="font-size: .85rem">{{ "SIGN.YOU_DONT_HAVE_AN_ACCOUNT" | translate}}</span>
+    <ion-button (click)="onRegister()" expand="block" fill="clear" color="primary" mode="ios">
+      <span style="font-size: .85rem" [innerHtml]="'SIGN.YOU_DONT_HAVE_AN_ACCOUNT' | translate"></span>
     </ion-button>
   </ion-toolbar>
 </ion-footer>

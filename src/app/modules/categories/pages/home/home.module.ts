@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { TranslateModule } from '@ngx-translate/core';
+import { LottieModule } from 'ngx-lottie';
 
 import { HomePage } from './home.page';
 import { HomePageRoutingModule } from './home-routing.module';
@@ -13,12 +14,12 @@ import { CategoriesWidgetModule } from '@modules/categories/widgets/home/home.mo
 import { LastRepairedWidgetModule } from '@core/widgets/last-repaired/last-repaired.module';
 import { ServiceStatusListModule } from '@modules/categories/widgets/service-status-list/service-status-list.module';
 
-
 @NgModule({
   imports: [
     FormsModule,
     IonicModule,
     HeaderModule,
+    LottieModule,
     CommonModule,
     TranslateModule,
     IntroWidgetModule,

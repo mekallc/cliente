@@ -7,8 +7,6 @@ import { MomentModule } from 'ngx-moment';
 import { ServiceStatusListComponent } from './service-status-list.component';
 import { CompanyModule } from '@modules/categories/pages/company/company.module';
 
-
-
 @NgModule({
   exports: [ServiceStatusListComponent],
   declarations: [ServiceStatusListComponent],
@@ -18,7 +16,7 @@ import { CompanyModule } from '@modules/categories/pages/company/company.module'
     CommonModule,
     MomentModule,
     CompanyModule,
-    TranslateModule
+    TranslateModule,
   ]
 })
 export class ServiceStatusListModule { }

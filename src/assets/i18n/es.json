@@ -4,7 +4,7 @@
   "Transfer Bank": "Transferencia Bancaria",
   "Crypto": "Criptomoneda",
   "Paypal": "Paypal",
-  "MECHANICAL WORKSHOP": "Taller Mecanico",
+  "MECHANICAL WORKSHOP": "Taller",
   "MECHANICAL": "Mecanico",
   "AUTO PARTS SHOP": "Venta de Respuestos",
   "PROCESSING": "Procesando...",
@@ -103,8 +103,8 @@
     "EDIT": "Editar",
     "FORGOT_PWD": "Cambiar Clave",
     "PROFILE": "Perfil",
-    "EMAIL": "Email/Usuário",
-    "PASSWORD": "Clave",
+    "EMAIL": "Correo Electrónico",
+    "PASSWORD": "Contraseña",
     "NEW_PASSWORD": "Nueva Clave",
     "CHANGE_PASSWORD": "Cambiar Clave",
     "FIRSTNAME": "Nombres",
@@ -115,13 +115,14 @@
     "ACCESS": "Acceder",
     "SEND": "enviar",
     "RECOVER_PASSWORD": "Recuperar clave",
-    "FORGET_YOUR_PASSWORD": "Olvidastes la clave",
-    "BACK_TO_LOGIN": "Regresar al Login",
-    "YOU_DONT_HAVE_AN_ACCOUNT": "No tienens una cuenta?. Registrate",
-    "SIGNUP_INFO": "Por favor escribe tu informacion abajo",
-    "SIGNUP_TITLE": "Registrate",
-    "LANGUAGE": "Idioma",
     "COUNTRY": "País",
+    "LANGUAGE": "Idioma",
+    "FORGET_YOUR_PASSWORD": "¿Has olvidado tu contraseña?",
+    "BACK_TO_LOGIN": "Regresar al Login",
+    "YOU_DONT_HAVE_AN_ACCOUNT": "¿No tienes una cuenta aún? <span class='red'>Registrate aquí</<span>",
+    "SIGNUP_INFO": "Por favor escribe la información abajo",
+    "SIGNUP_TITLE": "Registrate",
+    "SIGNUP_SUCCESS": "Cuenta creada, ahora accede con tu usuario y contraseña",
     "ERROR": {
       "EMAIL": "Por vaor ingresa un e-mail valido.",
       "FISTNAME": "Por vaor ingresa el nombre.",
@@ -132,7 +133,7 @@
   "WIDGET": {
     "INTRO": {
       "HI": "Hola",
-      "NEED_SOME_HELP_TODAY": "En que te puedo ayudar?"
+      "NEED_SOME_HELP_TODAY": "¿En que te puedo ayudar?"
     },
     "LAST_REPAIRED": { "TITLE": "Last Repaired"}
   },

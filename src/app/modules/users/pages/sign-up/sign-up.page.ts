@@ -8,6 +8,7 @@ import { MasterService } from '@core/services/master.service';
 import { AuthService } from '@modules/users/services/auth.service';
 import { StorageService } from '@core/services/storage.service';
 import { UtilsService } from '@core/services/utils.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-sign-up',
@@ -22,8 +23,7 @@ export class SignUpPage implements OnInit, AfterViewInit {
   language: number;
   idioma = [
     { name: 'Español (Latinoamerica)', id: 1 },
-    { name: 'Ingles (USA)', id: 2 },
-    { name: 'Portugues (Brasil)', id: 3 }
+    { name: 'Ingles (USA)', id: 2 }
   ];
 
   constructor(
@@ -32,6 +32,7 @@ export class SignUpPage implements OnInit, AfterViewInit {
     private ms: MasterService,
     private uService: UtilsService,
     private storage: StorageService,
+    private translate: TranslateService,
   ) { }
 
   ngOnInit() {
@@ -46,8 +47,7 @@ export class SignUpPage implements OnInit, AfterViewInit {
     if(this.registerForm.invalid) { return; }
     const data = this.registerForm.value;
     await this.getDataForm(data);
-    await this.uService.load({ message: 'Loading' });
-    console.log('VALUE ', this.registerForm.value);
+    await this.uService.load({message: this.translate.instant('PROCESSING')});
     this.auth.signUp(this.registerForm.value).subscribe(
       async () => {
         this.uService.loadDimiss();
@@ -105,7 +105,7 @@ export class SignUpPage implements OnInit, AfterViewInit {
 
   private setToast = async (): Promise<void> => {
     await this.uService.toast({
-      message: 'Account created, now access with your login and password',
+      message: this.translate.instant('SIGN.SIGNUP_SUCCESS'),
       position: 'top', duration: 1000
     });
     this.uService.navigate('/user/signIn');

@@ -37,7 +37,7 @@
         [longitude]="provider.longitude">
         <agm-info-window>
           <ion-label>
-            <p style="font-weight: 400; margin-bottom: .15rem">Distancia {{ provider.distance }}</p>
+            <p style="font-weight: 400; margin-bottom: .15rem">Distancia {{ provider.distance | unitConverted }}</p>
             <h2 style="margin-bottom: .20rem;">{{ provider.name }}</h2>
             <p class="mb-1">{{ provider.address }}</p>
           </ion-label>

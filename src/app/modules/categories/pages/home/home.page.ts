@@ -2,6 +2,8 @@ import { Component, OnInit  } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable, timer } from 'rxjs';
 import { map, filter, tap } from 'rxjs/operators';
+import { AnimationItem } from 'lottie-web';
+import { AnimationOptions } from 'ngx-lottie';
 
 import { AppState } from '@store/app.state';
 
@@ -15,6 +17,12 @@ export class HomePage implements OnInit {
   cancelled$: Observable<any>;
   toggle = 'FINISHED';
   progress = true;
+  totalFinished = 0;
+  totalCancelled = 0;
+
+  options: AnimationOptions = {
+    path: './assets/lotties/not-found.json',
+  };
 
   constructor(
     private store: Store<AppState>,
@@ -25,10 +33,14 @@ export class HomePage implements OnInit {
     this.getCancelled();
   }
 
+  animationCreated(animationItem: AnimationItem): void {
+    console.log(animationItem);
+  }
+
   progressBar(res: any) {
     const length = res.length;
     if(length === 0) {
-      timer(2000).subscribe(() => this.progress = false);
+      timer(1200).subscribe(() => this.progress = false);
     } else {
       timer(1000).subscribe(() => this.progress = false);
     }
@@ -38,9 +50,13 @@ export class HomePage implements OnInit {
     this.finished$ = this.store.select('finished')
     .pipe(
       filter(row => !row.loading),
-      tap(({ finished }) => this.progressBar(finished)),
+      tap(({ finished }) => {
+        this.totalFinished = finished.length;
+        this.progressBar(finished);
+      }),
       map((res: any) => res.finished)
     );
+    this.finished$.subscribe((res) => console.log('FINISHED', res.length));
   }
 
 
@@ -49,8 +65,13 @@ export class HomePage implements OnInit {
     this.cancelled$ = this.store.select('cancelled')
     .pipe(
       filter(row => !row.loading),
+      tap(({ cancelled }) => {
+        this.totalCancelled = cancelled.length;
+        this.progressBar(cancelled);
+      }),
       map(res => res.cancelled)
     );
+    this.cancelled$.subscribe((res) => console.log('CANCELLED', res));
   }
 
   segmentChanged(ev: any) {

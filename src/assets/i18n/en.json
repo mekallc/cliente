@@ -37,9 +37,10 @@
     "RECOVER_PASSWORD": "Recover password",
     "FORGET_YOUR_PASSWORD": "Did you forget your password?",
     "BACK_TO_LOGIN": "Back to Login",
-    "YOU_DONT_HAVE_AN_ACCOUNT": "You don't have an account?. Sign up",
+    "YOU_DONT_HAVE_AN_ACCOUNT": "You don't have an account?. <strong>Sign up</strong>",
     "SIGNUP_INFO": "Please write your information below",
     "SIGNUP_TITLE": "Sign Up",
+    "SIGNUP_SUCCESS": "Account created, now access with your login and password",
     "ERROR": {
       "EMAIL": "Please enter a valid email address.",
       "FISTNAME": "Please enter a valid first name.",

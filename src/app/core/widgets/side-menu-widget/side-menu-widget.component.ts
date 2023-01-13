@@ -64,7 +64,7 @@ export class SideMenuWidgetComponent implements OnInit, AfterViewInit {
 
   async signOut(): Promise<void> {
     this.menu.close();
-    await this.uService.load({ duration: 3000, message: 'Loading...' });
+    await this.uService.load({ duration: 1500, message: 'Loading...' });
     this.authService.signOut();
   };
 

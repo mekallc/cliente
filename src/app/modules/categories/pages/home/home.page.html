@@ -9,23 +9,25 @@
     </ion-segment-button>
   </ion-segment>
   <ion-progress-bar type="indeterminate" *ngIf="progress"></ion-progress-bar>
-  <ng-template [ngIf]="toggle === 'FINISHED'">
-    <ion-list lines="none" *ngIf="finished$; else notFound">
+  <ng-container *ngIf="toggle === 'FINISHED'">
+    <ion-list lines="none" *ngIf="finished$ && totalFinished > 0; else notFound">
+      <ion-item>
+        <ion-label>Hola</ion-label>
+      </ion-item>
       <ng-container *ngFor="let item of finished$ | async">
         <app-service-status-list [item]="item"></app-service-status-list>
       </ng-container>
     </ion-list>
-  </ng-template>
-  <ng-template [ngIf]="toggle === 'CANCELLED'">
-    <ion-list lines="none">
+  </ng-container>
+  <ng-container *ngIf="toggle === 'CANCELLED'">
+    <ion-list lines="none" *ngIf="cancelled$ && totalCancelled > 0; else notFound">
       <ng-container *ngFor="let item of cancelled$ | async">
         <app-service-status-list [item]="item"></app-service-status-list>
       </ng-container>
     </ion-list>
-  </ng-template>
+  </ng-container>
 </ion-content>
 <ng-template #notFound>
-  <ion-text color="primary">
-    <h1>Awesome text</h1>
-  </ion-text>
+  <ng-lottie [options]="options" (animationCreated)="animationCreated($event)"></ng-lottie>
 </ng-template>
+

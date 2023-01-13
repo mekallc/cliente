@@ -4,7 +4,6 @@ import { NavController } from '@ionic/angular';
 import { UtilsService } from '@core/services/utils.service';
 import { WaitingComponent } from '@modules/categories/pages/waiting/waiting.component';
 
-
 @Component({
   selector: 'app-service-status-list',
   templateUrl: './service-status-list.component.html',
@@ -20,7 +19,12 @@ export class ServiceStatusListComponent implements OnInit {
     private uService: UtilsService
   ) { }
 
+
+
+
   ngOnInit() {
+    timer(500).subscribe(() => console.log('ITEM ', this.item));
+    console.log('object');
   }
 
   async openService(res: any): Promise<void> {
