@@ -15,7 +15,7 @@ import { AppState } from '@store/app.state';
 export class HomePage implements OnInit {
   finished$: Observable<any>;
   cancelled$: Observable<any>;
-  toggle = 'FINISHED';
+  toggle = 'HISTORY';
   progress = true;
   totalFinished = 0;
   totalCancelled = 0;
@@ -32,10 +32,10 @@ export class HomePage implements OnInit {
     this.getFinished();
     this.getCancelled();
   }
-
   animationCreated(animationItem: AnimationItem): void {
     console.log(animationItem);
   }
+
 
   progressBar(res: any) {
     const length = res.length;

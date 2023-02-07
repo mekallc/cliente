@@ -43,17 +43,15 @@ export class BannersWidgetComponent implements OnInit {
   };
 
   goToCompany(id: string) {
-    console.log(id);
     this.ms.getMaster(`companies/${id}`)
     .subscribe(async (provider: any) => {
       if(provider) {
-        console.log(provider);
         await this.uService.modal({
           mode: 'ios',
           initialBreakpoint: 0.95,
           breakpoints: [0, 1, 1],
           component: CompanyViewModalComponent,
-          componentProps: { provider }
+          componentProps: { provider, banner: true }
         });
       }
     });

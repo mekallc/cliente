@@ -1,5 +1,5 @@
+import { StorageService } from '@core/services/storage.service';
 import { Component, Input, OnInit } from '@angular/core';
-import { timer } from 'rxjs';
 
 @Component({
   selector: 'app-chat-msg',
@@ -7,8 +7,17 @@ import { timer } from 'rxjs';
   styleUrls: ['message.component.scss'],
 })
 export class MessageChatComponent implements OnInit {
-  @Input() item: any;
 
-  ngOnInit() {}
+  @Input() item: any;
+  language: string;
+
+  constructor(
+    private storage: StorageService
+  ) {}
+
+  async ngOnInit() {
+    const { language } = await this.storage.getStorage('oUser');
+    this.language = language;
+  }
 
 }

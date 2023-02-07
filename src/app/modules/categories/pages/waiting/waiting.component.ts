@@ -1,13 +1,13 @@
 // eslint-disable-next-line max-len
-import { Component, OnInit, AfterViewInit, Input } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { Observable, timer } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { timer } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { AppState } from '@store/app.state';
 import * as actions from '@store/actions';
 import { UtilsService } from '@core/services/utils.service';
 import { MasterService } from '@core/services/master.service';
+import { RoomChatPage } from '@modules/chat/pages/room/room.page';
 
 declare let google: any;
 
@@ -34,9 +34,16 @@ export class WaitingComponent implements OnInit {
     timer(500).subscribe(() => console.log('WAITING ', this.res));
   }
 
-  onChat(room: any): void {
-    this.uService.navigate(`chat/service/${room}`);
+  async onChat(uid: string): Promise<void> {
     this.uService.modalDimiss();
+    await this.uService.modal({
+      component: RoomChatPage,
+      componentProps: { uid },
+      mode: 'ios',
+      initialBreakpoint: 1,
+      breakpoints: [0, .5, 1],
+    });
+    // this.uService.navigate(`chat/service/${room}`);
   };
 
   async onCancelService(item: any): Promise<void> {

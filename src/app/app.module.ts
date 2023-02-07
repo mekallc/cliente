@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouteReuseStrategy } from '@angular/router';
 import { BrowserModule } from '@angular/platform-browser';
+import { SocketIoConfig, SocketIoModule } from 'ngx-socket-io';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 
 import { appRoute } from './app.routes';
@@ -11,8 +12,9 @@ import { FirebaseModule } from '@core/firebase.module';
 import { CoreStoreModule } from '@store/core-store.module';
 import { CoreCordovaModule } from '@core/core-cordova.module';
 import { SideMenuWidgetModule } from '@core/widgets/side-menu-widget/side-menu-widget.module';
-import { SocketIoConfig, SocketIoModule } from 'ngx-socket-io';
+
 import { environment } from 'src/environments/environment';
+import { LanguageModule } from '@core/language/language.module';
 
 const config: SocketIoConfig = { url: environment.api.url, options: {} };
 @NgModule({
@@ -23,6 +25,7 @@ const config: SocketIoConfig = { url: environment.api.url, options: {} };
     CoreModule,
     BrowserModule,
     FirebaseModule,
+    LanguageModule,
     CoreStoreModule,
     CoreCordovaModule,
     SideMenuWidgetModule,

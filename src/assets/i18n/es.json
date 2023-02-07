@@ -41,14 +41,18 @@
   "IN_PROCESS": "Esperando Respuesta",
   "ACCEPTED": "Servicio en ejecución",
   "CANCELLED": "Cancelado",
+  "HISTORY": "Historico",
   "CLOSED": "Finalizado por el Proveedor",
   "FINISHED": "Finalizado",
+  "CATEGORIES": "Categories",
   "open": "Solicitud Abierta",
   "in_process": "Esperando Respuesta",
   "accepted": "Servicio en ejecución",
   "cancelled": "Cancelado",
   "closed": "Finalizado",
   "finished": "Cerrado por el Proveedor",
+  "YOUR_CLASSIFICATION": "Tu clasificación",
+  "SEE_COMMENT": "Ver comentario",
   "Any": "Cualquiera",
   "New - Original": "Nuevo - Original",
   "New - Replaceable": "Nuevo - Reemplazo",
@@ -70,6 +74,12 @@
   "WILL_YOU_ELIMINATE_THIS_SERVICE":"¿Vas eliminar este servicio?",
   "ALERT_WARNING": "Atención:",
   "ALERT_INFO": "Info:",
+  "CAR": "CARRO",
+  "MOTORCYCLE": "MOTO",
+  "RATE_THE_SERVICE": "¿calificar el servicio?",
+  "MESSAGE_CHAT": "No intercambie informacion personal, su seguridad es lo mas importante",
+  "SERVICE_CHAT": "CHAT DE SERVICIO",
+  "CHAT_SUPPORT": "CHAT DE SOPORTE",
   "SERVICE": {
     "SEND": "Enviar Servicio",
     "CANCEL": "Cancelar Servicio",
@@ -124,10 +134,10 @@
     "SIGNUP_TITLE": "Registrate",
     "SIGNUP_SUCCESS": "Cuenta creada, ahora accede con tu usuario y contraseña",
     "ERROR": {
-      "EMAIL": "Por vaor ingresa un e-mail valido.",
-      "FISTNAME": "Por vaor ingresa el nombre.",
-      "LASTNAME": "Por vaor ingresa el apellido.",
-      "PASSWORD": "Es necesario la clave."
+      "EMAIL": "Por favor, ingresa un e-mail valido.",
+      "FISTNAME": "Por favor, ingresa el nombre.",
+      "LASTNAME": "Por favor, ingresa el apellido.",
+      "PASSWORD": "Es necesario la contraseña."
     }
   },
   "WIDGET": {
@@ -150,7 +160,8 @@
   },
   "RATE": {
     "MESSAGE": "Es muy importante para nosotros conocer la calidad del servicio prestado.",
-    "LABEL": "Evalue como fue su servicio?"
+    "LABEL": "¿Evalue como fue su servicio?",
+    "SEND": "Calificar el servicio"
   }
 }
 

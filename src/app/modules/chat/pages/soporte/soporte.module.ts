@@ -1,13 +1,15 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
+import { CommonModule } from '@angular/common';
+import { Routes, RouterModule } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
+import { CoreModule } from '@core/core.module';
 import { SoporteChatPage } from './soporte.page';
 import { HeaderModule } from '@core/widgets/header/header.module';
-import { Routes, RouterModule } from '@angular/router';
 import { MessageWidgetModule } from '@modules/chat/widget/message/message.module';
-import { CoreModule } from '@core/core.module';
+import { LanguageModule } from '@core/language/language.module';
 
 const routes: Routes = [
   { path: '', component: SoporteChatPage, }
@@ -20,6 +22,7 @@ const routes: Routes = [
     IonicModule,
     CommonModule,
     HeaderModule,
+    TranslateModule,
     ReactiveFormsModule,
     MessageWidgetModule,
     RouterModule.forChild(routes),

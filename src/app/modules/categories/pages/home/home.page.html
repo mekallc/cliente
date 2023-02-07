@@ -1,19 +1,16 @@
 <app-header></app-header>
 <ion-content>
   <ion-segment class="sticky-top" mode="ios" [value]="toggle" (ionChange)="segmentChanged($event)">
-    <ion-segment-button value="FINISHED">
-      <ion-label>{{ 'FINISHED' | translate }}</ion-label>
+    <ion-segment-button value="HISTORY">
+      <ion-label>{{ 'HISTORY' | translate }}</ion-label>
     </ion-segment-button>
     <ion-segment-button value="CANCELLED">
       <ion-label>{{ 'CANCELLED' | translate }}</ion-label>
     </ion-segment-button>
   </ion-segment>
   <ion-progress-bar type="indeterminate" *ngIf="progress"></ion-progress-bar>
-  <ng-container *ngIf="toggle === 'FINISHED'">
+  <ng-container *ngIf="toggle === 'HISTORY'">
     <ion-list lines="none" *ngIf="finished$ && totalFinished > 0; else notFound">
-      <ion-item>
-        <ion-label>Hola</ion-label>
-      </ion-item>
       <ng-container *ngFor="let item of finished$ | async">
         <app-service-status-list [item]="item"></app-service-status-list>
       </ng-container>

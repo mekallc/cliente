@@ -1,15 +1,16 @@
-import { Injectable } from '@angular/core';
-import { App, AppInfo } from '@capacitor/app';
-import { Device, DeviceInfo } from '@capacitor/device';
-import { TraslationService } from '@core/language/traslation.service';
-import { UtilsService } from '@core/services/utils.service';
-import { Globalization } from '@ionic-native/globalization/ngx';
-import { Platform } from '@ionic/angular';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { Geolocation, Position } from '@capacitor/geolocation';
 import { Store } from '@ngrx/store';
-import { AppState } from '@store/app.state';
+import { AppInfo } from '@capacitor/app';
+import { Platform } from '@ionic/angular';
+import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { Device, DeviceInfo } from '@capacitor/device';
+import { Geolocation, Position } from '@capacitor/geolocation';
+import { Globalization } from '@ionic-native/globalization/ngx';
+
 import * as actions from  '@store/actions';
+import { AppState } from '@store/app.state';
+import { UtilsService } from '@core/services/utils.service';
+import { TraslationService } from '@core/language/traslation.service';
 
 @Injectable({
   providedIn: 'root'
@@ -39,7 +40,7 @@ export class AppService {
       if (value) {
         this.traslate.use(value.split('-')[0]);
       } else {
-        this.traslate.use('en');
+        this.traslate.use('es');
       }
     }
   };

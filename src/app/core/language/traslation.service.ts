@@ -13,16 +13,14 @@ export class TraslationService {
     private translate: TranslateService
     ) {
     translate.addLangs(['en', 'es', 'pt']);
-    translate.setDefaultLang('es');
-    const browserLang = translate.getBrowserLang();
-    storage.getStorage('language').then(res => {
-      if(res === 2) {
-        translate.use(browserLang.match(/en|es/) ? browserLang : 'en');
-      } else if(res === 3) {
-        translate.use(browserLang.match(/en|es/) ? browserLang : 'pt');
-      } else {
-        translate.use(browserLang.match(/en|es/) ? browserLang : 'es');
+    storage.getStorage('oUser')
+    .then((res: any) => {
+      if(res) {
+        translate.use(res.language);
       }
+    })
+    .catch(err => {
+      translate.setDefaultLang('es');
     });
   }
 

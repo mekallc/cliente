@@ -19,6 +19,14 @@
           <ion-icon slot="start" name="build-outline"></ion-icon>
           <ion-label>{{ provider.typeCompany.name | translate |titlecase }}</ion-label>
         </ion-item>
+        <ion-item *ngIf="banner">
+          <ion-icon slot="start" name="call-outline"></ion-icon>
+          <ion-label>{{ provider.user.phone }}</ion-label>
+        </ion-item>
+        <ion-item *ngIf="banner">
+          <ion-icon slot="start" name="mail-outline"></ion-icon>
+          <ion-label>{{ provider.user.email }}</ion-label>
+        </ion-item>
         <ion-item *ngIf="provider.typeCompany.type !== 1">
           <ion-icon slot="start" name="business-outline"></ion-icon>
           <ion-label class="ion-text-wrap">{{ provider.address }}</ion-label>

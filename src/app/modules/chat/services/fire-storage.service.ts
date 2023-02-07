@@ -59,7 +59,8 @@ export class FireStorageService {
     let url;
     const currentDate = Date.now() + '.png';
     const filename = this.base64ToImage(file);
-    const path = `soporte/${room}/${currentDate}`; {
+    const path = `soporte/${room}/${currentDate}`;
+    {
       if (file) {
         try {
           const storageRef = ref(this.storage, path);

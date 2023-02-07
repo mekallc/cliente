@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Camera, CameraResultType } from '@capacitor/camera';
 import { StorageService } from '@core/services/storage.service';
 import { UtilsService } from '@core/services/utils.service';
-import { Observable, timer } from 'rxjs';
+import { Observable } from 'rxjs';
 import { IonContent } from '@ionic/angular';
 import { ChatFireService } from '@core/services/chat-fire.service';
 import { FireStorageService } from '@modules/chat/services/fire-storage.service';
@@ -16,8 +16,8 @@ import { MasterService } from '@core/services/master.service';
   styleUrls: ['room.page.scss'],
 })
 export class RoomChatPage implements OnInit {
+  @Input() uid: string;
   @ViewChild(IonContent, { static: false }) content: IonContent;
-  uid: string;
   activeMessage = false;
   public users = 0;
   public message = '';
@@ -36,7 +36,13 @@ export class RoomChatPage implements OnInit {
 
   ngOnInit(): void {
     this.activatedRoute.params
-    .subscribe(({uid}) => this.getData(uid));
+    .subscribe(({uid}) => {
+      if (uid) {
+        this.getData(uid);
+      } else {
+        this.getData(this.uid);
+      }
+    });
   }
 
   async onSubmit(): Promise<void> {
@@ -50,9 +56,10 @@ export class RoomChatPage implements OnInit {
   sendPush() {
     const data = {
       token: this.service.company.user.push,
-      title: `Tienes un mensaje de ${this.service.company.name}`,
-      body: `${this.message.slice(0, 50)}...`
-    }
+      title: `Tienes un mensaje de ${this.service.user.first_name}`,
+      body: `${this.message.slice(0, 50)}...`,
+    };
+    console.log(data);
     this.msService.postMaster('services/push/chat', data)
       .subscribe((res) => console.log(res));
   }
@@ -80,6 +87,10 @@ export class RoomChatPage implements OnInit {
 
   onClose(): void {
     this.uService.navigate('pages/home');
+  }
+
+  onCloseModal(): void {
+    this.uService.modalDimiss();
   }
 
   onEventInput(ev: any) {

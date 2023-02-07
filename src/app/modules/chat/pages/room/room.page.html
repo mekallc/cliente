@@ -1,18 +1,23 @@
 <ion-header class="ion-no-border">
   <ion-toolbar mode="ios">
-    <ion-buttons slot="start">
+    <ion-buttons slot="start" *ngIf="!uid">
       <ion-button (click)="onClose()">
         <ion-icon slot="icon-only" name="chevron-back" color="primary"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title>Chat Servicio</ion-title>
+    <ion-title>{{ 'SERVICE_CHAT' | translate }}</ion-title>
+    <ion-buttons slot="end" *ngIf="uid">
+      <ion-button (click)="onCloseModal()">
+        <ion-icon slot="icon-only" name="close" color="primary"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 <ion-content [scrollEvents]="true">
   <div class="mt-4 px-4">
     <ion-text color="medium">
       <p class="text-center" style="font-size: .8rem">
-        No intercambie informacion personal, su seguridad es lo mas importante....
+        {{ 'MESSAGE_CHAT' | translate }}
         <span style="display: block; font-weight: 700;">{{ uid }}</span>
       </p>
     </ion-text>
@@ -30,7 +35,7 @@
       rows="1"
       class="chat-input"
       [(ngModel)]="message"
-      placeholder="escribe aqui..."
+      [placeholder]="'WRITE' | translate"
       (keyup.enter)="onSubmit()"
       (ngModelChange)="onEventInput($event)"
     >

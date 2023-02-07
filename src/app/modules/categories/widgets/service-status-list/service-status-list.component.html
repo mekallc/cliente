@@ -1,9 +1,9 @@
 <ng-container *ngIf="item">
   <ion-item button [detail]="false" (click)="openService(item)">
     <ion-label>
-      <p class="date">{{ '09-01-2022' | amTimeAgo  }}</p>
-      <p>{{ item._id }}</p>
-      <h2 class="code">{{ item.category.name }}</h2>
+      <p class="date">{{ item.createdAt | amTimeAgo  }}</p>
+      <p>{{ item._id | slice:0:7 }}</p>
+      <h2 class="code">{{ item.category.name | translate }}</h2>
       <h2 class="vehicle"> {{ item.brand.name }} {{ item.model.name }} </h2>
     </ion-label>
     <ion-buttons slot="end">

@@ -1,6 +1,6 @@
 <ion-header class="ion-no-border">
   <ion-toolbar mode="ios">
-    <ion-title>Chat Soporte</ion-title>
+    <ion-title>{{ 'CHAT_SUPPORT' | translate }}</ion-title>
     <ion-buttons slot="start">
       <ion-button (click)="onClose()">
         <ion-icon slot="icon-only" name="chevron-back"></ion-icon>
@@ -12,7 +12,7 @@
   <div class="mt-4 px-4">
     <ion-text color="medium">
       <p class="text-center" style="font-size: .8rem">
-        No intercambie informacion personal, su seguridad es lo mas importante...
+        {{ 'MESSAGE_CHAT' | translate }}
       </p>
     </ion-text>
   </div>
@@ -29,10 +29,9 @@
       rows="1"
       class="chat-input"
       [(ngModel)]="message"
-      placeholder="escribe aqui..."
+      [placeholder]="'WRITE' | translate"
       (keyup.enter)="onSubmit()"
-      (ngModelChange)="onEventInput($event)"
-    >
+      (ngModelChange)="onEventInput($event)">
     </ion-input>
     <ion-buttons slot="primary">
       <ion-button  fill="clear" (click)="setCamera()" *ngIf="!activeMessage">

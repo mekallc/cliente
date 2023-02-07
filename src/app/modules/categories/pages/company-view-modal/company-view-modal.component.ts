@@ -17,6 +17,7 @@ export class CompanyViewModalComponent implements AfterViewInit {
 
   @Input() service: any;
   @Input() provider: any;
+  @Input() banner = false;
   @Input() fullHeight = false;
 
   constructor(
@@ -25,20 +26,13 @@ export class CompanyViewModalComponent implements AfterViewInit {
     private translate: TranslateService,
   ) { }
 
-    ngAfterViewInit() {
-      timer(500).subscribe(() => {
-        console.log('SERVICE ', this.service);
-        console.log('PROVIDER ', this.provider);
-      });
-    }
+    ngAfterViewInit() { }
 
   onClose = (): Promise<boolean> =>
     this.uService.modalDimiss();
 
   async sendServiceByProvider(): Promise<void> {
     const data = { company: this.service._id, status: 'in_process' };
-    console.log('SERVICE ', this.service);
-    console.log('PROVIDER ', this.provider);
     await this.uService.alert({
       header: 'Atención',
       message:this.translate.instant('DO_YOU_WANT_TO_SEND_THE_SERVICE_TO_THIS_PROVIDER'),
@@ -51,8 +45,6 @@ export class CompanyViewModalComponent implements AfterViewInit {
   };
 
   private async send(id: string, data: any): Promise<void> {
-    console.log(id);
-    console.log(data);
     await this.uService.load({message: this.translate.instant('PROCESSING')});
     this.store.dispatch(actions.itemUpdate({ id, data }));
     this.uService.loadDimiss();

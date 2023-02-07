@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { SocketService } from '@core/services/socket.service';
 
 @Component({
   selector: 'app-home',
@@ -6,6 +7,13 @@ import { Component } from '@angular/core';
   styleUrls: ['home.page.scss'],
 })
 
-export class HomePage  {
+export class HomePage implements OnInit {
+
+  constructor(
+    private sockerService: SocketService,
+  ) {}
+  ngOnInit(): void {
+    this.sockerService.getData();
+  }
 
 }

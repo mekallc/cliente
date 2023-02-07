@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AlertController, NavController } from '@ionic/angular';
 import { map } from 'rxjs/operators';
-import { Store } from '@ngrx/store';
+import { Store, ReducerManager } from '@ngrx/store';
 
 import { Login } from './interfaces';
 import { MasterService } from '@core/services/master.service';
@@ -20,6 +20,8 @@ export class AuthService {
     private store: Store<AppState>,
     private storage: StorageService,
     private alertCtrl: AlertController,
+    private reducers: ReducerManager,
+
   ) { }
 
   //TODO: Autoriza el accesso
@@ -41,6 +43,11 @@ export class AuthService {
   // TODO: Desloga la app
   async signOut(): Promise<boolean> {
     await this.storage.clearStorages();
+    this.reducers.removeReducers([
+      'user', 'item', 'rating',
+      'expert', 'cancelled', 'finished',
+      'score', 'banner',
+    ]);
     return this.navCtrl.navigateRoot('/user/signIn');
   };
 

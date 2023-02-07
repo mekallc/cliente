@@ -12,12 +12,15 @@ import { StorageService } from 'src/app/core/services/storage.service';
 export class IntroWidgetComponent implements OnInit {
 
   user$: Observable<any>;
+  user: any;
   constructor(
-    private store: Store<AppState>
+    private store: Store<AppState>,
+    private storage: StorageService,
   ) { }
 
-  ngOnInit() {
-    this.user$ = this.store.select('user').pipe(map((res: any) => res.user));
+  async ngOnInit() {
+    this.user = await this.storage.getStorage('oUser');
+    // this.user$ = this.store.select('user').pipe(map((res: any) => res.user));
   }
 
 }

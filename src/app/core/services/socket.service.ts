@@ -20,16 +20,10 @@ export class SocketService {
 
   getData() {
     this.socket.on('connection', data => {
-      console.log('CONNECTION', data);
       this.socket.fromEvent('changeMessage')
-      .subscribe((message) => {
-        console.log('SOCKET ', message);
-        this.setStates(message);
-      });
+      .subscribe((message) => this.setStates(message));
     });
-    this.socket.on('changeMessage', data => {
-      console.log(data);
-    });
+    this.socket.on('changeMessage', data => data);
   }
 
   getJoinSocketService(id: string) {

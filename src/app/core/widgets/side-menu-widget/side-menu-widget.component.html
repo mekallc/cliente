@@ -1,5 +1,5 @@
 <ion-menu side="end" menuId="first" contentId="main"
-  *ngIf="(user$ | async) as user">
+  *ngIf="user">
   <ion-header>
     <ion-toolbar>
       <ion-item lines="none" class="my-3">
@@ -9,12 +9,12 @@
         <ion-label>
           <h2>{{ user.first_name }} {{ user.last_name }}</h2>
           <h4>{{ user.email }}</h4>
-          <ng-container *ngIf="(score$ | async) as score">
+          <ng-container>
               <p style="color: var(--ion-color-warning) !important">
-                <span style="font-weight: 600;">{{ score.score.toFixed(1) }}</span>
-                <ion-icon color="warning" [name]="(score$ | async) === 0 ? 'star-outline': 'star'" class="ms-1"></ion-icon>
+                <span style="font-weight: 600;">{{ user.score.toFixed(1) }}</span>
+                <ion-icon color="warning" [name]="user.score === 0 ? 'star-outline': 'star'" class="ms-1"></ion-icon>
               </p>
-              <p class="nivel">{{ score.nivel }}</p>
+              <p class="nivel">{{ user.nivel }}</p>
           </ng-container>
         </ion-label>
       </ion-item>
@@ -71,7 +71,7 @@
   </ion-footer>
 </ion-menu>
 <ng-template #notAvatar>
-  <ion-avatar slot="start" *ngIf="(user$ | async) as user">
+  <ion-avatar slot="start">
     <div class="meka">
       <p>{{ getName(user.first_name, user.last_name) }}</p>
     </div>

@@ -8,6 +8,7 @@ import { UtilsService } from '@core/services/utils.service';
 import { MasterService } from '@core/services/master.service';
 import { StorageService } from '@core/services/storage.service';
 import { Socket } from 'ngx-socket-io';
+import { RateComponent } from '@modules/rate/rate.component';
 
 @Injectable({
   providedIn: 'root'
@@ -71,4 +72,14 @@ export class IntegratedService {
       this.uService.navigate('service-open');
     }
   }
+
+  // private async setRating(res: any) {
+  //   await this.uService.modal({
+  //     mode: 'ios',
+  //     initialBreakpoint: 0.9,
+  //     breakpoints: [0, 0.5, 1],
+  //     component: RateComponent,
+  //     componentProps: { service: res }
+  //   });
+  // }
 }

@@ -22,8 +22,9 @@ export class SignUpPage implements OnInit, AfterViewInit {
   countries$: Observable<any[]>;
   language: number;
   idioma = [
-    { name: 'Español (Latinoamerica)', id: 1 },
-    { name: 'Ingles (USA)', id: 2 }
+    { name: 'Español', id: 'es' },
+    { name: 'Ingles', id: 'en' },
+    { name: 'Portugués', id: 'pt' },
   ];
 
   constructor(
@@ -37,7 +38,6 @@ export class SignUpPage implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.loadForm();
-    console.log(this.registerForm);
     this.countries$ = this.ms.getMaster('tables/countries');
   }
 

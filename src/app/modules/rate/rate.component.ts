@@ -6,8 +6,6 @@ import { UtilsService } from '@core/services/utils.service';
 import { AppState } from '@store/app.state';
 import * as actions from '@store/actions';
 import { filter, map, Observable, timer } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
-import { ifError } from 'assert';
 import { Socket } from 'ngx-socket-io';
 
 @Component({
@@ -34,17 +32,14 @@ export class RateComponent implements OnInit {
   }
 
   async onSubmit(): Promise<void> {
-    await this.uService.load({message: 'Procesando...'});
+    await this.uService.load({message: 'Procesando...', duration: 500});
     this.getService().subscribe((item: any) => {
       const data = {
-        service: item._id,
         score_company: this.score,
-        user: item.user._id,
-        comment_company: this.comments,
+        comment_company: this.comments || '',
       };
       this.sendComments(item, data);
-      timer(1000).subscribe(() => {
-        this.uService.loadDimiss();
+      timer(500).subscribe(() => {
         this.uService.modalDimiss();
       });
     });
@@ -54,14 +49,13 @@ export class RateComponent implements OnInit {
     this.score = ev;
   }
 
-  private sendComments(item: any, data: any) {
-    this.ms.patch2Master(`comments/${item.comment._id}`, data).subscribe(() => {
-      item.status = 'closed';
-      this.store.dispatch(actions.itemClosed({
-        id: item._id,
-        data: item
-      }));
+  private sendComments(item: any, body: any) {
+    console.log(item._id);
+    const data = { _id: item._id, status: 'closed' };
+    this.ms.patch2Master(`comments/service/${item._id}`, body).subscribe((res) => {
+      console.log(res);
     });
+    this.store.dispatch(actions.itemClosed({ id: item._id,  data  }));
   }
 
   private getService() {
@@ -74,7 +68,7 @@ export class RateComponent implements OnInit {
           }
         })
       );
-    data$.subscribe(res => console.log(res));
+    data$.subscribe(res => res);
     return data$;
   }
 }

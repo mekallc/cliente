@@ -1,4 +1,4 @@
-<div id="intro" class="container my-3" *ngIf="(user$ | async) as user">
+<div id="intro" class="container my-3" *ngIf="user">
   <ion-label class="welcome">
     <h1>{{ "WIDGET.INTRO.HI" | translate }}, {{ user.first_name }}</h1>
     <p>{{ "WIDGET.INTRO.NEED_SOME_HELP_TODAY" | translate }}</p>

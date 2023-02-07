@@ -5,7 +5,8 @@
         <ion-icon slot="icon-only" name="close"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title>{{ 'TABS.SERVICES' | translate | titlecase }}</ion-title>
+    <ion-title></ion-title>
+    <!-- <ion-title>{{ 'TABS.SERVICES' | translate | titlecase }}</ion-title> -->
   </ion-toolbar>
 </ion-header>
 <ion-content>
@@ -13,7 +14,7 @@
     <ion-item>
       <ion-label>
         <h1 class="code">{{ res.status | translate | titlecase  }}</h1>
-        <h1 class="status"> {{ res._id }} </h1>
+        <h1 class="status"> {{ res._id | slice:0:7 }} </h1>
       </ion-label>
     </ion-item>
   </ion-list>
@@ -101,7 +102,7 @@
             </ion-item>
             <ion-item>
               <ion-label class="ion-text-wrap">
-                <h2 class="mb-3">Categorias: </h2>
+                <h2 class="mb-3">{{'CATEGORIES:'| translate}}</h2>
                 <ion-badge *ngFor="let item of res.company.categories" color="success" mode="ios" class="me-2">
                   {{ item.name | translate }}</ion-badge>
               </ion-label>
@@ -118,14 +119,14 @@
           <ion-list lines="none" slot="content">
             <ion-item>
               <ion-label class="ion-text-wrap ion-text-center">
-                <h2 class="">Tu clasificacion:</h2>
+                <h2 class="">{{ 'YOUR_CLASSIFICATION' | translate }}</h2>
                 <app-stars-widget [score]="res.comment.score_customer"></app-stars-widget>
               </ion-label>
             </ion-item>
             <ion-item>
               <ion-label class="ion-text-wrap">
-                <h2>Comentarios:</h2>
-                <p>{{ res.comment.comment_customer }}</p>
+                <h2>{{ 'SEE_COMMENT' | translate }}</h2>
+                <p>{{ res.comment.comment_customer || 'NOT_FOUND' | translate }}</p>
               </ion-label>
             </ion-item>
           </ion-list>

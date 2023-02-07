@@ -6,21 +6,21 @@ import { PostContentsWidgetComponent } from '@modules/contents/widget/post/post.
 import { RateApp } from 'capacitor-rate-app';
 import { AppState } from '@store/app.state';
 import { Store } from '@ngrx/store';
-import { filter, map } from 'rxjs/operators';
 import { Browser, OpenOptions } from '@capacitor/browser';
 import { UtilsService } from '@core/services/utils.service';
+import { StorageService } from '@core/services/storage.service';
 
 @Component({
   selector: 'app-side-menu-widget',
   templateUrl: './side-menu-widget.component.html',
   styleUrls: ['./side-menu-widget.component.scss'],
 })
-export class SideMenuWidgetComponent implements OnInit, AfterViewInit {
+export class SideMenuWidgetComponent implements AfterViewInit {
 
   @Input() appVersion: any;
   user$: Observable<any>;
   score$: Observable<any>;
-
+  user: any;
   appPages = [
     { title: 'Home', url: '/home', },
     { title: 'Roster', url: '/roster' }
@@ -39,27 +39,15 @@ export class SideMenuWidgetComponent implements OnInit, AfterViewInit {
 
   constructor(
     private menu: MenuController,
-    private store: Store<AppState>,
     private uService: UtilsService,
     private authService: AuthService,
+    private storage: StorageService,
   ) { }
 
-  ngOnInit() {
-    this.user$ = this.store.select('user')
-      .pipe(map((res: any) => res.user));
+  async ngAfterViewInit(): Promise<void> {
+    this.user = await this.storage.getStorage('oUser');
   }
 
-  ngAfterViewInit() {
-    this.getData();
-  }
-
-  getData() {
-    this.score$ = this.store.select('score')
-    .pipe(
-      filter(row => !row.loading),
-      map(({ item }: any) => item),
-    );
-  }
 
 
   async signOut(): Promise<void> {

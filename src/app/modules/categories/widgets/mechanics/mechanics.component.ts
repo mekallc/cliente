@@ -72,10 +72,8 @@ export class MechanicsComponent implements OnInit, AfterViewInit {
     console.log(item);
     await this.uService.load({ message: 'Procesando tu servicio...', duration: 750 });
     this.store.dispatch(actions.itemAdd({ item }));
-    timer(750).subscribe(() =>{
-      this.formReactive.reset();
-      this.uService.navigate('service-open');
-    });
+    this.formReactive.reset();
+    this.uService.navigate('service-open');
   };
 
   getBrand(ev: any): void {

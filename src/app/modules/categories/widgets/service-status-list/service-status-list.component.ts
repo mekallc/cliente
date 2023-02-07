@@ -24,7 +24,6 @@ export class ServiceStatusListComponent implements OnInit {
 
   ngOnInit() {
     timer(500).subscribe(() => console.log('ITEM ', this.item));
-    console.log('object');
   }
 
   async openService(res: any): Promise<void> {

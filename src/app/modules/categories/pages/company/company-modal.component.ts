@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
 import { filter, map, switchMap } from 'rxjs/operators';
@@ -19,7 +19,7 @@ import { UtilsService } from '@core/services/utils.service';
 })
 
 export class CompanyModalComponent implements OnInit {
-
+  @Input() header = false;
   item$: Observable<any>;
   provider$: Observable<any>;
   position: any;
@@ -87,6 +87,14 @@ export class CompanyModalComponent implements OnInit {
 
   loadPage = (service: any) => this.res = service;
 
+  onClose(status: boolean) {
+    if (status) {
+      this.uService.modalDimiss();
+    } else {
+      this.uService.navigate('/pages/home');
+    }
+  }
+
   async sendProviderService(service: any, provider: any): Promise<void> {
     const distance = this.getDistance(service, provider);
     service.distance = distance;
@@ -101,6 +109,7 @@ export class CompanyModalComponent implements OnInit {
           handler: async () => {
             await this.uService.load({ message: this.translate.instant('PROCESSING'), duration: 1500 });
             this.store.dispatch(actions.itemUpdate({ id: service._id, data: service }));
+            this.uService.modalDimiss();
             this.uService.navigate('/pages/home');
           }
         }
@@ -109,7 +118,6 @@ export class CompanyModalComponent implements OnInit {
   }
 
   async onViewProfileProvider(service: any, provider: any): Promise<void> {
-    console.log('PROVIDER ', provider);
     await this.uService.modal({
       mode: 'ios',
       initialBreakpoint: 0.95,
@@ -146,8 +154,12 @@ export class CompanyModalComponent implements OnInit {
     service.status = 'cacelled';
     await this.uService.load({ message: this.translate.instant('PROCESSING') });
     this.store.dispatch(actions.itemDelete({ id: service._id, data: service }));
-    this.uService.navigate('/pages/home');
     this.uService.loadDimiss();
+    if (this.header) {
+      this.uService.modalDimiss();
+    } else {
+      this.uService.navigate('/pages/home');
+    }
   }
 
   private sortProviderNearBord(objs: any) {

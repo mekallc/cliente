@@ -1,3 +1,4 @@
+import { TranslateModule } from '@ngx-translate/core';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
@@ -18,6 +19,7 @@ const routes: Routes = [
     IonicModule,
     FormsModule,
     CommonModule,
+    TranslateModule,
     MessageWidgetModule,
     RouterModule.forChild(routes),
   ],

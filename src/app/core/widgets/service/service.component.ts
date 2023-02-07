@@ -8,7 +8,9 @@ import { UtilsService } from '@core/services/utils.service';
 import { Socket } from 'ngx-socket-io';
 import { RateComponent } from '@modules/rate/rate.component';
 import { SocketService } from '@core/services/socket.service';
-
+import { CompanyModalComponent } from '@modules/categories/pages/company/company-modal.component';
+import { ChatFireService } from '@core/services/chat-fire.service';
+import { RoomChatPage } from '@modules/chat/pages/room/room.page';
 
 @Component({
   selector: 'app-service',
@@ -18,22 +20,42 @@ import { SocketService } from '@core/services/socket.service';
 export class ServiceComponent implements AfterViewInit {
 
   service$: Observable<any> = this.socket.fromEvent('changeMessage');
+  total$: Observable<number>;
 
   constructor(
     private socket: Socket,
-    private store: Store<AppState>,
-    private socketService: SocketService,
     private uService: UtilsService,
+    private chatFire: ChatFireService,
   ) { }
   ngAfterViewInit(): void {
     this.getData();
 
   }
+
   getData(): void {
-    this.service$.subscribe(async res => {
-      if (res.status === 'finished') {
-        await this.setRating(res);
-      }
+    this.service$.subscribe(async (res: any) => this.unreadMessage(res._id));
+  }
+
+  async goToChat(uid: string) {
+    await this.uService.modal({
+      component: RoomChatPage,
+      componentProps: { uid },
+      mode: 'ios',
+      initialBreakpoint: 1,
+      breakpoints: [0, .5, 1],
+    });
+  }
+
+  unreadMessage(service: string) {
+    this.total$ = this.chatFire.unReadMessages(1, service);
+  }
+
+  async goToOpenService() {
+    await this.uService.modal({
+      component: CompanyModalComponent,
+      mode: 'ios',
+      initialBreakpoint: 1,
+      breakpoints: [0, .5, .8, 1],
     });
   }
 
@@ -50,6 +72,7 @@ export class ServiceComponent implements AfterViewInit {
       componentProps: { res },
     });
   }
+
 
   private async setRating(res: any) {
     await this.uService.modal({
