@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
+import { TranslateModule } from '@ngx-translate/core';
+import { LanguageModule } from '@core/language/language.module';
 
 import { chatRoute } from './chat.routes';
 
@@ -9,6 +11,8 @@ import { chatRoute } from './chat.routes';
     chatRoute,
     IonicModule,
     CommonModule,
+    TranslateModule,
+    LanguageModule,
   ],
   providers: []
 })

@@ -1,17 +1,16 @@
-import { catchError } from 'rxjs/operators';
 /* eslint-disable no-underscore-dangle */
-import { StorageService } from '@core/services/storage.service';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { AlertController, LoadingController } from '@ionic/angular';
 import { Store } from '@ngrx/store';
-import { Observable, timer } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 import * as actions from '@store/actions';
 import { AppState } from '@store/app.state';
-import { MasterService } from '@core/services/master.service';
 import { UtilsService } from '@core/services/utils.service';
+import { MasterService } from '@core/services/master.service';
+import { StorageService } from '@core/services/storage.service';
+import { TraslationService } from '@core/language/traslation.service';
 
 @Component({
   selector: 'app-editar',
@@ -24,9 +23,9 @@ export class EditarComponent implements OnInit {
   countries$: Observable<any[]>;
   language: number;
   idioma = [
-    { name: 'Español (Latinoamerica)', iso: 'es', id: 1 },
-    { name: 'Ingles (USA)', iso: 'en', id: 2 },
-    { name: 'Portugues (Brasil)', iso: 'po', id: 3 }
+    { name: 'Español', id: 'es' },
+    { name: 'Ingles', id: 'en' },
+    { name: 'Portugués', id: 'pt' },
   ];
   constructor(
     private fb: FormBuilder,
@@ -34,6 +33,7 @@ export class EditarComponent implements OnInit {
     private store: Store<AppState>,
     private uService: UtilsService,
     private storage: StorageService,
+    private traslationService: TraslationService,
   ) { }
 
   ngOnInit() {
@@ -50,8 +50,9 @@ export class EditarComponent implements OnInit {
   async onSubmit(): Promise<void> {
     if(this.registerForm.invalid) { return; }
     const data = this.registerForm.value;
+    console.log(data);
+    this.traslationService.use(data.language);
     await this.uService.load({message: 'Procesando...'});
-    await this.storage.setStorageValue('language', data.language);
     this.processingData(this.user._id, data);
   };
 
@@ -69,12 +70,15 @@ export class EditarComponent implements OnInit {
   loadData = () => {
     if (this.user) {
       const res = this.user;
-      this.registerForm.controls.first_name.setValue(res.first_name);
-      this.registerForm.controls.last_name.setValue(res.last_name);
-      this.registerForm.controls.email.setValue(res.email);
-      this.registerForm.controls.phone.setValue(res.phone);
-      this.registerForm.controls.country.setValue(res.country);
-      this.registerForm.controls.language.setValue(+res.language);
+      console.log(res);
+      this.registerForm.patchValue({
+        first_name: res.first_name,
+        last_name: res.last_name,
+        email: res.email,
+        phone: res.phone,
+        country: res.country._id,
+        language: res.language
+      });
     }
   };
 
@@ -90,10 +94,12 @@ export class EditarComponent implements OnInit {
         });
       })
     )
-    .subscribe(
-      (user: any) => {
+    .subscribe(async (user: any) => {
+        console.log(user);
         this.uService.loadDimiss();
         this.store.dispatch(actions.loadUser(user));
+        await this.storage.setStorage('oUser', user);
+        this.uService.navigate('/pages/home');
       },
     );
   }

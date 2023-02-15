@@ -1,7 +1,7 @@
 <ng-container *ngIf="item">
   <ion-item button [detail]="false" (click)="openService(item)">
     <ion-label>
-      <p class="date">{{ item.createdAt | amTimeAgo  }}</p>
+      <p class="date">{{ item.createdAt | amLocale: language | amTimeAgo  }}</p>
       <p>{{ item._id | slice:0:7 }}</p>
       <h2 class="code">{{ item.category.name | translate }}</h2>
       <h2 class="vehicle"> {{ item.brand.name }} {{ item.model.name }} </h2>

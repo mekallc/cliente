@@ -37,6 +37,7 @@ export class AppService {
     const info: DeviceInfo = await Device.getInfo();
     if (info.platform !== 'web') {
       const { value } = await this.global.getPreferredLanguage();
+      console.log(value);
       if (value) {
         this.traslate.use(value.split('-')[0]);
       } else {

@@ -48,6 +48,7 @@ export class SignUpPage implements OnInit, AfterViewInit {
     const data = this.registerForm.value;
     await this.getDataForm(data);
     await this.uService.load({message: this.translate.instant('PROCESSING')});
+    this.translate.use(data.language);
     this.auth.signUp(this.registerForm.value).subscribe(
       async () => {
         this.uService.loadDimiss();
@@ -73,7 +74,7 @@ export class SignUpPage implements OnInit, AfterViewInit {
       phone: ['', Validators.required],
       country: ['', Validators.required],
       password: ['', Validators.required],
-      language: [1],
+      language: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       last_name: ['', [Validators.required, Validators.minLength(4)]],
       first_name: ['', [Validators.required, Validators.minLength(4)]],

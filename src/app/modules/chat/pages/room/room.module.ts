@@ -1,13 +1,14 @@
-import { TranslateModule } from '@ngx-translate/core';
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
+import { RouterModule, Routes } from '@angular/router';
 
 import { RoomChatPage } from './room.page';
-import { RouterModule, Routes } from '@angular/router';
-import { FormsModule } from '@angular/forms';
-import { MessageWidgetModule } from '../../widget/message/message.module';
 import { CoreModule } from '@core/core.module';
+import { LanguageModule } from '@core/language/language.module';
+import { MessageWidgetModule } from '../../widget/message/message.module';
 
 const routes: Routes = [
   { path: ':uid', component: RoomChatPage }
@@ -20,6 +21,7 @@ const routes: Routes = [
     FormsModule,
     CommonModule,
     TranslateModule,
+    LanguageModule,
     MessageWidgetModule,
     RouterModule.forChild(routes),
   ],

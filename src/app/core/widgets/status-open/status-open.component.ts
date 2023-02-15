@@ -5,7 +5,6 @@ import { AppState } from '@store/app.state';
 import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { UtilsService } from '@core/services/utils.service';
-import { Socket } from 'ngx-socket-io';
 import { RateComponent } from '@modules/rate/rate.component';
 import { SocketService } from '@core/services/socket.service';
 import { CompanyModalComponent } from '@modules/categories/pages/company/company-modal.component';
@@ -21,7 +20,6 @@ export class StatusOpenComponent implements AfterViewInit {
 
   constructor(
     private store: Store<AppState>,
-    private socketService: SocketService,
     private uService: UtilsService,
   ) { }
   ngAfterViewInit(): void {

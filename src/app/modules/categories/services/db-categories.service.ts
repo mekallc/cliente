@@ -25,6 +25,9 @@ export class DbCategoriesService {
   getBrand = (type: any) =>
     this.ms.getMaster(`tables/brands`);
 
+    getBrandByType = (type: any) =>
+    this.ms.getMaster(`tables/brands/type/${type}`);
+
   //TODO: Get los modelos por marcas
   getModel = (brand: any) =>
     this.ms.getMaster(`tables/models/brand/${brand}`);

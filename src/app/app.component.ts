@@ -50,7 +50,6 @@ export class AppComponent implements OnInit, OnDestroy {
   appStateChange = () => {
     App.addListener('appStateChange',
     async ({ isActive }) => {
-      console.log('Is Active: ', isActive);
       if (isActive) {
         this.modalCtrl.dismiss();
         this.token.validate();
@@ -64,7 +63,7 @@ export class AppComponent implements OnInit, OnDestroy {
   };
 
   activate(ev: any) {
-    console.log('Component:', ev);
+    return null;
   }
 
   private async getLoadAppMobile(): Promise<void> {

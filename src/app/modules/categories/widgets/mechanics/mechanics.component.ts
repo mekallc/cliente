@@ -5,6 +5,7 @@ import { filter, map, Observable, timer } from 'rxjs';
 import {v4 as uuidv4} from 'uuid';
 
 import { Geolocation } from '@capacitor/geolocation';
+import { TranslateService } from '@ngx-translate/core';
 import { UtilsService } from '@core/services/utils.service';
 import { CameraService } from '@core/services/camera.service';
 import { DbCategoriesService } from '@modules/categories/services/db-categories.service';
@@ -46,6 +47,7 @@ export class MechanicsComponent implements OnInit, AfterViewInit {
     private db: DbCategoriesService,
     private cameraService: CameraService,
     private storageService: FireStorageService,
+    private translate: TranslateService
   ) { }
 
   ngOnInit() {
@@ -70,14 +72,14 @@ export class MechanicsComponent implements OnInit, AfterViewInit {
     const item: any = this.formReactive.value;
     item.pictures = this.capture;
     console.log(item);
-    await this.uService.load({ message: 'Procesando tu servicio...', duration: 750 });
+    await this.uService.load({ message: this.translate.instant('PROCCESSING'), duration: 750 });
     this.store.dispatch(actions.itemAdd({ item }));
     this.formReactive.reset();
     this.uService.navigate('service-open');
   };
 
   getBrand(ev: any): void {
-    this.brands$ = this.db.getBrand(ev.detail.value);
+    this.brands$ = this.db.getBrandByType(ev.detail.value);
   };
 
   getModels(ev: any): void {

@@ -6,6 +6,8 @@ import { CompanyViewModalComponent } from './company-view-modal.component';
 import * as mapbox from 'mapbox-gl';
 import { environment } from 'src/environments/environment';
 import { AgmCoreModule } from '@agm/core';
+import { MomentModule } from 'ngx-moment';
+import { StarsWidgetModule } from '@modules/rate/widgets/stars/stars.module';
 
 (mapbox as any).accessToken = environment.mapbox;
 
@@ -18,6 +20,8 @@ import { AgmCoreModule } from '@agm/core';
     IonicModule,
     TranslateModule,
     AgmCoreModule,
+    MomentModule,
+    StarsWidgetModule,
   ]
 })
 

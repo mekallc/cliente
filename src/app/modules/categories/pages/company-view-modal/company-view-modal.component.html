@@ -91,12 +91,23 @@
         <ion-icon slot="start" name="chatbubble-outline"></ion-icon>
         <ion-label><strong>{{ 'COMMENTS' | translate | titlecase }}</strong></ion-label>
       </ion-item>
-      <ion-list slot="content" lines="none">
-        <ion-item class="map-wrapper">
-          <ion-label>
-            <h1 class="ion-padding-horizontal">{{ 'NOT_FOUND' | translate | titlecase }}</h1>
-          </ion-label>
-        </ion-item>
+      <ion-list slot="content">
+        <ng-container *ngIf="(comments$ | async) as comments; else notFound">
+          <ion-item *ngFor="let comment of comments">
+            <ion-label>
+              <app-stars-widget [score]="comment.score_company"></app-stars-widget>
+              <p>{{ comment.updatedAt | amLocale: language | amTimeAgo  }}</p>
+              <p>{{ comment.comment_company || 'NOT_FOUND' | translate }}</p>
+            </ion-label>
+          </ion-item>
+        </ng-container>
+        <ng-template #notFound>
+          <ion-item class="map-wrapper">
+            <ion-label>
+              <h1 class="ion-padding-horizontal">{{ 'NOT_FOUND' | translate | titlecase }}</h1>
+            </ion-label>
+          </ion-item>
+        </ng-template>
       </ion-list>
     </ion-accordion>
   </ion-accordion-group>

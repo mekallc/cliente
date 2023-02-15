@@ -1,6 +1,6 @@
+import { StorageService } from '@core/services/storage.service';
 import { Component, Input, OnInit } from '@angular/core';
 import { Observable, of, timer } from 'rxjs';
-import { NavController } from '@ionic/angular';
 import { UtilsService } from '@core/services/utils.service';
 import { WaitingComponent } from '@modules/categories/pages/waiting/waiting.component';
 
@@ -14,16 +14,15 @@ export class ServiceStatusListComponent implements OnInit {
   @Input() item: any;
   items$: Observable<any|undefined>;
   total: number;
+  language: string;
 
   constructor(
-    private uService: UtilsService
+    private uService: UtilsService,
+    private storage: StorageService,
   ) { }
 
-
-
-
-  ngOnInit() {
-    timer(500).subscribe(() => console.log('ITEM ', this.item));
+  async ngOnInit() {
+    await this.getLanguage();
   }
 
   async openService(res: any): Promise<void> {
@@ -34,5 +33,12 @@ export class ServiceStatusListComponent implements OnInit {
       componentProps: { res },
       component: WaitingComponent
     });
+  }
+
+  private async getLanguage() {
+    const user = await this.storage.getStorage('oUser');
+    if (user) {
+      this.language = user.language;
+    }
   }
 }

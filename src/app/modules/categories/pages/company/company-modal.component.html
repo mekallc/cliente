@@ -12,7 +12,7 @@
   <ng-container *ngIf="(item$ | async) as item">
     <ion-fab vertical="bottom" horizontal="end" slot="fixed">
       <ion-fab-button color="danger" (click)="onCancelService(item)">
-        <ion-icon name="trash"></ion-icon>
+        <ion-icon name="close"></ion-icon>
       </ion-fab-button>
     </ion-fab>
     <ion-segment mode="ios" [value]="value" (ionChange)="segment($event)">

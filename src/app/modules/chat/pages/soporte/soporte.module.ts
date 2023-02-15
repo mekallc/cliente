@@ -23,6 +23,7 @@ const routes: Routes = [
     CommonModule,
     HeaderModule,
     TranslateModule,
+    LanguageModule,
     ReactiveFormsModule,
     MessageWidgetModule,
     RouterModule.forChild(routes),

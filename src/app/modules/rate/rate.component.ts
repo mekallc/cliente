@@ -1,6 +1,8 @@
 /* eslint-disable no-underscore-dangle */
 import { Component, Input, OnInit } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import { Store } from '@ngrx/store';
+
 import { MasterService } from '@core/services/master.service';
 import { UtilsService } from '@core/services/utils.service';
 import { AppState } from '@store/app.state';
@@ -25,6 +27,7 @@ export class RateComponent implements OnInit {
     private ms: MasterService,
     private store: Store<AppState>,
     private uService: UtilsService,
+    private translate: TranslateService,
   ) { }
 
   ngOnInit(): void {
@@ -32,16 +35,12 @@ export class RateComponent implements OnInit {
   }
 
   async onSubmit(): Promise<void> {
-    await this.uService.load({message: 'Procesando...', duration: 500});
+    await this.uService.load({message: this.translate.instant('PROCCESSING'), duration: 500});
     this.getService().subscribe((item: any) => {
-      const data = {
-        score_company: this.score,
-        comment_company: this.comments || '',
-      };
-      this.sendComments(item, data);
-      timer(500).subscribe(() => {
-        this.uService.modalDimiss();
-      });
+      item.status = 'closed';
+      const data = { id: item._id, data: item };
+      this.store.dispatch(actions.itemClosed(data));
+      this.sendComments(item.comment._id);
     });
   }
 
@@ -49,13 +48,14 @@ export class RateComponent implements OnInit {
     this.score = ev;
   }
 
-  private sendComments(item: any, body: any) {
-    console.log(item._id);
-    const data = { _id: item._id, status: 'closed' };
-    this.ms.patch2Master(`comments/service/${item._id}`, body).subscribe((res) => {
-      console.log(res);
+  private sendComments(id: string) {
+    const body = {
+      score_company: this.score,
+      comment_company: this.comments || '',
+    };
+    this.ms.patch2Master(`comments/${id}`, body).subscribe((res) => {
+      timer(300).subscribe(() => this.uService.modalDimiss());
     });
-    this.store.dispatch(actions.itemClosed({ id: item._id,  data  }));
   }
 
   private getService() {
@@ -68,7 +68,7 @@ export class RateComponent implements OnInit {
           }
         })
       );
-    data$.subscribe(res => res);
+    data$.subscribe(res => console.log(res));
     return data$;
   }
 }

@@ -89,6 +89,7 @@ export class SignInPage implements OnInit {
     }))
     .subscribe(async (res: any) => {
       this.uService.loadDimiss();
+      this.translate.use(res.user.language);
       await this.storage.setStorage('oAccess', res.access);
       await this.storage.setStorage('oUser', res.user);
       this.store.dispatch(actions.loadUser(res));

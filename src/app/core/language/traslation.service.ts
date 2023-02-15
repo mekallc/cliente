@@ -17,6 +17,8 @@ export class TraslationService {
     .then((res: any) => {
       if(res) {
         translate.use(res.language);
+      } else {
+        translate.setDefaultLang('es');
       }
     })
     .catch(err => {

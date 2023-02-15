@@ -1,3 +1,4 @@
+import { StorageService } from '@core/services/storage.service';
 /* eslint-disable no-underscore-dangle */
 import { AfterViewInit, Component, Input } from '@angular/core';
 import { Store } from '@ngrx/store';
@@ -6,7 +7,8 @@ import { TranslateService } from '@ngx-translate/core';
 import * as actions from '@store/actions';
 import { AppState } from '@store/app.state';
 import { UtilsService } from '@core/services/utils.service';
-import { timer } from 'rxjs';
+import { Observable, timer } from 'rxjs';
+import { MasterService } from '@core/services/master.service';
 
 @Component({
   selector: 'app-company-view-modal',
@@ -19,14 +21,20 @@ export class CompanyViewModalComponent implements AfterViewInit {
   @Input() provider: any;
   @Input() banner = false;
   @Input() fullHeight = false;
-
+  language!: string;
+  comments$!: Observable<any[]>;
   constructor(
+    private ms: MasterService,
     private store: Store<AppState>,
     private uService: UtilsService,
+    private storage: StorageService,
     private translate: TranslateService,
   ) { }
 
-    ngAfterViewInit() { }
+    async ngAfterViewInit() {
+      this.getComments();
+      await this.getLanguage();
+    }
 
   onClose = (): Promise<boolean> =>
     this.uService.modalDimiss();
@@ -43,6 +51,16 @@ export class CompanyViewModalComponent implements AfterViewInit {
       ]
     });
   };
+
+  getComments() {
+    this.comments$ = this.ms.getMaster(`comments/company/${this.provider.user._id}`);
+    this.comments$.subscribe(res => console.log(res));
+  }
+
+  private async getLanguage() {
+    const { language } = await this.storage.getStorage('oUser');
+    this.language = language;
+  }
 
   private async send(id: string, data: any): Promise<void> {
     await this.uService.load({message: this.translate.instant('PROCESSING')});

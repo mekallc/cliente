@@ -47,14 +47,15 @@ export class RatingModalComponent implements OnInit {
       comment_company: this.form.value.comment,
     };
     await this.uService.load({ message: this.translate.instant('PROCESSING'), duration: 1300 });
-    this.ms.patchMaster('comments/service', this.service._id, data)
-    .subscribe((res) => {
-      this.store.dispatch(action.itemClosed({
-        id: this.service._id,
-        data: { status: 'closed' }
-      }));
-      timer(1500).subscribe(() => this.uService.modalDimiss());
-    });
+    console.log(data);
+    // this.ms.patchMaster('comments/service', this.service._id, data)
+    // .subscribe((res) => {
+    //   this.store.dispatch(action.itemClosed({
+    //     id: this.service._id,
+    //     data: { status: 'closed' }
+    //   }));
+    //   timer(1500).subscribe(() => this.uService.modalDimiss());
+    // });
   };
 
   getStar(ev: number): void {

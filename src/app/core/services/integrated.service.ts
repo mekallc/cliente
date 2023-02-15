@@ -8,7 +8,6 @@ import { UtilsService } from '@core/services/utils.service';
 import { MasterService } from '@core/services/master.service';
 import { StorageService } from '@core/services/storage.service';
 import { Socket } from 'ngx-socket-io';
-import { RateComponent } from '@modules/rate/rate.component';
 
 @Injectable({
   providedIn: 'root'

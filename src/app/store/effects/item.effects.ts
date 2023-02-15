@@ -73,7 +73,7 @@ export class ItemEffects {
       ofType(actions.itemClosed),
       mergeMap(({ id, data }) => this.changeStatusService(id, data)
         .pipe(
-          map(() => actions.itemLoaded({ item: null })),
+          map((item: any) => actions.itemLoaded({ item })),
           catchError(async ({ error }) => actions.itemError({ error }))
         )
       )
@@ -84,7 +84,6 @@ export class ItemEffects {
     private socket: Socket,
     private ms: MasterService,
     private actions$: Actions,
-    private uService: UtilsService,
     private db: DbCategoriesService,
     private storage: StorageService,
     private firestore: ChatFireService,

@@ -31,11 +31,6 @@ const config: CapacitorConfig = {
     allowMixedContent: true
   },
   cordova: {
-    // preferences: {
-    //   LottieFullScreen: 'true',
-    //   LottieHideAfterAnimationEnd: 'true',
-    //   LottieAnimationLocation: 'public/assets/splash.json'
-    // }
   },
   // server: {
   //   cleartext: true,
