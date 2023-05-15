@@ -1,4 +1,8 @@
 {
+  "TERM": "Acepto los terminos y condiciones ",
+  "LGPD": "Al continuar, acepta recibir llamadas y mensajes SMS o WhatsApp.",
+  "USER_NOT_EXIST": "Usuário no registrado",
+  "Invalid user credentials": "Usuário o contraseña invalida",
   "MECANICS": "MECÁNICO",
   "AUTO_PARTS": "AUTO PARTES",
   "Cash": "Dinero",

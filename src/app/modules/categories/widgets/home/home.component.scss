@@ -1,5 +1,6 @@
 #categories {
   .box {
+    background: #fff;
     display: flex;
     height: 100px;
     padding: .35rem;
@@ -19,6 +20,7 @@
       margin-top: 10px;
       margin-bottom: 0px;
       font-size: .65rem;
+      line-height: 15px;
     }
   }
 }

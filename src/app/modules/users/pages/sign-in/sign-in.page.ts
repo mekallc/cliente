@@ -19,7 +19,7 @@ import * as actions from '@store/actions';
 export class SignInPage implements OnInit {
   @ViewChild('slides') slides: IonSlides;
   options = { initialSlide: 0, };
-
+  active = true;
   loginForm: FormGroup;
   forgotPasswordForm: FormGroup;
 
@@ -51,8 +51,12 @@ export class SignInPage implements OnInit {
         this.uService.loadDimiss();
         await this.storage.setStorage('oChange', res);
         const opts: AlertOptions = {
-          header: 'INFO', buttons: ['Ok'],
-          message: 'A code was sent to your email',
+          header: 'INFO',
+          message: this.translate.instant('SIGN.MESSAGE_FORGOT'),
+          buttons: [{
+            text: 'Ok',
+            handler: ()  => this.active = true
+          }],
         };
         await this.uService.alert(opts);
       }
@@ -84,16 +88,23 @@ export class SignInPage implements OnInit {
       this.uService.loadDimiss();
       await this.uService.alert({
         mode:'ios', header: 'Error', buttons: ['OK'],
-        message: error.error_description || error.message,
+        message: this.translate.instant(error.error.error_description || error.error.message),
       });
     }))
     .subscribe(async (res: any) => {
       this.uService.loadDimiss();
-      this.translate.use(res.user.language);
-      await this.storage.setStorage('oAccess', res.access);
-      await this.storage.setStorage('oUser', res.user);
-      this.store.dispatch(actions.loadUser(res));
-      this.uService.navigate('/pages/home');
+      if (res === null) {
+        await this.uService.alert({
+          mode:'ios', header: 'Error', buttons: ['OK'],
+          message: this.translate.instant('USER_NOT_EXIST'),
+        });
+      } else if(res !== undefined) {
+        this.translate.use(res?.user.language);
+        await this.storage.setStorage('oAccess', res.access);
+        await this.storage.setStorage('oUser', res.user);
+        this.store.dispatch(actions.loadUser(res));
+        this.uService.navigate('/pages/home');
+      }
     });
   }
 }

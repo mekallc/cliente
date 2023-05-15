@@ -15,13 +15,13 @@
               <ion-label>{{ "BRAND" | translate | titlecase }}</ion-label>
               <ion-select interface="action-sheet" placeholder="Select..." formControlName="brand"
                 (ionChange)="getModels($event)">
-                <ion-select-option [value]="item._id"  *ngFor="let item of brands$ | async">{{ item.name }}</ion-select-option>
+                <ion-select-option [value]="item._id"  *ngFor="let item of brands$ | async">{{ item.name | uppercase }}</ion-select-option>
               </ion-select>
             </ion-item>
             <ion-item class="mb-2">
               <ion-label>{{ "MODEL" | translate | titlecase }}</ion-label>
               <ion-select interface="action-sheet" placeholder="Select..." formControlName="vehicle_model" formControlName="model">
-                <ion-select-option [value]="item._id"  *ngFor="let item of models$ | async">{{ item.name }}</ion-select-option>
+                <ion-select-option [value]="item._id"  *ngFor="let item of models$ | async">{{ item.name | uppercase }}</ion-select-option>
               </ion-select>
             </ion-item>
             <ion-item>
@@ -60,7 +60,7 @@
   </div>
   <div class="row justify-content-center mt-4">
     <div class="col-6">
-      <ion-button  expand="block" color="warning" (click)="onSubmit()">
+      <ion-button  expand="block" color="warning" (click)="onSubmit()" [disabled]="formReactive.invalid">
         {{ "GLOBAL.SEND" | translate | uppercase }}
       </ion-button>
     </div>

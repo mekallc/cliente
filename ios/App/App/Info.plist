@@ -30,6 +30,8 @@
 	<array>
 		<string>armv7</string>
 	</array>
+  <key>NSUserTrackingUsageDescription</key>
+  <string>Your data will be used to deliver personalized ads to you.</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
@@ -62,8 +64,6 @@
 	<string>To add images</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>To store images</string>
-  <key>UIFileSharingEnabled</key>
-  <string>Application supports iTunes file sharing</string>
   <key>LSSupportsOpeningDocumentsInPlace</key>
   <string>Supports opening documents in place</string>
   <key>NSLocationAlwaysUsageDescription</key>

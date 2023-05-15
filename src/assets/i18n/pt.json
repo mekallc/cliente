@@ -1,4 +1,8 @@
 {
+  "TERM": "Aceito os termos e condições",
+  "LGPD": "Ao continuar, você concorda em receber chamadas e mensagens SMS ou pelo WhatsApp.",
+  "USER_NOT_EXIST": "Usuário não cadastrado",
+  "Invalid user credentials": "Usuário ou senha invalida",
   "MECANICS": "MECÁNICA",
   "AUTO_PARTS": "PEÇAS",
   "Cash": "Dinheiro",
@@ -165,4 +169,3 @@
     "SEND": "Avaliar o serviço"
   }
 }
-

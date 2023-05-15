@@ -29,11 +29,6 @@
         [longitude]="position.longitude"
         [zoom]="16"
         [disableDefaultUI]="false">
-        <!-- <agm-marker
-          [iconUrl]="pathIcon"
-          [latitude]="position.latitude"
-          [longitude]="position.longitude">
-        </agm-marker> -->
         <agm-marker *ngFor="let provider of provider$ | async as list"
           [iconUrl]="provider.typeCompany.icon"
           [latitude]="provider.latitude"

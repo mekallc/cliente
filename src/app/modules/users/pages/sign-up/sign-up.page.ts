@@ -46,7 +46,15 @@ export class SignUpPage implements OnInit, AfterViewInit {
   onSubmit = async () => {
     if(this.registerForm.invalid) { return; }
     const data = this.registerForm.value;
-    await this.getDataForm(data);
+    if(!data.term || !data.lgpd) {
+      await this.uService.alert({
+        mode: 'ios',
+        message: this.translate.instant('SIGN.ERROR_TERM_LGPD'),
+        buttons: ['OK']
+      });
+      return;
+    }
+    await this.storage.setStorageValue('language', data.language);
     await this.uService.load({message: this.translate.instant('PROCESSING')});
     this.translate.use(data.language);
     this.auth.signUp(this.registerForm.value).subscribe(
@@ -71,6 +79,8 @@ export class SignUpPage implements OnInit, AfterViewInit {
   loadForm = () => {
     this.registerForm = this.fb.group({
       picture: [''],
+      lgpd: [, Validators.required],
+      term: [, Validators.required],
       phone: ['', Validators.required],
       country: ['', Validators.required],
       password: ['', Validators.required],
@@ -83,18 +93,20 @@ export class SignUpPage implements OnInit, AfterViewInit {
 
   onBack = () => this.uService.navigate('/user/signIn');
 
-  takePicture = async () => {
+  async takePicture(): Promise<void> {
     const image = await Camera.getPhoto({
       quality: 80, allowEditing: false,
       resultType: CameraResultType.DataUrl,
     });
-    this.avatar =  image.dataUrl;
+    this.avatar = image.dataUrl;
+    const url = await this.auth.uploadAvatar(image.dataUrl);
+    this.registerForm.controls.picture.setValue(url);
+    console.log(url);
   };
 
-  private getDataForm = async (data: any): Promise<void> => {
-    this.constructImage();
-    await this.storage.setStorageValue('language', data.language);
-  };
+  // private getDataForm = async (data: any): Promise<void> => {
+  //   await this.storage.setStorageValue('language', data.language);
+  // };
 
   private constructImage = () => {
     if (this.avatar) {

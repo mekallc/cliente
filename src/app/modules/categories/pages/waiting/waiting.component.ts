@@ -24,15 +24,12 @@ export class WaitingComponent implements OnInit {
   slideOpts = { spaceBetween: 10, slidesPerView: 2.3, };
 
   constructor(
-    private ms: MasterService,
     private store: Store<AppState>,
     private uService: UtilsService,
     private translate: TranslateService,
   ) { }
 
-  ngOnInit() {
-    timer(500).subscribe(() => console.log('WAITING ', this.res));
-  }
+  ngOnInit() {}
 
   async onChat(uid: string): Promise<void> {
     this.uService.modalDimiss();

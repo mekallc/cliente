@@ -36,10 +36,10 @@
   <div class="container mt-4">
     <ion-segment value="editar" (ionChange)="segmentChanged($event)" mode="ios">
       <ion-segment-button value="editar">
-        <ion-label>{{ "SIGN.EDIT" | translate | titlecase }}</ion-label>
+        {{ "SIGN.EDIT" | translate | titlecase }}
       </ion-segment-button>
       <ion-segment-button value="password">
-        <ion-label>{{ "SIGN.FORGOT_PWD" | translate | titlecase }}</ion-label>
+        {{ "SIGN.FORGOT_PWD" | translate | titlecase }}
       </ion-segment-button>
     </ion-segment>
     <app-editar [user]="user" *ngIf="segment ==='editar'; else change"></app-editar>

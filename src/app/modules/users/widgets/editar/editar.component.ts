@@ -11,6 +11,7 @@ import { UtilsService } from '@core/services/utils.service';
 import { MasterService } from '@core/services/master.service';
 import { StorageService } from '@core/services/storage.service';
 import { TraslationService } from '@core/language/traslation.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-editar',
@@ -33,6 +34,7 @@ export class EditarComponent implements OnInit {
     private store: Store<AppState>,
     private uService: UtilsService,
     private storage: StorageService,
+    private translate: TranslateService,
     private traslationService: TraslationService,
   ) { }
 
@@ -50,9 +52,8 @@ export class EditarComponent implements OnInit {
   async onSubmit(): Promise<void> {
     if(this.registerForm.invalid) { return; }
     const data = this.registerForm.value;
-    console.log(data);
     this.traslationService.use(data.language);
-    await this.uService.load({message: 'Procesando...'});
+    await this.uService.load({message: this.translate.instant('PROCESSING')});
     this.processingData(this.user._id, data);
   };
 
@@ -62,7 +63,6 @@ export class EditarComponent implements OnInit {
       first_name: ['', [Validators.required, Validators.minLength(4)]],
       last_name: ['', [Validators.required, Validators.minLength(4)]],
       phone: ['', Validators.required],
-      country: ['', Validators.required],
       language: ['', Validators.required]
     });
   };
@@ -70,13 +70,11 @@ export class EditarComponent implements OnInit {
   loadData = () => {
     if (this.user) {
       const res = this.user;
-      console.log(res);
       this.registerForm.patchValue({
         first_name: res.first_name,
         last_name: res.last_name,
         email: res.email,
         phone: res.phone,
-        country: res.country._id,
         language: res.language
       });
     }

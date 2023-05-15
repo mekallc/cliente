@@ -17,17 +17,23 @@
   <!-- add to homescreen for ios -->
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <script src='https://maps.googleapis.com/maps/api/js?key=AIzaSyCLRF1U1vrDAqVmIdwMKTcnAEMylbvnkhY' async defer></script>
-  <link href='https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.css' rel='stylesheet' />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800;900&display=swap">
   <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.css" type="text/css">
+  <script type="text/partytown" src='https://maps.googleapis.com/maps/api/js?key=AIzaSyCLRF1U1vrDAqVmIdwMKTcnAEMylbvnkhY' async defer></script>
 </head>
 
 <body>
   <app-root></app-root>
+  <script type="text/partytown">
+    (function(w,d,t,u,n,a,m){w['MauticTrackingObject']=n;
+        w[n]=w[n]||function(){(w[n].q=w[n].q||[]).push(arguments)},a=d.createElement(t),
+        m=d.getElementsByTagName(t)[0];a.async=1;a.src=u;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://crm.meka.do/mtc.js','mt');
+    mt('send', 'pageview');
+  </script>
 </body>
 
 </html>

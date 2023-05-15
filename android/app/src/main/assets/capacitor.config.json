@@ -2,7 +2,7 @@
 	"appId": "com.mekadevelopments.cliente",
 	"appName": "Meka",
 	"webDir": "www",
-	"bundledWebRuntime": false,
+	"bundledWebRuntime": true,
 	"plugins": {
 		"PushNotifications": {
 			"presentationOptions": [
@@ -16,7 +16,7 @@
 			"splashImmersive": false,
 			"splashFullScreen": false,
 			"launchShowDuration": 1000,
-			"backgroundColor": "#222428",
+			"backgroundColor": "#000",
 			"spinnerColor": "#E7B63A",
 			"androidScaleType": "CENTER_CROP",
 			"androidSplashResourceName": "splash"
@@ -33,5 +33,6 @@
 	"android": {
 		"allowMixedContent": true
 	},
-	"cordova": {}
+	"cordova": {},
+	"server": {}
 }

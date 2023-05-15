@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { AlertController, NavController } from '@ionic/angular';
 import { map } from 'rxjs/operators';
 import { Store, ReducerManager } from '@ngrx/store';
+import { Storage, ref, deleteObject, uploadBytes, uploadString,
+  uploadBytesResumable, percentage, getDownloadURL } from '@angular/fire/storage';
 
 import { Login } from './interfaces';
 import { MasterService } from '@core/services/master.service';
@@ -13,8 +15,9 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class AuthService {
-
+  uploadPercent: Observable<any>;
   constructor(
+    private uploadStorage: Storage,
     private ms: MasterService,
     private navCtrl: NavController,
     private store: Store<AppState>,
@@ -69,4 +72,35 @@ export class AuthService {
   };
 
   getRating = () => this.ms.getMaster('ratings/');
+
+  async uploadAvatar(file: any | null): Promise<string> {
+    let url;
+    const filename = this.base64ToImage(file);
+    const path = `avatar/${Date.now()}.png`; {
+      if (file) {
+        try {
+          const storageRef = ref(this.uploadStorage, path);
+          const task = uploadBytesResumable(storageRef, filename);
+          this.uploadPercent = percentage(task);
+          await task;
+          url = await getDownloadURL(storageRef);
+        } catch(e: any) {
+          console.error(e);
+        }
+      }
+      return url;
+    }
+  };
+
+  private base64ToImage(dataURI) {
+    const fileDate = dataURI.split(',');
+    const byteString = atob(fileDate[1]);
+    const arrayBuffer = new ArrayBuffer(byteString.length);
+    const int8Array = new Uint8Array(arrayBuffer);
+    for (let i = 0; i < byteString.length; i++) {
+      int8Array[i] = byteString.charCodeAt(i);
+    }
+    const blob = new Blob([arrayBuffer], { type: 'image/png' });
+    return blob;
+  }
 }

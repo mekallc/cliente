@@ -8,6 +8,9 @@ project(':capacitor-community-firebase-analytics').projectDir = new File('../nod
 include ':capacitor-community-google-maps'
 project(':capacitor-community-google-maps').projectDir = new File('../node_modules/@capacitor-community/google-maps/android')
 
+include ':capacitor-firebase-crashlytics'
+project(':capacitor-firebase-crashlytics').projectDir = new File('../node_modules/@capacitor-firebase/crashlytics/android')
+
 include ':capacitor-app'
 project(':capacitor-app').projectDir = new File('../node_modules/@capacitor/app/android')
 

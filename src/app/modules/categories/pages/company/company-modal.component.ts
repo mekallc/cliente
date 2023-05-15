@@ -78,6 +78,7 @@ export class CompanyModalComponent implements OnInit {
     this.provider$ = this.item$.pipe(
       switchMap(res => {
         const data = this.setDataSearchProvider(res);
+        console.log(data);
         return this.db.getProviderByServise(data).pipe(
           map((provider: any) => this.sortProviderNearBord(provider))
         );
@@ -145,8 +146,6 @@ export class CompanyModalComponent implements OnInit {
   private getDistance(p1: any, p2: any) {
     const data1 = { latitude: p1.latitude, longitude: p1.longitude };
     const data2 = { latitude: p2.latitude, longitude: p2.longitude };
-    console.log(data1);
-    console.log(data2);
     return this.uService.distance(data1, data2);
   }
 

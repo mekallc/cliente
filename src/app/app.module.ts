@@ -15,6 +15,7 @@ import { SideMenuWidgetModule } from '@core/widgets/side-menu-widget/side-menu-w
 
 import { environment } from 'src/environments/environment';
 import { LanguageModule } from '@core/language/language.module';
+import { NetworkWidgetModule } from '@core/widgets/network/network.module';
 
 const config: SocketIoConfig = { url: environment.api.url, options: {} };
 @NgModule({
@@ -31,10 +32,12 @@ const config: SocketIoConfig = { url: environment.api.url, options: {} };
     SideMenuWidgetModule,
     IonicModule.forRoot(),
     SocketIoModule.forRoot(config),
+    NetworkWidgetModule,
   ],
   providers: [
     AppService,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    { provide: 'googleTagManagerId', useValue: 'GTM-KTGSRRW' },
   ],
   bootstrap: [AppComponent],
 })

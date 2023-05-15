@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 import { TranslateModule } from '@ngx-translate/core';
+import { IonicSelectableModule } from 'ionic-selectable';
 
 import { SolicitudPage } from './solicitud.page';
 import { PartsComponent } from './../../widgets/parts/parts.component';
@@ -20,7 +21,8 @@ import { MechanicsComponent } from '../../widgets/mechanics/mechanics.component'
     HeaderModule,
     TranslateModule,
     ReactiveFormsModule,
-    SolicitudPageRoutingModule
+    IonicSelectableModule,
+    SolicitudPageRoutingModule,
   ],
   declarations: [
     SolicitudPage,

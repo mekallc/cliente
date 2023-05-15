@@ -3,7 +3,7 @@ const config: CapacitorConfig = {
   appId: 'com.mekadevelopments.cliente',
   appName: 'Meka',
   webDir: 'www',
-  bundledWebRuntime: false,
+  bundledWebRuntime: true,
   plugins: {
     PushNotifications: {
       presentationOptions: ['badge', 'sound', 'alert'],
@@ -13,7 +13,7 @@ const config: CapacitorConfig = {
       splashImmersive: false,
       splashFullScreen: false,
       launchShowDuration: 1000,
-      backgroundColor: '#222428',
+      backgroundColor: '#000',
       spinnerColor: '#E7B63A',
       androidScaleType: 'CENTER_CROP',
       androidSplashResourceName: 'splash',
@@ -32,10 +32,10 @@ const config: CapacitorConfig = {
   },
   cordova: {
   },
-  // server: {
-  //   cleartext: true,
-  //   url: 'http://192.168.250.114:8105',
-  // },
+  server: {
+    // cleartext: true,
+    // url: 'http://192.168.0.226:8101',
+  },
 };
 
 export default config;

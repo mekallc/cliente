@@ -27,7 +27,7 @@ export class MechanicsComponent implements OnInit, AfterViewInit {
 
   @Input() category: any;
   @Input() autopart = false;
-
+  name: string;
   coordinates: any;
   capture: any = [];
   formReactive: FormGroup;
@@ -67,11 +67,9 @@ export class MechanicsComponent implements OnInit, AfterViewInit {
   }
 
   async onSubmit(): Promise<void> {
-    let photos: any[];
     await this.setReactive();
     const item: any = this.formReactive.value;
     item.pictures = this.capture;
-    console.log(item);
     await this.uService.load({ message: this.translate.instant('PROCCESSING'), duration: 750 });
     this.store.dispatch(actions.itemAdd({ item }));
     this.formReactive.reset();
@@ -88,17 +86,17 @@ export class MechanicsComponent implements OnInit, AfterViewInit {
 
   loadReactiveForm = () => {
     this.formReactive = this.fb.group({
-      description: ['', [Validators.required, Validators.minLength(4)]],
-      vehicle: ['', Validators.required],
+      type: [0],
+      year: [''],
+      pictures: [''],
+      latitude: [''],
+      longitude: [''],
       user: ['', Validators.required],
       brand: ['', Validators.required],
       model: ['', Validators.required],
+      vehicle: ['', Validators.required],
       category: ['', Validators.required],
-      latitude: [''],
-      longitude: [''],
-      year: [''],
-      pictures: [''],
-      type: [0],
+      description: ['', [Validators.required, Validators.minLength(4)]],
     });
   };
 

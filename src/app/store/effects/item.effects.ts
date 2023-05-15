@@ -106,7 +106,6 @@ export class ItemEffects {
 
   changeStatusService(id: string, item: any) {
     const data = { id, item };
-    console.log(data);
     this.socket.emit('joinService', id);
     this.socket.emit('changeStatusService', data);
     return this.socket.fromEvent('changeMessage');
@@ -119,7 +118,6 @@ export class ItemEffects {
   }
 
   private async createRoom(item: any) {
-    console.log(item);
     if (item.status === 'in_process') {
       await this.firestore.createRoom(item);
       await this.storage.setStorageValue('service', item._id);

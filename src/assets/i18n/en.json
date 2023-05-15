@@ -1,4 +1,8 @@
 {
+  "TERM": "I accept the terms and conditions",
+  "LGPD": "By continuing, you agree to receive calls and SMS or WhatsApp messages.",
+  "USER_NOT_EXIST": "User not exist",
+  "Invalid user credentials": "Invalid user credentials",
   "MECANICS": "Mechanics",
   "AUTO_PARTS": "AUTO PARTS",
   "Air Conditioning": "Air Conditioning",
@@ -154,7 +158,7 @@
     "CONFIRM_PASSWORD": "Confirm password",
     "SAVE_CHANGES": "Save changes",
     "LOGOUT": "Logout",
-    "YOU_WILL_BE_RECEIVING_AN_EMAIL_WITH_A_VALIDATION_CODE_TO_RECOVER_YOUR_PASSWORD.": "You will be receiving an email with a validation code to recover your password.",
+    "YOU_WILL_BE_RECEIVING_AN_EMAIL_WITH_A_VALIDATION_CODE_TO_RECOVER_YOUR_PASSWORD": "You will be receiving an email with a validation code to recover your password.",
     "RESET_PASSWORD": "Reset password",
     "BACK_TO_LOGIN": "Back to login",
     "BASED_ON": "Based on",
@@ -180,7 +184,7 @@
     "YOU_DON_T_HAVE_CONVERSATIONS_WITH_CUSTOMERS": "You don't have conversations with clients.",
     "FAVORITES": "Favorites",
     "YOU_HAVE_NOT_ADDED_MECHANICS": "You have not added mechanics",
-    "TO_YOUR_FAVORITES.": "To your favorites.",
+    "TO_YOUR_FAVORITES": "To your favorites.",
     "COMMERCIAL_PROFILE": "Commercial Profile",
     "CHANGE_LOGO": "Change logo",
     "REGISTER_AS_A_MECHANIC_IN_OUR_APP_AND_GET": "Register as a mechanic or spare parts in our app and get",
@@ -271,7 +275,7 @@
     "SEARCH_BRANDS": "Search brand",
     "SEARCH_CATEGORIES": "Search categories",
     "BRANDS": "Brands",
-    "ACEPT_TERMS_AND_CONDITIONOS":"Accept terms and conditions",
+    "ACEPT_TERMS_AND_CONDITIONS":"Accept terms and conditions",
     "TERM_AND_CONDITION_LINK": "http://www.meka-usa.com/terms-and-conditions/",
     "READ_TERMS_AND_CONDITION" :"Read the terms and conditions",
     "Aire Acondicionado": "Air conditioning",
@@ -280,7 +284,4 @@
     "ONLINE": "Online",
     "LAST_ONLINE": "Last time online",
     "VEHICLE_TYPE": "Vehicle Type"
-
-
-
 }

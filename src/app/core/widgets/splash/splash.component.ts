@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NavController } from '@ionic/angular';
 import { AnimationOptions } from 'ngx-lottie';
 import { timer } from 'rxjs';
-import { SplashScreen } from '@capacitor/splash-screen';
+import { StatusBar, Style } from '@capacitor/status-bar';
 
 
 @Component({
@@ -21,12 +21,15 @@ export class SplashComponent implements OnInit {
     private nav: NavController
   ) { }
 
-  ionViewDidEnter() {
-    SplashScreen.hide();
-  }
+  ionViewDidEnter() {}
 
   ngOnInit() {
-    timer(2000).subscribe(() => this.nav.navigateRoot(''));
+    timer(3000).subscribe(async () => {
+      this.nav.navigateRoot('/pages/home');
+      await StatusBar.show();
+      await StatusBar.setStyle({ style: Style.Light });
+    });
+
   }
 
 }

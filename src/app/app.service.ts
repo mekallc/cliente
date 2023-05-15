@@ -6,6 +6,12 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { Device, DeviceInfo } from '@capacitor/device';
 import { Geolocation, Position } from '@capacitor/geolocation';
 import { Globalization } from '@ionic-native/globalization/ngx';
+import {
+  AppTrackingTransparency,
+  AppTrackingStatusResponse,
+} from 'capacitor-plugin-app-tracking-transparency';
+import { Capacitor } from '@capacitor/core';
+
 
 import * as actions from  '@store/actions';
 import { AppState } from '@store/app.state';
@@ -26,7 +32,7 @@ export class AppService {
     public traslate: TraslationService,
     private uService: UtilsService,
     private store: Store<AppState>
-  ) {}
+  ) { }
 
   setVersion$  = (items: AppInfo) => this.version$.next(items);
 
@@ -67,6 +73,15 @@ export class AppService {
         longitude: position.coords.longitude,
       };
       this.store.dispatch(actions.bannerLoad({ data }));
+    }
+  }
+
+  async validateTracking() {
+    if (Capacitor.getPlatform() === 'ios') {
+      const { status }: AppTrackingStatusResponse = await AppTrackingTransparency.getStatus();
+      if (status !== 'authorized') {
+        await AppTrackingTransparency.requestPermission();
+      }
     }
   }
 }

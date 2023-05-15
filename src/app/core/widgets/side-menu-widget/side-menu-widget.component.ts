@@ -1,21 +1,19 @@
-import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { MenuController } from '@ionic/angular';
 import { AuthService } from '@modules/users/services/auth.service';
-import { Observable } from 'rxjs';
-import { PostContentsWidgetComponent } from '@modules/contents/widget/post/post.component';
+import { filter, map, Observable, timer } from 'rxjs';
 import { RateApp } from 'capacitor-rate-app';
 import { AppState } from '@store/app.state';
 import { Store } from '@ngrx/store';
 import { Browser, OpenOptions } from '@capacitor/browser';
 import { UtilsService } from '@core/services/utils.service';
-import { StorageService } from '@core/services/storage.service';
 
 @Component({
   selector: 'app-side-menu-widget',
   templateUrl: './side-menu-widget.component.html',
   styleUrls: ['./side-menu-widget.component.scss'],
 })
-export class SideMenuWidgetComponent implements AfterViewInit {
+export class SideMenuWidgetComponent implements OnInit {
 
   @Input() appVersion: any;
   user$: Observable<any>;
@@ -40,15 +38,25 @@ export class SideMenuWidgetComponent implements AfterViewInit {
   constructor(
     private menu: MenuController,
     private uService: UtilsService,
+    private store: Store<AppState>,
     private authService: AuthService,
-    private storage: StorageService,
   ) { }
 
-  async ngAfterViewInit(): Promise<void> {
-    this.user = await this.storage.getStorage('oUser');
+  ngOnInit(): void {
+    this.user$ = this.getUser$();
   }
 
+  getUser$(): Observable<any> {
+    return this.store.select('user')
+    .pipe(
+      filter((row) => !row.loading),
+      map(({ user }) => user)
+    );
+  }
 
+  async onRemove(username: string) {
+    console.log(username);
+  }
 
   async signOut(): Promise<void> {
     this.menu.close();
@@ -60,14 +68,6 @@ export class SideMenuWidgetComponent implements AfterViewInit {
     this.menu.close();
     this.uService.navigate(url);
   }
-
-  async onPost(title: string): Promise<void> {
-    this.menu.close();
-    await this.uService.modal({
-      component: PostContentsWidgetComponent,
-      componentProps: { title }
-    });
-  };
 
   onModalChat(): void {
     this.uService.navigate('chat/soporte');

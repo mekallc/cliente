@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { userRoute } from './users.routes';
 import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 
 
 
@@ -11,6 +12,7 @@ import { CommonModule } from '@angular/common';
     userRoute,
     IonicModule,
     CommonModule,
+    TranslateModule,
   ]
 })
 export class UsersModule { }

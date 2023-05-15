@@ -8,7 +8,7 @@
       <ion-label>{{ 'CANCELLED' | translate }}</ion-label>
     </ion-segment-button>
   </ion-segment>
-  <ion-progress-bar type="indeterminate" *ngIf="progress"></ion-progress-bar>
+  <!-- <ion-progress-bar type="indeterminate" *ngIf="progress"></ion-progress-bar> -->
   <ng-container *ngIf="toggle === 'HISTORY'">
     <ion-list lines="none" *ngIf="finished$ && totalFinished > 0; else notFound">
       <ng-container *ngFor="let item of finished$ | async">
@@ -25,6 +25,14 @@
   </ng-container>
 </ion-content>
 <ng-template #notFound>
-  <ng-lottie [options]="options" (animationCreated)="animationCreated($event)"></ng-lottie>
+  <ion-card color="warning" class="notFound">
+    <ion-card-content>
+      <ion-label>
+        <h2 class="notfound-title">
+          {{ 'NOT_FOUND' | translate }}
+        </h2>
+      </ion-label>
+    </ion-card-content>
+  </ion-card>
 </ng-template>
 

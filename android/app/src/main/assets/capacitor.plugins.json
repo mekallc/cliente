@@ -8,6 +8,10 @@
 		"classpath": "com.hemangkumar.capacitorgooglemaps.CapacitorGoogleMaps"
 	},
 	{
+		"pkg": "@capacitor-firebase/crashlytics",
+		"classpath": "io.capawesome.capacitorjs.plugins.firebase.crashlytics.FirebaseCrashlyticsPlugin"
+	},
+	{
 		"pkg": "@capacitor/app",
 		"classpath": "com.capacitorjs.plugins.app.AppPlugin"
 	},
