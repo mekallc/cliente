@@ -1,14 +1,14 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AlertController, LoadingController, NavController, ToastController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { Camera, CameraResultType } from '@capacitor/camera';
-
+import { Capacitor } from '@capacitor/core';
 import { MasterService } from '@core/services/master.service';
 import { AuthService } from '@modules/users/services/auth.service';
 import { StorageService } from '@core/services/storage.service';
 import { UtilsService } from '@core/services/utils.service';
 import { TranslateService } from '@ngx-translate/core';
+import { Firestore, onSnapshot, doc } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-sign-up',
@@ -16,7 +16,8 @@ import { TranslateService } from '@ngx-translate/core';
   styleUrls: ['./sign-up.page.scss'],
 })
 export class SignUpPage implements OnInit, AfterViewInit {
-
+  fs: Firestore = inject(Firestore);
+  setting!: any;
   registerForm: FormGroup;
   avatar: any;
   countries$: Observable<any[]>;
@@ -38,10 +39,21 @@ export class SignUpPage implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.loadForm();
+    this.getSetting();
     this.countries$ = this.ms.getMaster('tables/countries');
   }
 
-  ngAfterViewInit() { }
+  ngAfterViewInit() {
+  }
+
+  getSetting() {
+    console.log(Capacitor.getPlatform());
+    onSnapshot(doc(this.fs, 'setting', 'meka'), (res: any) => {
+      const data = res.data();
+      this.setting = Capacitor.getPlatform() === 'ios' ? data.ios : data.md;
+    });
+
+  }
 
   onSubmit = async () => {
     if(this.registerForm.invalid) { return; }
@@ -81,7 +93,7 @@ export class SignUpPage implements OnInit, AfterViewInit {
       picture: [''],
       lgpd: [, Validators.required],
       term: [, Validators.required],
-      phone: ['', Validators.required],
+      phone: [''],
       country: ['', Validators.required],
       password: ['', Validators.required],
       language: ['', Validators.required],
@@ -89,6 +101,9 @@ export class SignUpPage implements OnInit, AfterViewInit {
       last_name: ['', [Validators.required, Validators.minLength(4)]],
       first_name: ['', [Validators.required, Validators.minLength(4)]],
     });
+    if(this.setting && this.setting.phone) {
+      this.registerForm.get('phone').addValidators(Validators.required);
+    }
   };
 
   onBack = () => this.uService.navigate('/user/signIn');

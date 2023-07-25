@@ -31,9 +31,11 @@ export class HomeWidgetComponent implements OnInit {
     .pipe(filter(row => !row.loading), map(res => res.items));
   };
 
-  goToSolicitud = (item: any) =>
+  goToSolicitud(item: any) {
+    const info: string = item === '' ? '2324343223wefrewr32' : item._id;
     // eslint-disable-next-line no-underscore-dangle
-    this.router.navigate(['pages', 'solicitud', 'home',item._id]);
+    this.router.navigate(['pages', 'solicitud', 'home', info]);
+  }
 
   onToogleCategories = () =>
     this.toogleCategory = !this.toogleCategory;

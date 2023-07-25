@@ -1,24 +1,38 @@
 <app-header></app-header>
 <ion-content *ngIf="!service; else active">
   <div class="container mt-4">
-    <div class="row justify-content-center mb-5">
-      <div class="col-12 col-md-10">
-        <ion-segment mode="md" (ionChange)="segmentChanged($event)"  [value]="segment">
-          <ion-segment-button  mode="md" value="mechanics">
-            <ion-label>{{ "MECANICS" | translate }}</ion-label>
-          </ion-segment-button>
-          <ion-segment-button  mode="md" value="replacement">
-            <ion-label>{{ "AUTO_PARTS" | translate }}</ion-label>
-          </ion-segment-button>
-        </ion-segment>
+    <ng-container *ngIf="!autoPart; else AutoPart">
+      <div class="row justify-content-center mb-5">
+        <div class="col-12 col-md-10">
+          <ion-segment mode="md" (ionChange)="segmentChanged($event)"  [value]="segment">
+            <ion-segment-button  mode="md" value="mechanics">
+              <ion-label>{{ "MECANICS" | translate }}</ion-label>
+            </ion-segment-button>
+            <ion-segment-button  mode="md" value="replacement">
+              <ion-label>{{ "AUTO_PARTS" | translate }}</ion-label>
+            </ion-segment-button>
+          </ion-segment>
+        </div>
       </div>
-    </div>
-    <app-mechanics *ngIf="segment === 'mechanics';else replace" [category]="expert"></app-mechanics>
-    <ng-template #replace>
+      <ng-container *ngIf="segment === 'mechanics';else replace">
+        <app-mechanics [category]="expert"></app-mechanics>
+      </ng-container>
+      <ng-template #replace>
+        <app-mechanics [autopart]="true" [category]="expert"></app-mechanics>
+      </ng-template>
+    </ng-container>
+    <ng-template #AutoPart>
+      <div class="row justify-content-center mb-5">
+        <div class="col-12 col-md-10">
+          <ion-segment mode="md" value="replacement">
+            <ion-segment-button  mode="md" value="replacement">
+              <ion-label>{{ "AUTO_PARTS" | translate }}</ion-label>
+            </ion-segment-button>
+          </ion-segment>
+        </div>
+      </div>
       <app-mechanics [autopart]="true" [category]="expert"></app-mechanics>
-      <!-- <app-parts [expert]="expert"></app-parts> -->
     </ng-template>
-
     <div class="row justify-content-center mb-3">
       <div class="col-11">
       </div>

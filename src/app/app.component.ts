@@ -4,8 +4,6 @@ import { App } from '@capacitor/app';
 import { Device, DeviceInfo } from '@capacitor/device';
 import { Capacitor } from '@capacitor/core';
 import { AppService } from 'src/app/app.service';
-import { PushService } from './core/services/push.service';
-import { IntegratedService } from '@core/services/integrated.service';
 import { ValidationTokenService } from '@core/services/validation-token.service';
 import { NavigationEnd, Router } from '@angular/router';
 import { StatusBar, Style } from '@capacitor/status-bar';
@@ -26,9 +24,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private router: Router,
     private platform: Platform,
     private appService: AppService,
-    private pushService: PushService,
     private modalCtrl: ModalController,
-    private integrated: IntegratedService,
     private token: ValidationTokenService,
     private gtmService: GoogleTagManagerService,
   ) {
@@ -48,9 +44,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.initializeApp();
     this.appStateChange();
     await this.getLoadAppMobile();
-    this.appService.getBanner();
     this.appService.getLanguage();
-    this.integrated.initStates();
     this.token.validate();
   }
 
@@ -70,7 +64,6 @@ export class AppComponent implements OnInit, OnDestroy {
       if (isActive) {
         this.token.validate();
         this.getLoadAppMobile();
-        this.integrated.initStates();
         this.appService.getLanguage();
       }
     });
@@ -84,7 +77,6 @@ export class AppComponent implements OnInit, OnDestroy {
   private async getLoadAppMobile(): Promise<void> {
     const info: DeviceInfo = await Device.getInfo();
     if (info.platform !== 'web') {
-      this.pushService.initPush();
       this.appVersion = await App.getInfo();
       this.appService.setVersion$(this.appVersion);
     }

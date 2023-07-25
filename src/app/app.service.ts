@@ -4,7 +4,6 @@ import { Platform } from '@ionic/angular';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Device, DeviceInfo } from '@capacitor/device';
-import { Geolocation, Position } from '@capacitor/geolocation';
 import { Globalization } from '@ionic-native/globalization/ngx';
 import {
   AppTrackingTransparency,
@@ -12,9 +11,6 @@ import {
 } from 'capacitor-plugin-app-tracking-transparency';
 import { Capacitor } from '@capacitor/core';
 
-
-import * as actions from  '@store/actions';
-import { AppState } from '@store/app.state';
 import { UtilsService } from '@core/services/utils.service';
 import { TraslationService } from '@core/language/traslation.service';
 
@@ -31,7 +27,6 @@ export class AppService {
     private global: Globalization,
     public traslate: TraslationService,
     private uService: UtilsService,
-    private store: Store<AppState>
   ) { }
 
   setVersion$  = (items: AppInfo) => this.version$.next(items);
@@ -65,16 +60,6 @@ export class AppService {
     this.uService.modalDimiss();
   }
 
-  async getBanner(): Promise<any> {
-    const position: Position = await Geolocation.getCurrentPosition();
-    if (position) {
-      const data = {
-        latitude: position.coords.latitude,
-        longitude: position.coords.longitude,
-      };
-      this.store.dispatch(actions.bannerLoad({ data }));
-    }
-  }
 
   async validateTracking() {
     if (Capacitor.getPlatform() === 'ios') {

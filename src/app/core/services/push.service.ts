@@ -16,13 +16,13 @@ export class PushService {
   ) { }
 
 
-  initPush(): void {
-    this.registerNotifications();
+  async initPush(): Promise<void> {
+    await this.registerNotifications();
     this.addListeners();
-    this.getDeliveredNotifications();
+    await this.getDeliveredNotifications();
   }
 
-  registerNotifications = async () => {
+  async registerNotifications(): Promise<void> {
     let permStatus = await PushNotifications.checkPermissions();
     if (permStatus.receive === 'prompt') {
       permStatus = await PushNotifications.requestPermissions();
@@ -33,7 +33,7 @@ export class PushService {
     await PushNotifications.register();
   };
 
-  addListeners = () => {
+  addListeners(): void {
     PushNotifications.addListener('registration', async (token: any) => {
       console.log('TOKEN VDD', token.value);
       await this.updateToken(token.value);
@@ -59,8 +59,8 @@ export class PushService {
     PushNotifications.addListener('pushNotificationActionPerformed', notification => { });
   };
 
-  getDeliveredNotifications = async () => {
-    const notificationList = await PushNotifications.getDeliveredNotifications();
+  async getDeliveredNotifications(): Promise<void> {
+    await PushNotifications.getDeliveredNotifications();
   };
 
   private async updateToken(push: string) {

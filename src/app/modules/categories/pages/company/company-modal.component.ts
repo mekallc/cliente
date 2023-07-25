@@ -78,7 +78,7 @@ export class CompanyModalComponent implements OnInit {
     this.provider$ = this.item$.pipe(
       switchMap(res => {
         const data = this.setDataSearchProvider(res);
-        console.log(data);
+        console.log('setDataSearchProvider', data);
         return this.db.getProviderByServise(data).pipe(
           map((provider: any) => this.sortProviderNearBord(provider))
         );
@@ -119,6 +119,8 @@ export class CompanyModalComponent implements OnInit {
   }
 
   async onViewProfileProvider(service: any, provider: any): Promise<void> {
+    console.log('SERVICE', service);
+    console.log('PROVIDER', provider);
     await this.uService.modal({
       mode: 'ios',
       initialBreakpoint: 0.95,

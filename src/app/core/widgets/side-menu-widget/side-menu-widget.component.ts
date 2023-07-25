@@ -5,8 +5,10 @@ import { filter, map, Observable, timer } from 'rxjs';
 import { RateApp } from 'capacitor-rate-app';
 import { AppState } from '@store/app.state';
 import { Store } from '@ngrx/store';
+import { TranslateService } from '@ngx-translate/core';
 import { Browser, OpenOptions } from '@capacitor/browser';
 import { UtilsService } from '@core/services/utils.service';
+import { MasterService } from '@core/services/master.service';
 
 @Component({
   selector: 'app-side-menu-widget',
@@ -36,10 +38,12 @@ export class SideMenuWidgetComponent implements OnInit {
 
 
   constructor(
+    private ms: MasterService,
     private menu: MenuController,
     private uService: UtilsService,
     private store: Store<AppState>,
     private authService: AuthService,
+    private translate: TranslateService
   ) { }
 
   ngOnInit(): void {
@@ -54,8 +58,28 @@ export class SideMenuWidgetComponent implements OnInit {
     );
   }
 
-  async onRemove(username: string) {
-    console.log(username);
+  async onRemove(id: string) {
+    await this.uService.alert({
+      header: 'Info',
+      message: this.translate.instant('REMOVE_USER'),
+      mode: 'ios',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+        },
+        {
+          text: 'OK',
+          role: 'confirm',
+          handler: () => {
+            this.ms.patchMaster('users', id, { status: false }).subscribe(async (res: any)=> {
+              console.log(res);
+              await this.signOut();
+            });
+          },
+        },
+      ]
+    });
   }
 
   async signOut(): Promise<void> {

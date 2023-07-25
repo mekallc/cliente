@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Geolocation } from '@capacitor/geolocation';
-import { GeolocationService } from '@core/services/geolocation.service';
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { AppState } from '@store/app.state';
@@ -14,7 +12,7 @@ import { filter, map, tap } from 'rxjs/operators';
 })
 
 export class SolicitudPage implements OnInit {
-
+  autoPart = false;
   service$: Observable<any>;
   service = false;
   expert: number;
@@ -29,6 +27,17 @@ export class SolicitudPage implements OnInit {
 
   ngOnInit(): void {
     this.getService();
+    this.getAutoParts();
+  }
+
+  getAutoParts() {
+    this.store.select('expert').pipe(
+      filter(row => !row.loading),
+      map(({ items }: any) => items),
+    ).subscribe((res: any) => {
+      const fill = res.filter((row: any) => row._id === this.expert && row.name === 'Brakes');
+      this.autoPart = fill.length > 0 ? true : false;
+    });
   }
 
   getService = () => {

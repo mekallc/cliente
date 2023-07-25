@@ -4,6 +4,7 @@ const config: CapacitorConfig = {
   appName: 'Meka',
   webDir: 'www',
   bundledWebRuntime: true,
+  loggingBehavior: 'debug',
   plugins: {
     PushNotifications: {
       presentationOptions: ['badge', 'sound', 'alert'],
@@ -25,6 +26,10 @@ const config: CapacitorConfig = {
     },
     CapacitorCookies: {
       enabled: true,
+    },
+    Badge: {
+      persist: true,
+      autoClear: true
     },
   },
   android: {

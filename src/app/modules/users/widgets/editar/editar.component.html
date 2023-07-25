@@ -30,10 +30,12 @@
               <small>{{ "SIGN.ERROR.EMAIL" | translate }}</small>
             </ion-text>
           </ion-item>
-          <ion-item class="phone" lines="none">
-            <ion-label position="stacked">{{ "SIGN.PHONE" | translate }} <ion-text color="danger">*</ion-text></ion-label>
-            <ion-input required formControlName="phone" type="phone" inputmode="numeric" placeholder="0000-0000"></ion-input>
-          </ion-item>
+          <ng-container *ngIf="setting && setting.phone">
+            <ion-item class="phone" lines="none">
+              <ion-label position="stacked">{{ "SIGN.PHONE" | translate }} <ion-text color="danger">*</ion-text></ion-label>
+              <ion-input required formControlName="phone" type="phone" inputmode="numeric" placeholder="0000-0000"></ion-input>
+            </ion-item>
+          </ng-container>
           <ion-item class="idioma" lines="none">
             <ion-label position="stacked">{{ "SIGN.LANGUAGE" | translate }} <ion-text color="danger">*</ion-text></ion-label>
             <ion-select [placeholder]="'SIGN.LANGUAGE' | translate" interface="action-sheet" formControlName="language">

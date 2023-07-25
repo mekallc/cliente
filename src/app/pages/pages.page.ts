@@ -1,10 +1,13 @@
+import { Capacitor } from '@capacitor/core';
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { IntegratedService } from '@core/services/integrated.service';
 import { AppState } from '@store/app.state';
 import { Store } from '@ngrx/store';
 import { UtilsService } from '@core/services/utils.service';
+import { Geolocation, Position } from '@capacitor/geolocation';
+import * as actions from  '@store/actions';
+import { PushService } from '@core/services/push.service';
 
 @Component({
   selector: 'app-pages',
@@ -20,23 +23,36 @@ export class PagesPage implements OnInit, AfterViewInit {
 
   constructor(
     private store: Store<AppState>,
-    private uService: UtilsService,
+    private pushService: PushService,
     private intService: IntegratedService,
   ) { }
 
   async ngOnInit(): Promise<void> {
+    this.intService.initStates();
     this.intService.pageStates();
+    await this.getBanner();
+  }
+
+  async ngAfterViewInit(): Promise<void> {
+    await this.setPushToken();
     await this.intService.setTokenPushOnUser();
   }
 
-  ngAfterViewInit() {
+  async getBanner(): Promise<any> {
+    const position: Position = await Geolocation.getCurrentPosition();
+    if (position) {
+      const data = {
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude,
+      };
+      this.store.dispatch(actions.bannerLoad({ data }));
+    }
   }
 
-  getChatNotification = (item: any) => {
-
-  };
-
-  private sum = (items: any) => items.reduce((a: any, b: any) => a + (b.unread || 0), 0);
-
-
+  async setPushToken(): Promise<void> {
+    if (Capacitor.isNativePlatform()) {
+      console.log((Capacitor.getPlatform()));
+      await this.pushService.initPush();
+    }
+  }
 }

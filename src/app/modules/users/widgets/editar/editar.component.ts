@@ -20,6 +20,7 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class EditarComponent implements OnInit {
   @Input() user: any;
+  setting: any;
   registerForm: FormGroup;
   countries$: Observable<any[]>;
   language: number;
@@ -46,6 +47,8 @@ export class EditarComponent implements OnInit {
     this.loadForm();
     this.loadData();
     this.countries$ = this.ms.getMaster('tables/countries');
+    this.ms.getMaster('setting')
+    .subscribe((res: any) => this.setting = res.data);
   }
 
 
@@ -62,9 +65,12 @@ export class EditarComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       first_name: ['', [Validators.required, Validators.minLength(4)]],
       last_name: ['', [Validators.required, Validators.minLength(4)]],
-      phone: ['', Validators.required],
+      phone: [''],
       language: ['', Validators.required]
     });
+    if(this.setting && this.setting.phone) {
+      this.registerForm.get('phone').addValidators(Validators.required);
+    }
   };
 
   loadData = () => {

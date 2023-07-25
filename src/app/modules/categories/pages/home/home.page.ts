@@ -5,7 +5,9 @@ import { map, filter, tap } from 'rxjs/operators';
 import { AnimationItem } from 'lottie-web';
 import { AnimationOptions } from 'ngx-lottie';
 
+import * as actions from '@store/actions';
 import { AppState } from '@store/app.state';
+import { StorageService } from '@core/services/storage.service';
 
 @Component({
   selector: 'app-home',
@@ -26,9 +28,11 @@ export class HomePage implements OnInit {
 
   constructor(
     private store: Store<AppState>,
+    private storage: StorageService,
   ){}
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
+    await this.getData();
     this.getFinished();
     this.getCancelled();
   }
@@ -47,6 +51,7 @@ export class HomePage implements OnInit {
   }
 
   getFinished() {
+    // this.ms.getMaster('')
     this.finished$ = this.store.select('finished')
     .pipe(
       filter(row => !row.loading),
@@ -59,7 +64,13 @@ export class HomePage implements OnInit {
     this.finished$.subscribe((res) => console.log('FINISHED', res.length));
   }
 
-
+  async getData(): Promise<void> {
+    const user = await this.storage.getStorage('oUser');
+    if (user) {
+      this.store.dispatch(actions.finishedLoad({ user: user._id }));
+      this.store.dispatch(actions.cancelledLoad({ user: user._id }));
+    }
+  }
 
   getCancelled() {
     this.cancelled$ = this.store.select('cancelled')

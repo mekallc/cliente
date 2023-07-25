@@ -57,7 +57,7 @@
         <ion-item *ngFor="let provider of provider$ | async">
           <ion-label>
             <h3>{{ provider.name | titlecase }}</h3>
-            <app-stars-widget [score]="provider.user.score"></app-stars-widget>
+            <app-stars-widget [score]="provider.user?.score"></app-stars-widget>
             <p>
               {{ "SERVICE.DISTANCE" | translate | titlecase }}
               {{ provider.distance }}
