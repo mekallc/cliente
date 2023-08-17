@@ -1,3 +1,5 @@
+import { ScreenOrientationResult } from './../../node_modules/@capacitor/screen-orientation/dist/esm/definitions.d';
+import { initializeApp } from 'firebase/app';
 import { Store } from '@ngrx/store';
 import { AppInfo } from '@capacitor/app';
 import { Platform } from '@ionic/angular';
@@ -10,9 +12,10 @@ import {
   AppTrackingStatusResponse,
 } from 'capacitor-plugin-app-tracking-transparency';
 import { Capacitor } from '@capacitor/core';
-
+import { ScreenOrientation } from '@capacitor/screen-orientation';
 import { UtilsService } from '@core/services/utils.service';
 import { TraslationService } from '@core/language/traslation.service';
+import { AppUpdateService } from '@core/services/app-update.service';
 
 @Injectable({
   providedIn: 'root'
@@ -25,9 +28,18 @@ export class AppService {
   constructor(
     private platform: Platform,
     private global: Globalization,
-    public traslate: TraslationService,
     private uService: UtilsService,
+    public traslate: TraslationService,
+    private appUpdate: AppUpdateService,
   ) { }
+
+    async initializeApp(): Promise<void> {
+      if (Capacitor.isNativePlatform()) {
+        await this.appUpdate.initialize();
+        await this.screenOrientation();
+      }
+    }
+
 
   setVersion$  = (items: AppInfo) => this.version$.next(items);
 
@@ -68,5 +80,10 @@ export class AppService {
         await AppTrackingTransparency.requestPermission();
       }
     }
+  }
+
+  private async screenOrientation(): Promise<void> {
+    const orientation: ScreenOrientationResult = await ScreenOrientation.orientation();
+    console.log(orientation);
   }
 }

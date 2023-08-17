@@ -74,5 +74,7 @@
   <string>The location when the App is in use, will be used to give the location of the service</string>
   <key>NSMicrophoneUsageDescription</key>
   <string>The microphone permission is needed to to receive voice commands.</string>
+  <key>UIRequiresFullScreen</key>
+  <true/>
 </dict>
 </plist>

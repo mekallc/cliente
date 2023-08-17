@@ -38,8 +38,8 @@ const config: CapacitorConfig = {
   cordova: {
   },
   server: {
-    // cleartext: true,
-    // url: 'http://192.168.0.226:8101',
+    cleartext: true,
+    url: 'http://192.168.0.227:8101',
   },
 };
 

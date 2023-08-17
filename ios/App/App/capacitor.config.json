@@ -39,5 +39,8 @@
 		"allowMixedContent": true
 	},
 	"cordova": {},
-	"server": {}
+	"server": {
+		"cleartext": true,
+		"url": "http://192.168.0.227:8101"
+	}
 }

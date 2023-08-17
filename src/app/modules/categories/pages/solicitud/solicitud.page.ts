@@ -13,6 +13,7 @@ import { filter, map, tap } from 'rxjs/operators';
 
 export class SolicitudPage implements OnInit {
   autoPart = false;
+  towTruck = false;
   service$: Observable<any>;
   service = false;
   expert: number;
@@ -35,8 +36,10 @@ export class SolicitudPage implements OnInit {
       filter(row => !row.loading),
       map(({ items }: any) => items),
     ).subscribe((res: any) => {
-      const fill = res.filter((row: any) => row._id === this.expert && row.name === 'Brakes');
+      const fill = res.filter((row: any) => row._id === this.expert && row.name === 'Auto Part');
+      const fill1 = res.filter((row: any) => row._id === this.expert && row.name === 'Tow truck');
       this.autoPart = fill.length > 0 ? true : false;
+      this.towTruck = fill1.length > 0 ? true : false;
     });
   }
 

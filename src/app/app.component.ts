@@ -51,8 +51,9 @@ export class AppComponent implements OnInit, OnDestroy {
   initializeApp(): void {
     this.platform.ready().then(async () => {
       this.appService.validateTracking();
-      if (Capacitor.getPlatform() !== 'web') {
+      if (Capacitor.isNativePlatform()) {
         await StatusBar.hide();
+        await this.appService.initializeApp();
         this.router.navigateByUrl('splash');
       }
     });

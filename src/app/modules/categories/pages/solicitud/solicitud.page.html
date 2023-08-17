@@ -2,24 +2,26 @@
 <ion-content *ngIf="!service; else active">
   <div class="container mt-4">
     <ng-container *ngIf="!autoPart; else AutoPart">
-      <div class="row justify-content-center mb-5">
-        <div class="col-12 col-md-10">
-          <ion-segment mode="md" (ionChange)="segmentChanged($event)"  [value]="segment">
-            <ion-segment-button  mode="md" value="mechanics">
-              <ion-label>{{ "MECANICS" | translate }}</ion-label>
-            </ion-segment-button>
-            <ion-segment-button  mode="md" value="replacement">
-              <ion-label>{{ "AUTO_PARTS" | translate }}</ion-label>
-            </ion-segment-button>
-          </ion-segment>
+      <ng-container *ngIf="!towTruck; else TowTruck">
+        <div class="row justify-content-center mb-5">
+          <div class="col-12 col-md-10">
+            <ion-segment mode="md" (ionChange)="segmentChanged($event)"  [value]="segment">
+              <ion-segment-button  mode="md" value="mechanics">
+                <ion-label>{{ "MECANICS" | translate }}</ion-label>
+              </ion-segment-button>
+              <ion-segment-button  mode="md" value="replacement">
+                <ion-label>{{ "AUTO_PARTS" | translate }}</ion-label>
+              </ion-segment-button>
+            </ion-segment>
+          </div>
         </div>
-      </div>
-      <ng-container *ngIf="segment === 'mechanics';else replace">
-        <app-mechanics [category]="expert"></app-mechanics>
+        <ng-container *ngIf="segment === 'mechanics';else replace">
+          <app-mechanics [category]="expert"></app-mechanics>
+        </ng-container>
+        <ng-template #replace>
+          <app-mechanics [autopart]="true" [category]="expert"></app-mechanics>
+        </ng-template>
       </ng-container>
-      <ng-template #replace>
-        <app-mechanics [autopart]="true" [category]="expert"></app-mechanics>
-      </ng-template>
     </ng-container>
     <ng-template #AutoPart>
       <div class="row justify-content-center mb-5">
@@ -32,6 +34,18 @@
         </div>
       </div>
       <app-mechanics [autopart]="true" [category]="expert"></app-mechanics>
+    </ng-template>
+    <ng-template #TowTruck>
+      <div class="row justify-content-center mb-5">
+        <div class="col-12 col-md-10">
+          <ion-segment mode="md" value="replacement">
+            <ion-segment-button  mode="md" value="replacement">
+              <ion-label>{{ "CREATE.TOW_TRUCK" | translate }}</ion-label>
+            </ion-segment-button>
+          </ion-segment>
+        </div>
+      </div>
+      <app-mechanics [autopart]="false" [category]="expert"></app-mechanics>
     </ng-template>
     <div class="row justify-content-center mb-3">
       <div class="col-11">
