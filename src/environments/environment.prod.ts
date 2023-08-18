@@ -16,5 +16,4 @@ export const environment = {
     admin: {email: 'knaimero@gmail.com', password: 'meka123'}
   },
   maps: 'AIzaSyAylhtwYmgO_nuFZsQzvm_z6vAOvbEk80Q',
-  mapbox: ''
 };

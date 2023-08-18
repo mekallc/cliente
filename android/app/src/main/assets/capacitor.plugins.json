@@ -64,8 +64,8 @@
 		"classpath": "com.capacitorjs.plugins.statusbar.StatusBarPlugin"
 	},
 	{
-		"pkg": "@capawesome/capacitor-app-update",
-		"classpath": "io.capawesome.capacitorjs.plugins.appupdate.AppUpdatePlugin"
+		"pkg": "@capawesome/capacitor-badge",
+		"classpath": "io.capawesome.capacitorjs.plugins.badge.BadgePlugin"
 	},
 	{
 		"pkg": "capacitor-rate-app",

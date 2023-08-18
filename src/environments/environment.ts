@@ -23,5 +23,4 @@ export const environment = {
     url: 'https://api.meka.do',
   },
   maps: 'AIzaSyAylhtwYmgO_nuFZsQzvm_z6vAOvbEk80Q',
-  mapbox: ''
 };

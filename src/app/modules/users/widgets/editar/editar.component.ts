@@ -55,7 +55,6 @@ export class EditarComponent implements OnInit {
   async onSubmit(): Promise<void> {
     if(this.registerForm.invalid) { return; }
     const data = this.registerForm.value;
-    this.traslationService.use(data.language);
     await this.uService.load({message: this.translate.instant('PROCESSING')});
     this.processingData(this.user._id, data);
   };
@@ -102,7 +101,9 @@ export class EditarComponent implements OnInit {
         console.log(user);
         this.uService.loadDimiss();
         this.store.dispatch(actions.loadUser(user));
+        await this.storage.removeStorage('oUser');
         await this.storage.setStorage('oUser', user);
+        this.traslationService.use(data.language);
         this.uService.navigate('/pages/home');
       },
     );

@@ -84,6 +84,7 @@ export class AppService {
 
   private async screenOrientation(): Promise<void> {
     const orientation: ScreenOrientationResult = await ScreenOrientation.orientation();
-    console.log(orientation);
+    console.log('screenOrientation', orientation);
+    await ScreenOrientation.lock({ orientation: 'portrait' });
   }
 }
